@@ -1,0 +1,125 @@
+<section class="px-4 py-6 md:px-16 md:pb-16">
+  <div class="theme-container space-y-6">
+    <h2
+      class="text-primary text-[32px] leading-[41.6px] [font-variant:all-small-caps] md:text-[40px] md:leading-[48px]"
+    >
+      Our partners
+    </h2>
+    <div class="relative overflow-hidden">
+      <div class="fade-left pointer-events-none absolute top-0 left-0 z-10 h-full w-20"></div>
+      <div class="fade-right pointer-events-none absolute top-0 right-0 z-10 h-full w-20"></div>
+      <div class="scroll-animation flex items-center gap-16">
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/partners-logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+        <div class="flex h-20 w-[138px] shrink-0 items-center justify-center">
+          <img
+            src="{{ "images/logo.svg" | asset_url }}"
+            alt="Webflow"
+            class="h-10 w-auto object-contain"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+    .scroll-animation {
+      animation: scroll 30s linear infinite;
+    }
+    .fade-left {
+      background: linear-gradient(to right, #ffffff 0%, transparent 100%);
+    }
+    .fade-right {
+      background: linear-gradient(to left, #ffffff 0%, transparent 100%);
+    }
+  </style>
+</section>

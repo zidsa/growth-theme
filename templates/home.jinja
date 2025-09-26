@@ -3,5 +3,15 @@
 {% block title %}{{ store.name }} – {{ _('Home') }}{% endblock %}
 
 {% block content %}
-
+  {% include 'sections/hero.jinja' %}
+  {% include 'sections/categories.jinja' %}
+  {% include 'sections/products.jinja' %}
+  {% include 'sections/countdown.jinja' %}
+  {% include 'sections/gallery.jinja' %}
+  {% include 'sections/benefits.jinja' %}
+  {% include 'sections/hero-2.jinja' %}
+  {% include 'sections/categories-2.jinja' %}
+  {% include 'sections/partners.jinja' %}
+  {% include 'sections/video.jinja' %}
+  {% include 'sections/testimonial.jinja' %}
 {% endblock %}
