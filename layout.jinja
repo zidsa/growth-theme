@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  dir="ltr"
+  class="no-js"
+  lang="{{ session.lang }}"
+  dir="{{ session.locale.language.direction }}"
 >
   <head>
     <meta charset="utf-8" />
@@ -23,21 +24,59 @@
       href="https://fonts.gstatic.com"
       crossorigin
     />
+
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.onload=null;this.media='all'"
+      href="https://fonts.googleapis.com/css2?family={{ settings.font_family | default('Roboto') }}:wght@300;400;500;700&display=swap"
     />
+    {#
+      Prettier ignore is needed here because the CSS contains Jinja template variables
+      which cause Prettier's PostCSS parser to fail with "Cannot read properties of undefined (reading 'raw')"
+    #}
+    <!-- prettier-ignore-start -->
+    <style>
+      :root {
+        --font-family: {{ (settings.font_family | default('Roboto')).replace('+', ' ') }}, sans-serif;
+        --primary: {{ settings.theme_primary }};
+        --primary-foreground: {{ settings.theme_primary_foreground }};
+        --background: {{ settings.theme_background }};
+        --foreground: {{ settings.theme_foreground }};
+        --secondary: {{ settings.theme_secondary }};
+        --destructive: {{ settings.theme_destructive }};
+        --success: {{ settings.theme_success }};
+        --border: {{ settings.theme_border }};
+        --ring: {{ settings.theme_ring }};
+        --input: {{ settings.theme_input }};
+        --radius: {{ settings.theme_radius }}rem;
+      }
+    </style>
+    <!-- prettier-ignore-end -->
+
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ 'styles.css' | asset_url }}"
+      href="{{ 'styles.css?v=133452344' | asset_url }}"
     />
+
+    {# TailwindPlus Elements #}
     <script
       src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
       type="module"
     ></script>
+
+    {% if user_custom_css %}
+      <link
+        rel="stylesheet"
+        href="{{ user_custom_css }}"
+      />
+    {% endif %}
   </head>
-  <body class="min-h-dvh font-sans antialiased">
+  <body
+    data-template="{{ session.template }}"
+    class="min-h-dvh font-sans antialiased"
+  >
     {% include 'header.jinja' %}
 
     <main id="main">{% block content %}{% endblock %}</main>

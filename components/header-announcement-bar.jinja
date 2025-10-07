@@ -1,0 +1,18 @@
+{% if settings.announcement_bar_display %}
+  {% if not settings.announcement_bar_page_display or (session.template == 'home' and settings.announcement_bar_page_display == 'home') or settings.announcement_bar_page_display == 'all' %}
+    <div class="bg-primary text-primary-foreground">
+      <div class="theme-container flex items-center justify-center py-2">
+        {% if settings.announcement_bar_url %}
+          <a
+            href="{{ settings.announcement_bar_url }}"
+            class="text-center text-[16px] leading-[24px] hover:underline"
+          >
+            {{ settings.announcement_bar_text }}
+          </a>
+        {% else %}
+          <p class="text-center text-[16px] leading-[24px]">{{ settings.announcement_bar_text }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

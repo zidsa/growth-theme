@@ -1,31 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  /*texts btns texts etc...*/
-  --primary: #0b0a09;
-  --primary-foreground: #fff;
-  --background: #fff;
-  --foreground: #f6f5f4;
-
-  --secondary: #545352;
-
-  --destructive: #c22b51;
-  --success: #649560;
-
-  /*use for UI elements border ex: badges*/
-  --border: #545352;
-
-  /* use for focus rings, highlights */
-  --ring: #767573;
-
-  /* use for border radius in buttons, inputs, cards */
-  --radius: 0.25;
-
-  /*use for form elements borders*/
-  --input: #545352;
-}
-
-:root {
   --header-h: 107px;
 }
 
@@ -35,7 +10,7 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
-  --font-sans: "Roboto", sans-serif;
+  --font-sans: var(--font-family);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

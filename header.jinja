@@ -1,6 +1,4 @@
-<div class="bg-primary text-primary-foreground w-full py-2 text-center text-[16px] leading-[24px]">
-  Free shipping available on all orders!
-</div>
+{% include 'components/header-announcement-bar.jinja' %}
 <header class="border-b border-[#F2F2F2] px-4 py-3 md:px-16 md:py-4">
   <nav class="theme-container flex items-center justify-between">
     <el-dialog class="group contents">
@@ -13,12 +11,12 @@
         <span
           aria-hidden="true"
           class="absolute block h-0.5 w-5 transform bg-current transition duration-500 ease-in-out group-data-[closed]:-translate-y-1.5 group-data-[enter]:rotate-45 group-data-[leave]:!rotate-0 group-[:not([open])]:-translate-y-1.5 group-[[open]]:rotate-45"
-        ></span>
-        <span
+        ></span
+        ><span
           aria-hidden="true"
           class="absolute block h-0.5 w-5 transform bg-current transition duration-500 ease-in-out group-data-[enter]:opacity-0 group-data-[leave]:!opacity-100 group-[[open]]:opacity-0"
-        ></span>
-        <span
+        ></span
+        ><span
           aria-hidden="true"
           class="absolute block h-0.5 w-5 transform bg-current transition duration-500 ease-in-out group-data-[closed]:translate-y-1.5 group-data-[enter]:-rotate-45 group-data-[leave]:!-rotate-0 group-[:not([open])]:translate-y-1.5 group-[[open]]:-rotate-45"
         ></span>
@@ -36,165 +34,285 @@
           class="absolute inset-0 focus:outline-none"
         >
           <el-dialog-panel
-            class="group/dialog-panel relative ml-auto block size-full max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+            class="group/dialog-panel relative block size-full transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
           >
-            <div
-              class="bg-background relative flex h-full flex-col overflow-y-auto py-6 shadow-xl after:absolute after:inset-y-0 after:left-0 after:w-px after:bg-white/10"
-            >
-              <details class="group">
-                <summary
-                  class="flex cursor-pointer items-center justify-between gap-x-2 px-6 py-2 text-base text-[#0B0A09] select-none"
-                >
-                  Bags
-                  <svg
-                    class="size-4 transition-transform group-open:rotate-180"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M5.22 7.22a.75.75 0 0 1 1.06 0L10 10.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.28a.75.75 0 0 1 0-1.06Z"
-                    ></path>
-                  </svg>
-                </summary>
-                <div class="mt-1 space-y-1 pl-8">
-                  <a
-                    href="#"
-                    class="block px-3 py-2 text-base text-[#0B0A09]"
-                  >
-                    Shoulder bags
-                  </a>
-                  <a
-                    href="#"
-                    class="block px-3 py-2 text-base text-[#0B0A09]"
-                  >
-                    Tote bags
-                  </a>
-                  <a
-                    href="#"
-                    class="block px-3 py-2 text-base text-[#0B0A09]"
-                  >
-                    Backpacks
-                  </a>
+            <div class="relative flex h-full flex-col bg-white">
+              <div class="flex h-full flex-col items-start gap-8 overflow-y-auto pt-4">
+                <div class="flex min-h-px w-full min-w-px flex-1 flex-col items-start overflow-clip">
+                  {% for menu in store.settings.menus.main_menu.items %}
+                    {% if menu.items | length > 0 %}
+                      <details class="group w-full">
+                        <summary
+                          class="text-primary flex w-full cursor-pointer items-center justify-between gap-1 px-6 py-2 text-base select-none"
+                        >
+                          <span class="text-primary min-h-px min-w-px flex-1 text-start text-[16px] leading-[24px]">
+                            {{ menu.label }}
+                          </span>
+                          <svg
+                            class="size-4 transition-transform group-open:rotate-90"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M6 12l4-4-4-4"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </summary>
+                        <div class="mt-1 space-y-1 ltr:pl-8 rtl:pr-8">
+                          {% for submenu in menu.items %}
+                            <a
+                              href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
+                              class="text-primary block px-6 py-2 text-base"
+                            >
+                              {{ submenu.label }}
+                            </a>
+                          {% endfor %}
+                        </div>
+                      </details>
+                    {% else %}
+                      <a
+                        href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
+                        class="text-primary min-h-px w-full min-w-px px-6 py-2 text-start text-[16px] leading-[24px]"
+                      >
+                        {{ menu.label }}
+                      </a>
+                    {% endif %}
+                  {% endfor %}
                 </div>
-              </details>
+                <div class="flex w-full flex-col items-start gap-[3px] border-t border-[#F2F2F2] pt-4 pb-6">
+                  <button
+                    type="button"
+                    class="text-primary min-h-px w-full min-w-px px-6 py-2 text-start text-[16px] leading-[24px]"
+                  >
+                    Log in
+                  </button>
+                  <div class="flex w-full flex-col items-start gap-2.5 py-0 pr-0 pl-6">
+                    <div class="flex w-full items-start gap-4">
+                      <button
+                        type="button"
+                        class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                      >
+                        Riyadh
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
+                          <path
+                            d="M4.7251 6.18231C4.74222 6.18232 4.7492 6.18527 4.75146 6.18622L4.77783 6.20575L7.64502 9.09052L7.99854 9.44598L8.354 9.09149L11.2388 6.20575C11.2466 6.19792 11.2525 6.19402 11.2554 6.19208C11.257 6.19096 11.2579 6.19031 11.2583 6.19012H11.2651C11.2834 6.1908 11.2983 6.19307 11.3276 6.22235C11.3426 6.23728 11.3462 6.24633 11.3472 6.24872C11.3481 6.25095 11.3511 6.25787 11.3511 6.27509C11.3511 6.29208 11.3481 6.29911 11.3472 6.30145C11.3462 6.30384 11.3426 6.31289 11.3276 6.32782L8.04834 9.60712C8.03231 9.62314 8.02229 9.62961 8.01904 9.63153C8.0165 9.63259 8.01164 9.63441 8.00049 9.63446C7.989 9.63446 7.98354 9.63261 7.98096 9.63153L7.95166 9.60712L4.65576 6.31122C4.64868 6.30413 4.64476 6.29909 4.64307 6.29657C4.64222 6.29531 4.64233 6.29409 4.64209 6.29364H4.64111C4.64105 6.29341 4.64128 6.29174 4.64111 6.29071C4.64079 6.28864 4.63986 6.28398 4.64014 6.27606C4.64115 6.24749 4.64677 6.23134 4.67236 6.20575C4.68728 6.19084 4.69635 6.18722 4.69873 6.18622C4.70113 6.18523 4.70822 6.18231 4.7251 6.18231Z"
+                            fill="currentColor"
+                            stroke="currentColor"
+                          ></path>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                      >
+                        SAR
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
+                          <path
+                            d="M4.7251 6.18231C4.74222 6.18232 4.7492 6.18527 4.75146 6.18622L4.77783 6.20575L7.64502 9.09052L7.99854 9.44598L8.354 9.09149L11.2388 6.20575C11.2466 6.19792 11.2525 6.19402 11.2554 6.19208C11.257 6.19096 11.2579 6.19031 11.2583 6.19012H11.2651C11.2834 6.1908 11.2983 6.19307 11.3276 6.22235C11.3426 6.23728 11.3462 6.24633 11.3472 6.24872C11.3481 6.25095 11.3511 6.25787 11.3511 6.27509C11.3511 6.29208 11.3481 6.29911 11.3472 6.30145C11.3462 6.30384 11.3426 6.31289 11.3276 6.32782L8.04834 9.60712C8.03231 9.62314 8.02229 9.62961 8.01904 9.63153C8.0165 9.63259 8.01164 9.63441 8.00049 9.63446C7.989 9.63446 7.98354 9.63261 7.98096 9.63153L7.95166 9.60712L4.65576 6.31122C4.64868 6.30413 4.64476 6.29909 4.64307 6.29657C4.64222 6.29531 4.64233 6.29409 4.64209 6.29364H4.64111C4.64105 6.29341 4.64128 6.29174 4.64111 6.29071C4.64079 6.28864 4.63986 6.28398 4.64014 6.27606C4.64115 6.24749 4.64677 6.23134 4.67236 6.20575C4.68728 6.19084 4.69635 6.18722 4.69873 6.18622C4.70113 6.18523 4.70822 6.18231 4.7251 6.18231Z"
+                            fill="currentColor"
+                            stroke="currentColor"
+                          ></path>
+                        </svg>
+                      </button>
+                      <el-dialog>
+                        <button
+                          command="show-modal"
+                          commandfor="language-selector"
+                          type="button"
+                          class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                          aria-expanded="false"
+                        >
+                          EN
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4.7251 6.18231C4.74222 6.18232 4.7492 6.18527 4.75146 6.18622L4.77783 6.20575L7.64502 9.09052L7.99854 9.44598L8.354 9.09149L11.2388 6.20575C11.2466 6.19792 11.2525 6.19402 11.2554 6.19208C11.257 6.19096 11.2579 6.19031 11.2583 6.19012H11.2651C11.2834 6.1908 11.2983 6.19307 11.3276 6.22235C11.3426 6.23728 11.3462 6.24633 11.3472 6.24872C11.3481 6.25095 11.3511 6.25787 11.3511 6.27509C11.3511 6.29208 11.3481 6.29911 11.3472 6.30145C11.3462 6.30384 11.3426 6.31289 11.3276 6.32782L8.04834 9.60712C8.03231 9.62314 8.02229 9.62961 8.01904 9.63153C8.0165 9.63259 8.01164 9.63441 8.00049 9.63446C7.989 9.63446 7.98354 9.63261 7.98096 9.63153L7.95166 9.60712L4.65576 6.31122C4.64868 6.30413 4.64476 6.29909 4.64307 6.29657C4.64222 6.29531 4.64233 6.29409 4.64209 6.29364H4.64111C4.64105 6.29341 4.64128 6.29174 4.64111 6.29071C4.64079 6.28864 4.63986 6.28398 4.64014 6.27606C4.64115 6.24749 4.64677 6.23134 4.67236 6.20575C4.68728 6.19084 4.69635 6.18722 4.69873 6.18622C4.70113 6.18523 4.70822 6.18231 4.7251 6.18231Z"
+                              fill="currentColor"
+                              stroke="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <dialog
+                          id="language-selector"
+                          class="fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent not-open:hidden backdrop:bg-transparent"
+                        >
+                          <el-dialog-backdrop
+                            class="bg-primary/10 absolute inset-0 backdrop-blur-xs transition-opacity duration-300 ease-in-out data-closed:opacity-0"
+                            inert=""
+                          ></el-dialog-backdrop>
+                          <div
+                            tabindex="0"
+                            class="absolute inset-0 flex items-end justify-center focus:outline-none"
+                          >
+                            <el-dialog-panel
+                              class="w-full transform transition duration-300 ease-in-out data-closed:translate-y-full"
+                            >
+                              <div class="bg-background rounded-t-2xl">
+                                <div class="flex items-center justify-between px-4 py-2">
+                                  <div class="flex items-center justify-center p-2.5 opacity-0">
+                                    <svg
+                                      class="size-6"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                    >
+                                      <path
+                                        d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+                                        fill="currentColor"
+                                      ></path>
+                                    </svg>
+                                  </div>
+                                  <span class="text-primary flex-1 text-center text-[20px] leading-[28px]"
+                                    >COUNTRY</span
+                                  >
+                                  <button
+                                    command="close"
+                                    commandfor="language-selector"
+                                    type="button"
+                                    class="flex items-center justify-center p-2.5"
+                                    aria-label="Close"
+                                    aria-expanded="false"
+                                  >
+                                    <svg
+                                      class="size-6"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                    >
+                                      <path
+                                        d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+                                        fill="currentColor"
+                                      ></path>
+                                    </svg>
+                                  </button>
+                                </div>
+                                <div class="flex w-full flex-col items-start gap-2 pt-2 pb-4">
+                                  <button
+                                    type="button"
+                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                  >
+                                    Egypt
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                  >
+                                    Saudi Arabia
+                                  </button>
+                                  <button
+                                    type="button"
+                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                  >
+                                    Kuwait
+                                  </button>
+                                </div>
+                              </div>
+                            </el-dialog-panel>
+                          </div>
+                        </dialog>
+                      </el-dialog>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </el-dialog-panel>
         </div>
       </dialog>
     </el-dialog>
     <div class="flex items-center gap-8">
-      <img
-        width="106"
-        height="44"
-        src="{{ "images/logo.svg" | asset_url }}"
-      />
+      {% if settings.logo_desktop or settings.logo_mobile %}
+        <img
+          width="106"
+          height="44"
+          src="{{ settings.logo_desktop | default(settings.logo_mobile) | default(store.logo) }}"
+          class="hidden md:block"
+          alt="{{ store.name }}"
+        />
+        <img
+          width="106"
+          height="44"
+          src="{{ settings.logo_mobile | default(settings.logo_desktop) | default(store.logo) }}"
+          class="block md:hidden"
+          alt="{{ store.name }}"
+        />
+      {% else %}
+        <img
+          width="106"
+          height="44"
+          src="{{ store.logo }}"
+          alt="{{ store.name }}"
+        />
+      {% endif %}
       <ul class="hidden items-center gap-6 md:flex">
-        <li>
-          <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
-            Categories
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              class="text-primary"
-              fill="none"
-            >
-              <path
-                d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-                fill="#0B0A09"
-                stroke="#0B0A09"
-              ></path>
-            </svg>
-          </button>
-        </li>
-        <li>
-          <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
-            Dresses
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              class="text-primary"
-              fill="none"
-            >
-              <path
-                d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-                fill="#0B0A09"
-                stroke="#0B0A09"
-              ></path>
-            </svg>
-          </button>
-        </li>
-        <li>
-          <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
-            Shoes
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              class="text-primary"
-              fill="none"
-            >
-              <path
-                d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-                fill="#0B0A09"
-                stroke="#0B0A09"
-              ></path>
-            </svg>
-          </button>
-        </li>
-        <li>
-          <el-dropdown class="inline-block">
-            <button
-              class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px] underline underline-offset-1"
-            >
-              Bags
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                class="text-primary"
-                fill="none"
-              >
-                <path
-                  d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-                  fill="#0B0A09"
-                  stroke="#0B0A09"
-                ></path>
-              </svg>
-            </button>
+        {% for menu in store.settings.menus.main_menu.items %}
+          <li>
+            {% if menu.items | length > 0 %}
+              <el-dropdown class="inline-block">
+                <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
+                  {{ menu.label }}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    class="text-primary"
+                    fill="none"
+                  >
+                    <path
+                      d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
+                      fill="currentColor"
+                      stroke="currentColor"
+                    ></path>
+                  </svg>
+                </button>
 
-            <el-menu
-              anchor="bottom center"
-              popover
-              class="origin-bottom-center gap-1 border border-[#F2F2F2] bg-white p-4 transition transition-discrete data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-            >
-              <div class="py-2">
-                <a
-                  href="#"
-                  class="text-[16px] leading-[24px]"
+                <el-menu
+                  anchor="bottom center"
+                  popover
+                  class="origin-bottom-center gap-1 border border-[#F2F2F2] bg-white p-4 transition transition-discrete data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
-                  Shoulder bags
-                </a>
-              </div>
-              <div class="py-2">
-                <a
-                  href="#"
-                  class="text-[16px] leading-[24px]"
-                >
-                  Shoulder bags
-                </a>
-              </div>
-            </el-menu>
-          </el-dropdown>
-        </li>
+                  {% for submenu in menu.items %}
+                    <div class="py-2">
+                      <a
+                        href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
+                        class="text-[16px] leading-[24px]"
+                      >
+                        {{ submenu.label }}
+                      </a>
+                    </div>
+                  {% endfor %}
+                </el-menu>
+              </el-dropdown>
+            {% else %}
+              <a
+                href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
+                class="text-primary py-2 text-[16px] leading-[24px]"
+              >
+                {{ menu.label }}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
       </ul>
     </div>
     <ul class="flex items-center gap-1">
@@ -217,23 +335,172 @@
         </button>
       </li>
       <li class="hidden md:block">
-        <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
-          Riyadh (SAR) | EN
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            class="text-primary"
-            fill="none"
+        <el-popover-group class="relative">
+          <button
+            type="button"
+            popovertarget="locale-popover"
+            class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]"
           >
-            <path
-              d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-              fill="#0B0A09"
-              stroke="#0B0A09"
-            ></path>
-          </svg>
-        </button>
+            Riyadh (SAR) | EN
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              class="text-primary"
+              fill="none"
+            >
+              <path
+                d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
+                fill="#0B0A09"
+                stroke="#0B0A09"
+              ></path>
+            </svg>
+          </button>
+          <el-popover
+            id="locale-popover"
+            popover
+            anchor="bottom"
+            anchor-strategy="fixed"
+            class="w-md min-w-sm rounded-md border border-black/10 p-4 shadow-lg transition transition-discrete [--anchor-gap:8px] data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-150 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+          >
+            <div class="grid grid-cols-2 gap-2">
+              <label
+                for="currency"
+                class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
+              >
+                <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
+                  >Currency</span
+                >
+                <select
+                  id="currency"
+                  name="currency"
+                  class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                >
+                  <option value="SAR">SAR</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                </select>
+                <svg
+                  class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#0B0A09"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </label>
+              <label
+                for="language"
+                class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
+              >
+                <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
+                  >Language</span
+                >
+                <select
+                  id="language"
+                  name="language"
+                  class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                >
+                  <option value="en">English</option>
+                  <option value="ar">Arabic</option>
+                </select>
+                <svg
+                  class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#0B0A09"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </label>
+              <label
+                for="country"
+                class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
+              >
+                <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
+                  >Country</span
+                >
+                <select
+                  id="country"
+                  name="country"
+                  class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                >
+                  <option value="sa">Saudi Arabia</option>
+                  <option value="ae">UAE</option>
+                  <option value="kw">Kuwait</option>
+                  <option value="om">Oman</option>
+                  <option value="bh">Bahrain</option>
+                </select>
+                <svg
+                  class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#0B0A09"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </label>
+              <label
+                for="city"
+                class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
+              >
+                <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
+                  >City</span
+                >
+                <select
+                  id="city"
+                  name="city"
+                  class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                >
+                  <option value="riyadh">Riyadh</option>
+                  <option value="jeddah">Jeddah</option>
+                  <option value="dammam">Dammam</option>
+                  <option value="khobar">Khobar</option>
+                  <option value="mecca">Mecca</option>
+                  <option value="medina">Medina</option>
+                </select>
+                <svg
+                  class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#0B0A09"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </label>
+              <button
+                class="text-primary col-span-2 justify-self-end border-none bg-transparent px-2 py-1.5 text-[12px] leading-[18px]"
+              >
+                Save
+              </button>
+            </div>
+          </el-popover>
+        </el-popover-group>
       </li>
       <li class="hidden md:block">
         <button class="p-2">

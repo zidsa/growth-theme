@@ -1,0 +1,20 @@
+{
+  "ar": {
+    "header_options": [],
+    "logo_desktop": "https://static.zid.store/1aa1cdea/images/logo.svg?v=v1.0.0",
+    "logo_mobile": "https://static.zid.store/1aa1cdea/images/logo.svg?v=v1.0.0",
+    "announcement_bar_display": true,
+    "announcement_bar_text": "احصل على خصم 20% على جميع المنتجات!",
+    "announcement_bar_url": "",
+    "announcement_bar_page_display": "all"
+  },
+  "en": {
+    "header_options": [],
+    "logo_desktop": "https://static.zid.store/1aa1cdea/images/logo.svg?v=v1.0.0",
+    "logo_mobile": "https://static.zid.store/1aa1cdea/images/logo.svg?v=v1.0.0",
+    "announcement_bar_display": true,
+    "announcement_bar_text": "Get 20% off on all products!",
+    "announcement_bar_url": "",
+    "announcement_bar_page_display": "all"
+  }
+}

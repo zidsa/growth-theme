@@ -1,0 +1,198 @@
+{
+  "name": {
+    "ar": "إعدادات التخطيط",
+    "en": "Layout Settings"
+  },
+  "groups": [
+    {
+      "id": "font",
+      "icon": "fa fa-font",
+      "name": {
+        "ar": "الخط",
+        "en": "Font"
+      },
+      "settings": [
+        {
+          "id": "family",
+          "type": "select",
+          "label": {
+            "ar": "نوع الخط",
+            "en": "Font Family"
+          },
+          "default": "IBM+Plex+Sans+Arabic",
+          "options": [
+            {
+              "label": {
+                "ar": "IBM Arabic",
+                "en": "IBM Arabic"
+              },
+              "value": "IBM+Plex+Sans+Arabic"
+            },
+            {
+              "label": {
+                "ar": "Roboto",
+                "en": "Roboto"
+              },
+              "value": "Roboto"
+            },
+            {
+              "label": {
+                "ar": "Cairo",
+                "en": "Cairo"
+              },
+              "value": "Cairo"
+            },
+            {
+              "label": {
+                "ar": "Changa",
+                "en": "Changa"
+              },
+              "value": "Changa"
+            },
+            {
+              "label": {
+                "ar": "Tajawal",
+                "en": "Tajawal"
+              },
+              "value": "Tajawal"
+            },
+            {
+              "label": {
+                "ar": "Almarai",
+                "en": "Almarai"
+              },
+              "value": "Almarai"
+            },
+            {
+              "label": {
+                "ar": "Amiri",
+                "en": "Amiri"
+              },
+              "value": "Amiri"
+            },
+            {
+              "label": {
+                "ar": "Mada",
+                "en": "Mada"
+              },
+              "value": "Mada"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "theme",
+      "icon": "fa fa-paint-brush",
+      "name": {
+        "ar": "الثيم",
+        "en": "Theme"
+      },
+      "settings": [
+        {
+          "id": "primary",
+          "type": "color",
+          "label": {
+            "ar": "اللون الأساسي",
+            "en": "Primary Color"
+          },
+          "default": "#0b0a09"
+        },
+        {
+          "id": "primary_foreground",
+          "type": "color",
+          "label": {
+            "ar": "لون الخط الأساسي",
+            "en": "Primary Foreground Color"
+          },
+          "default": "#fff"
+        },
+        {
+          "id": "background",
+          "type": "color",
+          "label": {
+            "ar": "لون الخلفية",
+            "en": "Background Color"
+          },
+          "default": "#fff"
+        },
+        {
+          "id": "foreground",
+          "type": "color",
+          "label": {
+            "ar": "اللون الأمامي",
+            "en": "Foreground Color"
+          },
+          "default": "#f6f5f4"
+        },
+        {
+          "id": "secondary",
+          "type": "color",
+          "label": {
+            "ar": "اللون الثانوي",
+            "en": "Secondary Color"
+          },
+          "default": "#545352"
+        },
+        {
+          "id": "destructive",
+          "type": "color",
+          "label": {
+            "ar": "لون الخطر",
+            "en": "Destructive Color"
+          },
+          "default": "#c22b51"
+        },
+        {
+          "id": "success",
+          "type": "color",
+          "label": {
+            "ar": "لون النجاح",
+            "en": "Success Color"
+          },
+          "default": "#649560"
+        },
+        {
+          "id": "border",
+          "type": "color",
+          "label": {
+            "ar": "لون الحدود",
+            "en": "Border Color"
+          },
+          "default": "#545352"
+        },
+        {
+          "id": "ring",
+          "type": "color",
+          "label": {
+            "ar": "لون التحديد",
+            "en": "Ring Color"
+          },
+          "default": "#767573"
+        },
+        {
+          "id": "input",
+          "type": "color",
+          "label": {
+            "ar": "لون حدود الإدخال",
+            "en": "Input Border Color"
+          },
+          "default": "#545352"
+        },
+        {
+          "id": "radius",
+          "type": "range",
+          "label": {
+            "ar": "نصف قطر الحواف",
+            "en": "Border Radius"
+          },
+          "min": 0,
+          "max": 2,
+          "step": 0.05,
+          "unit": "rem",
+          "default": 0.25
+        }
+      ]
+    }
+  ]
+}
