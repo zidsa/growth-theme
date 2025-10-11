@@ -57,7 +57,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ 'styles.css?v=23456' | asset_url }}"
+      href="{{ 'styles.css' | asset_url }}"
     />
 
     {# TailwindPlus Elements #}
@@ -65,6 +65,12 @@
       src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
       type="module"
     ></script>
+
+    {# Embla Carousel - Correct versions for fade + autoplay #}
+    <script src="https://cdn.jsdelivr.net/npm/embla-carousel@8.1.6/embla-carousel.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-autoplay@8.1.6/embla-carousel-autoplay.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-fade@8.1.6/embla-carousel-fade.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/embla-carousel-auto-scroll@8.1.6/embla-carousel-auto-scroll.umd.js"></script>
 
     {% if user_custom_css %}
       <link
