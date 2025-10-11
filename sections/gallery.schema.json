@@ -29,11 +29,19 @@
       },
       "settings": [
         {
-          "id": "image",
+          "id": "src",
           "type": "image",
           "label": {
             "ar": "الصورة",
             "en": "Image"
+          }
+        },
+        {
+          "id": "alt",
+          "type": "text",
+          "label": {
+            "ar": "النص البديل للصورة",
+            "en": "image alt text"
           }
         },
         {
