@@ -1,0 +1,158 @@
+{
+  "ar": {
+    "logo_desktop": null,
+    "logo_mobile": null,
+    "links_1_hide": true,
+    "links_1_title": "المتجر",
+    "links_1_links": [
+      {
+        "title": "جميع المنتجات",
+        "url": "/products"
+      },
+      {
+        "title": "الوصول الجديد",
+        "url": "/collections/new-arrivals"
+      },
+      {
+        "title": "الأكثر مبيعاً",
+        "url": "/collections/best-sellers"
+      },
+      {
+        "title": "التخفيضات",
+        "url": "/collections/sale"
+      },
+      {
+        "title": "بطاقات الهدايا",
+        "url": "/products/gift-card"
+      }
+    ],
+    "links_2_hide": false,
+    "links_2_title": "خدمة العملاء",
+    "links_2_links": [
+      {
+        "title": "اتصل بنا",
+        "url": "/contact"
+      },
+      {
+        "title": "الشحن والإرجاع",
+        "url": "/shipping-returns"
+      },
+      {
+        "title": "الأسئلة الشائعة",
+        "url": "/faqs"
+      },
+      {
+        "title": "دليل المقاسات",
+        "url": "/size-guide"
+      },
+      {
+        "title": "تتبع الطلب",
+        "url": "/track-order"
+      }
+    ],
+    "links_3_hide": true,
+    "links_3_title": "عن المتجر",
+    "links_3_links": [
+      {
+        "title": "قصتنا",
+        "url": "/about"
+      },
+      {
+        "title": "المدونة",
+        "url": "/blog"
+      },
+      {
+        "title": "الوظائف",
+        "url": "/careers"
+      },
+      {
+        "title": "سياسة الخصوصية",
+        "url": "/privacy-policy"
+      },
+      {
+        "title": "شروط الخدمة",
+        "url": "/terms-of-service"
+      }
+    ],
+    "about_us": "<p>نحن ملتزمون بتقديم منتجات عالية الجودة وخدمة عملاء استثنائية. مهمتنا هي جعل التسوق سهلاً وممتعاً للجميع.</p>",
+    "contact_info_title": "تواصل معنا"
+  },
+  "en": {
+    "logo_desktop": null,
+    "logo_mobile": null,
+    "links_1_hide": false,
+    "links_1_title": "Shop",
+    "links_1_links": [
+      {
+        "title": "All Products",
+        "url": "/products"
+      },
+      {
+        "title": "New Arrivals",
+        "url": "/collections/new-arrivals"
+      },
+      {
+        "title": "Best Sellers",
+        "url": "/collections/best-sellers"
+      },
+      {
+        "title": "Sale",
+        "url": "/collections/sale"
+      },
+      {
+        "title": "Gift Cards",
+        "url": "/products/gift-card"
+      }
+    ],
+    "links_2_hide": false,
+    "links_2_title": "Customer Service",
+    "links_2_links": [
+      {
+        "title": "Contact Us",
+        "url": "/contact"
+      },
+      {
+        "title": "Shipping & Returns",
+        "url": "/shipping-returns"
+      },
+      {
+        "title": "FAQs",
+        "url": "/faqs"
+      },
+      {
+        "title": "Size Guide",
+        "url": "/size-guide"
+      },
+      {
+        "title": "Track Order",
+        "url": "/track-order"
+      }
+    ],
+    "links_3_hide": false,
+    "links_3_title": "About",
+    "links_3_links": [
+      {
+        "title": "Our Story",
+        "url": "/about"
+      },
+      {
+        "title": "Blog",
+        "url": "/blog"
+      },
+      {
+        "title": "Careers",
+        "url": "/careers"
+      },
+      {
+        "title": "Privacy Policy",
+        "url": "/privacy-policy"
+      },
+      {
+        "title": "Terms of Service",
+        "url": "/terms-of-service"
+      }
+    ],
+    "about_us": "<p>We are committed to providing high-quality products and exceptional customer service. Our mission is to make shopping easy and enjoyable for everyone.</p>",
+    "contact_info_title": "Get In Touch"
+  }
+}
