@@ -14,7 +14,7 @@
       },
       "settings": [
         {
-          "id": "options",
+          "id": "header_options",
           "type": "checkboxes",
           "label": {
             "ar": "الخيارات",
