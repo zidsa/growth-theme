@@ -4,7 +4,7 @@
 <div class="{{ wrapper_class|default('') }}">
   <!-- Input Container -->
   <div
-    class="peer relative flex h-12 items-center gap-3 rounded border border-[#545352] px-3 transition-all hover:border-2 focus-within:border-2 focus-within:border-primary has-[:invalid]:border-2 has-[:invalid]:border-destructive has-[:disabled]:border-[#DADADA] has-[:disabled]:bg-[#F2F2F2]"
+    class="peer focus-within:border-primary has-[input:user-invalid]:border-destructive relative flex h-12 items-center gap-3 rounded border border-[#545352] px-3 transition-all focus-within:border-2 hover:border-2 has-[input:disabled]:border-[#DADADA] has-[input:disabled]:bg-[#F2F2F2] has-[input:user-invalid]:border-2"
   >
     <!-- Left Icon (Optional) -->
     {% if icon_left %}
@@ -32,7 +32,7 @@
 
       <label
         for="{{ input_id }}"
-        class="pointer-events-none absolute start-0 text-[#858484] transition-all peer-invalid:text-destructive peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:translate-y-0 peer-focus:text-xs peer-disabled:text-[#B5B5B5] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs"
+        class="peer-user-invalid:text-destructive pointer-events-none absolute start-0 text-[#858484] transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:translate-y-0 peer-focus:text-xs peer-disabled:text-[#B5B5B5] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs"
       >
         {{ label }}{% if required %}<span class="text-destructive">*</span>{% endif %}
       </label>
@@ -46,7 +46,7 @@
 
   <!-- Caption / Error Message -->
   {% if caption or error_message %}
-    <p class="mt-1.5 text-xs leading-[1.5] text-[#858484] peer-has-[:invalid]:text-destructive">
+    <p class="peer-has-[input:user-invalid]:text-destructive mt-1.5 text-xs leading-[1.5] text-[#858484]">
       {{ error_message or caption }}
     </p>
   {% endif %}

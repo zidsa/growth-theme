@@ -274,18 +274,18 @@ Pass custom attributes for JavaScript interaction.
 
 ### Parameters
 
-| Parameter       | Type      | Default | Description                                      |
-|----------------|-----------|---------|--------------------------------------------------|
-| `label`        | `string`  | -       | Text label displayed next to checkbox            |
-| `id`           | `string`  | Required| Unique identifier for the checkbox               |
-| `name`         | `string`  | Required| Form field name for submission                   |
-| `value`        | `string`  | `on`    | Value submitted when checked                     |
-| `checked`      | `boolean` | `false` | Initial checked state                            |
-| `disabled`     | `boolean` | `false` | Disables the checkbox                            |
-| `required`     | `boolean` | `false` | Marks as required for validation                 |
-| `class`        | `string`  | -       | Additional CSS classes for the input             |
-| `wrapper_class`| `string`  | -       | Additional CSS classes for the wrapper div       |
-| `attrs`        | `string`  | -       | Raw HTML attributes (data-*, aria-*, etc.)       |
+| Parameter       | Type      | Default | Description                                  |
+|----------------|-----------|---------|----------------------------------------------|
+| `label`        | `string`  | -       | Text label displayed next to checkbox        |
+| `id`           | `string`  | Required| Unique identifier for the checkbox           |
+| `name`         | `string`  | Required| Form field name for submission               |
+| `value`        | `string`  | `on`    | Value submitted when checked                 |
+| `checked`      | `boolean` | `false` | Initial checked state                        |
+| `disabled`     | `boolean` | `false` | Disables the checkbox                        |
+| `required`     | `boolean` | `false` | Marks as required for validation             |
+| `class`        | `string`  | -       | Additional CSS classes for the input         |
+| `wrapper_class`| `string`  | -       | Additional CSS classes for the wrapper label |
+| `attrs`        | `string`  | -       | Raw HTML attributes (data-*, aria-*, etc.)   |
 
 ## Accessibility
 
