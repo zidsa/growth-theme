@@ -12,8 +12,7 @@
       "label": {
         "ar": "العنوان",
         "en": "Title"
-      },
-      "default": "Featured Products"
+      }
     },
     {
       "id": "products",
@@ -29,8 +28,7 @@
       "label": {
         "ar": "نص زر المزيد",
         "en": "More Button Text"
-      },
-      "default": "View All"
+      }
     },
     {
       "id": "display_more",
