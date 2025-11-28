@@ -18,15 +18,16 @@
         id="{{ input_id }}"
         name="{{ name }}"
         value="{{ value|default('') }}"
-        placeholder=" "
+        placeholder="{{ placeholder|default(' ') }}"
         {% if required %}required{% endif %}
         {% if disabled %}disabled{% endif %}
         {% if readonly %}readonly{% endif %}
         {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+        {% if inputmode %}inputmode="{{ inputmode }}"{% endif %}
         {% if minlength %}minlength="{{ minlength }}"{% endif %}
         {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
         {% if pattern %}pattern="{{ pattern }}"{% endif %}
-        class="peer text-primary {{ input_class|default('') }} w-full bg-transparent pt-4 pb-0 text-base leading-[1.5] outline-none disabled:cursor-not-allowed disabled:text-[#B5B5B5]"
+        class="peer text-primary {{ input_class|default('') }} w-full bg-transparent pt-4 pb-0 text-base leading-[1.5] outline-none placeholder:text-[#858484] placeholder:opacity-0 focus:placeholder:opacity-100 disabled:cursor-not-allowed disabled:text-[#B5B5B5]"
         {{ attrs|default('')|safe }}
       />
 

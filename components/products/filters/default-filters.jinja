@@ -1,0 +1,101 @@
+{# Default Filters - For stores without custom filter attributes #}
+{% set availability_options = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
+
+<div class="flex flex-wrap items-center gap-3">
+  <span class="text-secondary text-[16px] leading-[24px]"> {{ _("Filters") }} </span>
+  <button
+    popovertarget="availability-popover"
+    type="button"
+    class="text-primary group inline-flex items-center justify-center gap-2 border-none bg-transparent text-[16px] leading-[24px] focus:ring-0"
+  >
+    <span>{{ _("Availability") }}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      class="transition-transform duration-200 group-aria-expanded:rotate-180"
+    >
+      <path
+        d="M8 5.96875C8.01431 5.96879 8.01997 5.97104 8.02148 5.97168C8.02382 5.97269 8.03271 5.97706 8.04785 5.99219L11.3438 9.28809C11.3597 9.30408 11.3644 9.31349 11.3652 9.31543C11.3656 9.31635 11.3672 9.32094 11.3672 9.33301C11.3671 9.34474 11.3656 9.3487 11.3652 9.34961C11.3645 9.35129 11.3601 9.36063 11.3438 9.37695C11.3289 9.39179 11.3198 9.39549 11.3174 9.39648C11.3148 9.39752 11.3076 9.40039 11.291 9.40039C11.2739 9.40036 11.2668 9.3974 11.2646 9.39648C11.2621 9.39541 11.253 9.39166 11.2383 9.37695L11.2373 9.37598L8.35254 6.50684L7.99902 6.15527L4.76074 9.39355C4.75291 9.40139 4.74699 9.40529 4.74414 9.40723C4.74242 9.40839 4.74153 9.40902 4.74121 9.40918H4.73438C4.71613 9.4085 4.70117 9.40625 4.67188 9.37695C4.65695 9.36203 4.65334 9.35297 4.65234 9.35059C4.65136 9.34822 4.64844 9.34117 4.64844 9.32422C4.64844 9.30715 4.65138 9.30016 4.65234 9.29785C4.65334 9.29547 4.65694 9.28642 4.67188 9.27148L7.95117 5.99219C7.96696 5.9764 7.97663 5.97248 7.97852 5.97168C7.98051 5.97086 7.98651 5.96875 8 5.96875Z"
+        fill="currentColor"
+        stroke="currentColor"
+      ></path>
+    </svg>
+  </button>
+  <el-popover
+    id="availability-popover"
+    anchor="bottom center"
+    popover
+    class="origin-top-center min-w-[200px] rounded-none border border-border bg-white p-4 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+  >
+    <div class="space-y-1">
+      {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
+      {% for value, label in availability_options.items() %}
+        {%
+          with
+          label=label,
+          id='availability-' ~ value,
+          name='availability',
+          value=value,
+          checked=(value in availability_values),
+          wrapper_class='py-2',
+          attrs='onchange="window.productFilter.handleAvailability()"'
+        %}
+          {% include 'components/ui/checkbox.jinja' %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  </el-popover>
+
+  <button
+    popovertarget="price-popover"
+    type="button"
+    class="text-primary group inline-flex items-center justify-center gap-2 border-none bg-transparent text-[16px] leading-[24px] focus:ring-0"
+  >
+    <span>{{ _("Price") }}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      class="transition-transform duration-200 group-aria-expanded:rotate-180"
+    >
+      <path
+        d="M8 5.96875C8.01431 5.96879 8.01997 5.97104 8.02148 5.97168C8.02382 5.97269 8.03271 5.97706 8.04785 5.99219L11.3438 9.28809C11.3597 9.30408 11.3644 9.31349 11.3652 9.31543C11.3656 9.31635 11.3672 9.32094 11.3672 9.33301C11.3671 9.34474 11.3656 9.3487 11.3652 9.34961C11.3645 9.35129 11.3601 9.36063 11.3438 9.37695C11.3289 9.39179 11.3198 9.39549 11.3174 9.39648C11.3148 9.39752 11.3076 9.40039 11.291 9.40039C11.2739 9.40036 11.2668 9.3974 11.2646 9.39648C11.2621 9.39541 11.253 9.39166 11.2383 9.37695L11.2373 9.37598L8.35254 6.50684L7.99902 6.15527L4.76074 9.39355C4.75291 9.40139 4.74699 9.40529 4.74414 9.40723C4.74242 9.40839 4.74153 9.40902 4.74121 9.40918H4.73438C4.71613 9.4085 4.70117 9.40625 4.67188 9.37695C4.65695 9.36203 4.65334 9.35297 4.65234 9.35059C4.65136 9.34822 4.64844 9.34117 4.64844 9.32422C4.64844 9.30715 4.65138 9.30016 4.65234 9.29785C4.65334 9.29547 4.65694 9.28642 4.67188 9.27148L7.95117 5.99219C7.96696 5.9764 7.97663 5.97248 7.97852 5.97168C7.98051 5.97086 7.98651 5.96875 8 5.96875Z"
+        fill="currentColor"
+        stroke="currentColor"
+      ></path>
+    </svg>
+  </button>
+  <el-popover
+    id="price-popover"
+    anchor="bottom center"
+    popover
+    class="origin-top-center max-w-[260px] rounded-none border border-border bg-white p-4 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+  >
+    <form
+      id="price-filter-form-simple"
+      onsubmit="return window.productFilter.handlePriceSubmit(event, 'price_min_simple', 'price_max_simple')"
+    >
+      {%
+        with
+        slider_id='price-slider-simple',
+        min_input_id='price_min_simple',
+        max_input_id='price_max_simple'
+      %}
+        {% include 'components/products/filters/price-filter.jinja' %}
+      {% endwith %}
+      <div class="mt-3 flex justify-end">
+        <button
+          type="submit"
+          class="text-primary border-none bg-transparent px-2 py-1.5 text-[12px] leading-[18px]"
+        >
+          {{ _("Apply") }}
+        </button>
+      </div>
+    </form>
+  </el-popover>
+</div>

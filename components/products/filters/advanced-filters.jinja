@@ -1,0 +1,323 @@
+{% macro render_attr_option(option, attr_slug, idx, selected_values) %}
+  {% if option.type == 'default' %}
+    {%
+      with
+      label=option.value,
+      id=attr_slug ~ '-' ~ idx,
+      name='attributes[' ~ attr_slug ~ '][]',
+      value=option.value,
+      checked=(option.value in selected_values)
+    %}
+      {% include 'components/ui/checkbox.jinja' %}
+    {% endwith %}
+  {% elif option.type == 'color' %}
+    {% set color_label %}
+      <span class="flex size-8 shrink-0 items-center justify-center rounded p-0.5">
+        <span class="block size-full rounded" style="background-color: {{ option.type_value }};" title="{{ option.value }}"></span>
+      </span>
+      <span class="text-[16px] leading-[24px]">{{ option.value }}</span>
+    {% endset %}
+    {%
+      with
+      label=color_label,
+      id=attr_slug ~ '-color-' ~ idx,
+      name='attributes[' ~ attr_slug ~ '][]',
+      value=option.value,
+      checked=(option.value in selected_values)
+    %}
+      {% include 'components/ui/checkbox.jinja' %}
+    {% endwith %}
+  {% elif option.type == 'icon' and option.type_value.thumbnail %}
+    {% set icon_label %}
+      <span class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded p-0.5">
+        <img src="{{ option.type_value.thumbnail }}" alt="{{ option.value }}" class="size-full rounded object-cover" />
+      </span>
+      <span class="text-[16px] leading-[24px]">{{ option.value }}</span>
+    {% endset %}
+    {%
+      with
+      label=icon_label,
+      id=attr_slug ~ '-icon-' ~ idx,
+      name='attributes[' ~ attr_slug ~ '][]',
+      value=option.value,
+      checked=(option.value in selected_values)
+    %}
+      {% include 'components/ui/checkbox.jinja' %}
+    {% endwith %}
+  {% endif %}
+{% endmacro %}
+
+{# Sort options for the drawer #}
+{%
+  set sort_options = [
+    { 'value': 'popularity_order-asc', 'label': _('Most popular'), 'sort_by': 'popularity_order', 'order': 'asc' },
+    { 'value': 'created_at-desc', 'label': _('Newest'), 'sort_by': 'created_at', 'order': 'desc' },
+    { 'value': 'name-asc', 'label': _('Alphabetically, A-Z'), 'sort_by': 'name', 'order': 'asc' },
+    { 'value': 'name-desc', 'label': _('Alphabetically, Z-A'), 'sort_by': 'name', 'order': 'desc' },
+    { 'value': 'price-asc', 'label': _('Price, low to high'), 'sort_by': 'price', 'order': 'asc' },
+    { 'value': 'price-desc', 'label': _('Price, high to low'), 'sort_by': 'price', 'order': 'desc' }
+  ]
+%}
+
+{# Availability options #}
+{% set availability_options = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
+
+<button
+  type="button"
+  command="show-modal"
+  commandfor="filters-drawer"
+  class="border-primary text-primary flex items-center gap-3 rounded border px-4 py-3 text-[16px] leading-[24px]"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M11.2441 16.6211H13.7617C13.9946 16.6211 14.1894 16.7016 14.3467 16.8633C14.5039 17.0252 14.583 17.2239 14.583 17.46C14.583 17.6957 14.5031 17.8894 14.3447 18.043C14.186 18.1968 13.9901 18.2744 13.7559 18.2744H11.2441C11.0091 18.2744 10.8135 18.1957 10.6553 18.0391C10.4972 17.8826 10.418 17.6872 10.418 17.4512C10.418 17.2153 10.4975 17.0185 10.6562 16.8594C10.815 16.7006 11.0103 16.6211 11.2441 16.6211ZM7.21387 11.1738H17.7803C18.015 11.1739 18.2108 11.2534 18.3691 11.4131C18.5274 11.5726 18.6064 11.7697 18.6064 12.0059C18.6064 12.2423 18.5271 12.4362 18.3691 12.5898C18.2108 12.7436 18.0153 12.8212 17.7803 12.8213H7.21387C6.97849 12.8212 6.78382 12.7424 6.62793 12.5859C6.47192 12.4294 6.39355 12.2336 6.39355 11.9971C6.39361 11.7609 6.47208 11.5658 6.62793 11.4092C6.78383 11.2526 6.97845 11.1739 7.21387 11.1738ZM4.20215 5.7207H20.8037C21.0386 5.7207 21.2343 5.80031 21.3926 5.95996C21.551 6.11955 21.6309 6.31684 21.6309 6.55273C21.6308 6.78843 21.5504 6.98371 21.3896 7.13965C21.2287 7.29576 21.0316 7.37402 20.7979 7.37402H4.19629C3.96101 7.37401 3.7663 7.29421 3.61035 7.13574C3.4543 6.97695 3.37606 6.77995 3.37598 6.54395C3.37598 6.30828 3.45492 6.11269 3.61328 5.95605C3.772 5.79928 3.96798 5.72075 4.20215 5.7207Z"
+      fill="currentColor"
+      stroke="currentColor"
+      stroke-width="0.05"
+    ></path>
+  </svg>
+  {{ _("Filters") }}
+</button>
+
+<el-dialog class="contents">
+  <dialog
+    id="filters-drawer"
+    aria-labelledby="drawer-title"
+    class="fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent not-open:hidden backdrop:bg-transparent"
+  >
+    <el-dialog-backdrop
+      class="absolute inset-0 bg-black/75 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
+    ></el-dialog-backdrop>
+    <div
+      tabindex="0"
+      class="absolute inset-0 pe-10 focus:outline-none sm:pe-16"
+    >
+      <el-dialog-panel
+        class="group/dialog-panel relative block size-full max-w-md transform transition duration-500 ease-in-out sm:duration-700 ltr:data-closed:-translate-x-full rtl:data-closed:translate-x-full"
+      >
+        <form
+          method="GET"
+          action=""
+          onsubmit="return window.productFilter.submitDrawerForm(event)"
+          class="bg-background relative flex h-full flex-col"
+        >
+          <div class="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-4 sm:px-8 sm:py-8">
+            {#header#}
+              <div class="flex items-start justify-between">
+              <h2
+                id="drawer-title"
+                class="text-primary text-[24px] leading-[33.6px] uppercase [font-variant:all-small-caps]"
+              >
+                {{ _("Filters") }}
+              </h2>
+              {% set close_icon %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+                  <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              {% endset %}
+              {%
+                with
+                content=close_icon,
+                size='icon-md',
+                aria_label=_("Close panel"),
+                attrs='command="close" commandfor="filters-drawer"'
+              %}
+                {% include 'components/ui/button.jinja' %}
+              {% endwith %}
+            </div>
+
+            {# Filters List #}
+            <div class="mt-6 divide-y divide-border border-t border-border">
+              {# Sorting - Only visible on mobile #}
+              {% set current_sort_by = session.query_params.get('sort_by') or 'popularity_order' %}
+              {% set current_order = session.query_params.get('order') or 'asc' %}
+              {% set current_sort_value = current_sort_by ~ '-' ~ current_order %}
+
+
+              {% set sort_content %}
+                <input
+                  type="hidden"
+                  name="sort_by"
+                  value="{{ current_sort_by }}"
+                />
+                <input
+                  type="hidden"
+                  name="order"
+                  value="{{ current_order }}"
+                />
+                <div class="space-y-3">
+                  {% for option in sort_options %}
+                   {%
+                        with
+                        label=option.label,
+                        id='sort-' ~ loop.index,
+                        name='sort_option',
+                        value=option.value,
+                        checked=(current_sort_value == option.value),
+                        attrs='onchange="window.productFilter.setSortParams(this, \'' ~ option.sort_by ~ '\', \'' ~ option.order ~ '\')"'
+                      %}
+                        {% include 'components/ui/radio.jinja' %}
+                      {% endwith %}
+                  {% endfor %}
+                </div>
+
+              {% endset %}
+
+              <div class="py-4 md:hidden">
+                {%
+                  with
+                  id='sorting-disclosure',
+                  title=_("Sort by"),
+                  open=false,
+                  content=sort_content,
+                  content_class='px-0'
+                %}
+                  {% include 'components/ui/disclosure.jinja' %}
+                {% endwith %}
+              </div>
+
+              {# Availability Filter #}
+              {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
+
+
+              {% set availability_content %}
+                <div class="space-y-3">
+                  {% for value, label in availability_options.items() %}
+                    {%
+                      with
+                      label=label,
+                      id='availability-' ~ value ~ '-drawer',
+                      name='availability',
+                      value=value,
+                      checked=(value in availability_values)
+                    %}
+                      {% include 'components/ui/checkbox.jinja' %}
+                    {% endwith %}
+                  {% endfor %}
+                </div>
+              {% endset %}
+
+              <div class="py-4">
+                {%
+                  with
+                  id='availability-disclosure',
+                  title=_("Availability"),
+                  open=true,
+                  content=availability_content,
+                  content_class='px-0'
+                %}
+                  {% include 'components/ui/disclosure.jinja' %}
+                {% endwith %}
+              </div>
+
+              {# Attribute Filters #}
+              {% if filters and filters.attributes %}
+                {% for attribute in filters.attributes %}
+                  {% if attribute.is_enabled and attribute.data|length > 0 %}
+                    {% set attr_key = 'attributes[' ~ attribute.slug ~ '][]' %}
+                    {% set selected_attr_values = session.query_params.getlist(attr_key) %}
+
+                    {% set visible_options = attribute.data[:4] %}
+                    {% set hidden_options = attribute.data[4:] %}
+
+                    {% set attr_content %}
+                      <div class="space-y-3">
+                        {% for option in visible_options %}
+                          {{ render_attr_option(option, attribute.slug, loop.index, selected_attr_values) }}
+                        {% endfor %}
+                      </div>
+                      {% if hidden_options|length > 0 %}
+                        <el-disclosure id="{{ attribute.slug }}-more" hidden class="peer mt-3 space-y-3 transition duration-200 data-closed:opacity-0">
+                          {% for option in hidden_options %}
+                            {{ render_attr_option(option, attribute.slug, loop.index + 4, selected_attr_values) }}
+                          {% endfor %}
+                        </el-disclosure>
+                        <button
+                          type="button"
+                          command="--toggle"
+                          commandfor="{{ attribute.slug }}-more"
+                          class="group text-secondary mt-3 text-[14px] leading-[21px] underline"
+                        >
+                          <span class="group-aria-[expanded=false]:inline hidden">{{ _("View more") }}</span>
+                          <span class="group-aria-[expanded=true]:inline hidden">{{ _("View less") }}</span>
+                        </button>
+                      {% endif %}
+                    {% endset %}
+
+                    <div class="py-4">
+                      {%
+                        with
+                        id=attribute.slug ~ '-disclosure',
+                        title=attribute.name,
+                        open=true,
+                        content=attr_content,
+                        content_class='px-0'
+                      %}
+                        {% include 'components/ui/disclosure.jinja' %}
+                      {% endwith %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {# Price Filter #}
+              {% set price_content %}
+                {%
+                  with
+                  slider_id='price-slider-drawer',
+                  min_input_id='price_min_drawer',
+                  max_input_id='price_max_drawer'
+                %}
+                  {% include 'components/products/filters/price-filter.jinja' %}
+                {% endwith %}
+              {% endset %}
+
+              <div class="py-4">
+                {%
+                  with
+                  id='price-disclosure',
+                  title=_("Price"),
+                  open=true,
+                  content=price_content,
+                  content_class='px-0'
+                %}
+                  {% include 'components/ui/disclosure.jinja' %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+
+          {# Footer Actions #}
+          <div class="flex shrink-0 justify-end gap-3 border-t border-border px-4 py-4 sm:px-8 sm:py-6">
+            {%
+              with
+              content=_("Clear all"),
+              variant='outlined',
+              size='lg',
+              class='flex-1',
+              attrs='type="button" onclick="window.productFilter.clearDrawerFilters()"'
+            %}
+              {% include 'components/ui/button.jinja' %}
+            {% endwith %}
+            {%
+              with
+              content=_("Apply"),
+              variant='filled',
+              size='lg',
+              type='submit',
+              class='flex-1'
+            %}
+              {% include 'components/ui/button.jinja' %}
+            {% endwith %}
+          </div>
+        </form>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>

@@ -1,0 +1,114 @@
+{# Applied Filters Component #}
+{% set active_filters = [] %}
+
+{# Sort filter (only if not default) #}
+{% set current_sort_by = session.query_params.get('sort_by') %}
+{% set current_order = session.query_params.get('order') %}
+{% if current_sort_by and not (current_sort_by == 'popularity_order' and current_order == 'asc') %}
+  {% set sort_key = current_sort_by ~ '-' ~ (current_order or 'asc') %}
+  {%
+    set sort_labels = {
+      'popularity_order-asc': _('Most popular'),
+      'created_at-desc': _('Newest'),
+      'name-asc': _('Alphabetically, A-Z'),
+      'name-desc': _('Alphabetically, Z-A'),
+      'price-asc': _('Price, low to high'),
+      'price-desc': _('Price, high to low')
+    }
+  %}
+  {%
+    set __ = active_filters.append({
+      'type': 'sort',
+      'label': _('Sort') ~ ': ' ~ sort_labels.get(sort_key, current_sort_by)
+    })
+  %}
+{% endif %}
+
+{# Availability filter #}
+{% set availability_labels = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
+{% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
+{% for av_value in availability_values %}
+  {%
+    set __ = active_filters.append({
+      'type': 'availability',
+      'label': _('Availability') ~ ': ' ~ availability_labels.get(av_value, av_value),
+      'value': av_value
+    })
+  %}
+{% endfor %}
+
+{# Attribute filters #}
+{% if filters and filters.attributes %}
+  {% for attribute in filters.attributes %}
+    {% set attr_key = 'attributes[' ~ attribute.slug ~ '][]' %}
+    {% set selected_attr_values = session.query_params.getlist(attr_key) if session and session.query_params else [] %}
+    {% for selected_value in selected_attr_values %}
+      {%
+        set __ = active_filters.append({
+          'type': 'attribute',
+          'label': attribute.name ~ ': ' ~ selected_value,
+          'attribute_slug': attribute.slug,
+          'value': selected_value
+        })
+      %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{# Price filter #}
+{% set from_price = session.query_params.get('from_price') %}
+{% set to_price = session.query_params.get('to_price') %}
+{% if from_price or to_price %}
+  {% if from_price and to_price %}
+    {% set price_label = _('Price') ~ ': ' ~ from_price ~ ' - ' ~ to_price %}
+  {% elif from_price %}
+    {% set price_label = _('Price') ~ ': ' ~ _('From') ~ ' ' ~ from_price %}
+  {% else %}
+    {% set price_label = _('Price') ~ ': ' ~ _('To') ~ ' ' ~ to_price %}
+  {% endif %}
+  {% set __ = active_filters.append({ 'type': 'price', 'label': price_label }) %}
+{% endif %}
+
+{# Render #}
+{% if active_filters %}
+  <div class="flex flex-wrap items-center gap-2">
+    <div class="flex w-full items-center justify-between md:order-1 md:w-auto">
+      <span class="text-secondary block text-[16px] leading-[24px] md:hidden">
+        {% trans current=products.results|length, total=products.count %}
+          {{ current }}
+          out of {{ total }} products
+        {% endtrans %}
+      </span>
+      {%
+        with
+        content=_('Clear all'),
+        variant='text',
+        size='md',
+        class='h-[40px]',
+        attrs='onclick="window.productFilter.clearFilters([\'sort_by\', \'order\', \'page_size\', \'q\'])"'
+      %}
+        {% include 'components/ui/button.jinja' %}
+      {% endwith %}
+    </div>
+
+    {% for filter in active_filters %}
+      {% set badge_content %}
+        {{ filter.label }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M11.7324 4.11719C11.8022 4.11719 11.8264 4.13502 11.8457 4.1543C11.865 4.17359 11.8828 4.19775 11.8828 4.26758C11.8827 4.33702 11.8649 4.36064 11.8457 4.37988L8.5791 7.64648L8.22559 8.00098L11.8457 11.6211C11.8649 11.6403 11.8827 11.664 11.8828 11.7334C11.8828 11.8032 11.865 11.8274 11.8457 11.8467C11.8264 11.866 11.8022 11.8838 11.7324 11.8838C11.663 11.8837 11.6394 11.8659 11.6201 11.8467L8 8.22656L7.64551 8.58008L4.37891 11.8467C4.35966 11.8659 4.33605 11.8837 4.2666 11.8838C4.19678 11.8838 4.17261 11.866 4.15332 11.8467C4.13404 11.8274 4.11621 11.8032 4.11621 11.7334C4.11629 11.664 4.1341 11.6403 4.15332 11.6211L7.77344 8.00098L7.41992 7.64648L4.15332 4.37988C4.1341 4.36064 4.11628 4.33699 4.11621 4.26758C4.11621 4.19775 4.13403 4.17359 4.15332 4.1543C4.17261 4.13501 4.19678 4.11719 4.2666 4.11719C4.33601 4.11725 4.35967 4.13508 4.37891 4.1543L7.64551 7.4209L8 7.77441L11.6201 4.1543C11.6394 4.13507 11.663 4.11726 11.7324 4.11719Z" fill="currentColor" stroke="currentColor"></path>
+        </svg>
+      {% endset %}
+      {%
+        with
+        content=badge_content,
+        tag='button',
+        variant='outlined',
+        aria_label=_('Remove filter') ~ ': ' ~ filter.label,
+        class='shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70',
+        attrs='data-filter-type="' ~ filter.type ~ '" data-filter-slug="' ~ (filter.attribute_slug | default('')) ~ '" data-filter-value="' ~ (filter.value | default('')) ~ '" onclick="window.productFilter.removeFilter(this.dataset.filterType, this.dataset.filterSlug, this.dataset.filterValue)"'
+      %}
+        {% include 'components/ui/badge.jinja' %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+{% endif %}

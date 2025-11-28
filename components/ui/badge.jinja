@@ -13,19 +13,28 @@
 {# Combine all classes #}
 {% set all_classes = base_classes + ' ' + variant_classes + ' ' + (class|default('')) %}
 
-{# Render as link or span #}
+{# Render as link, button, or span #}
 {% if href %}
   <a
     href="{{ href }}"
     class="{{ all_classes }}"
-    {{ attrs|safe }}
+    {{ attrs|default('')|safe }}
   >
     {{ content|safe }}
   </a>
+{% elif tag == 'button' %}
+  <button
+    type="{{ type|default('button') }}"
+    class="{{ all_classes }}"
+    {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+    {{ attrs|default('')|safe }}
+  >
+    {{ content|safe }}
+  </button>
 {% else %}
   <span
     class="{{ all_classes }}"
-    {{ attrs|safe }}
+    {{ attrs|default('')|safe }}
   >
     {{ content|safe }}
   </span>

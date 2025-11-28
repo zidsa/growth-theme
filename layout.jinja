@@ -60,11 +60,20 @@
       href="{{ 'styles.css' | asset_url }}"
     />
 
+    {# noUiSlider - For price range slider #}
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css"
+    />
+
     {# TailwindPlus Elements #}
     <script
       src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
       type="module"
     ></script>
+
+    {# noUiSlider JS #}
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
 
     {# Embla Carousel - Correct versions for fade + autoplay #}
     <script src="https://cdn.jsdelivr.net/npm/embla-carousel@8.1.6/embla-carousel.umd.js"></script>
@@ -92,6 +101,17 @@
       src="{{ 'locale-switcher.js' | asset_url }}"
       defer
     ></script>
+    <script
+      src="{{ 'js/price-slider.js' | asset_url }}"
+      defer
+    ></script>
+    <script
+      src="{{ 'js/product-filter.js' | asset_url }}"
+      defer
+    ></script>
+
     {% vitrin_body %}
+    {% block footer_scripts %}
+    {% endblock %}
   </body>
 </html>

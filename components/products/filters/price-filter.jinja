@@ -1,0 +1,41 @@
+  {# Price slider JS: assets/js/price-slider.js #}
+<div class="space-y-4">
+  <div
+    id="{{ slider_id|default('price-slider') }}"
+    class="price-range-slider"
+    data-price-slider
+    data-min-input="{{ min_input_id|default('price_min') }}"
+    data-max-input="{{ max_input_id|default('price_max') }}"
+    data-min-price="{{ min_price|default(0) }}"
+    data-max-price="{{ max_price|default(20000) }}"
+  ></div>
+  <div class="flex items-center gap-3">
+    <div class="flex-1">
+      {%
+        with
+        label=_("From") ~ ", " ~ store.currency.code,
+        id=min_input_id|default('price_min'),
+        name='from_price',
+        type='text',
+        inputmode='numeric',
+        placeholder='0'
+      %}
+        {% include 'components/ui/input.jinja' %}
+      {% endwith %}
+    </div>
+    <span class="text-secondary mt-3 text-base">—</span>
+    <div class="flex-1">
+      {%
+        with
+        label=_("To") ~ ", " ~ store.currency.code,
+        id=max_input_id|default('price_max'),
+        name='to_price',
+        type='text',
+        inputmode='numeric',
+        placeholder=_("No limit")
+      %}
+        {% include 'components/ui/input.jinja' %}
+      {% endwith %}
+    </div>
+  </div>
+</div>

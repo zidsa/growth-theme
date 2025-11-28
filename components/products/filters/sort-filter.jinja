@@ -1,0 +1,64 @@
+{% set current_sort_by = session.query_params.get('sort_by') or 'popularity_order' %}
+{% set current_order = session.query_params.get('order') or 'asc' %}
+{% set current_value = current_sort_by ~ '-' ~ current_order %}
+
+{%
+  set sort_options = [
+    { 'value': 'popularity_order-asc', 'label': _('Most popular') },
+    { 'value': 'created_at-desc', 'label': _('Newest') },
+    { 'value': 'name-asc', 'label': _('Alphabetically, A-Z') },
+    { 'value': 'name-desc', 'label': _('Alphabetically, Z-A') },
+    { 'value': 'price-asc', 'label': _('Price, low to high') },
+    { 'value': 'price-desc', 'label': _('Price, high to low') }
+  ]
+%}
+
+{% set current_label = sort_options | selectattr('value', 'equalto', current_value) | map(attribute='label') | first | default(_('Most popular')) %}
+
+<div class="hidden items-center gap-3 sm:flex">
+  <span class="text-secondary">{{ _("Sort by") }}</span>
+
+  <el-select
+    id="sort-select"
+    value="{{ current_value }}"
+    onchange="window.productFilter.handleSortChange(this.value)"
+  >
+    <button
+      type="button"
+      class="text-primary group inline-flex items-center justify-center gap-2 border-none bg-transparent text-[16px] leading-[24px] focus:ring-0"
+    >
+      <el-selectedcontent class="underline underline-offset-auto">{{ current_label }}</el-selectedcontent>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        class="transition-transform duration-200 group-aria-expanded:rotate-180"
+        aria-hidden="true"
+      >
+        <path
+          d="M8 5.96875C8.01431 5.96879 8.01997 5.97104 8.02148 5.97168C8.02382 5.97269 8.03271 5.97706 8.04785 5.99219L11.3438 9.28809C11.3597 9.30408 11.3644 9.31349 11.3652 9.31543C11.3656 9.31635 11.3672 9.32094 11.3672 9.33301C11.3671 9.34474 11.3656 9.3487 11.3652 9.34961C11.3645 9.35129 11.3601 9.36063 11.3438 9.37695C11.3289 9.39179 11.3198 9.39549 11.3174 9.39648C11.3148 9.39752 11.3076 9.40039 11.291 9.40039C11.2739 9.40036 11.2668 9.3974 11.2646 9.39648C11.2621 9.39541 11.253 9.39166 11.2383 9.37695L11.2373 9.37598L8.35254 6.50684L7.99902 6.15527L4.76074 9.39355C4.75291 9.40139 4.74699 9.40529 4.74414 9.40723C4.74242 9.40839 4.74153 9.40902 4.74121 9.40918H4.73438C4.71613 9.4085 4.70117 9.40625 4.67188 9.37695C4.65695 9.36203 4.65334 9.35297 4.65234 9.35059C4.65136 9.34822 4.64844 9.34117 4.64844 9.32422C4.64844 9.30715 4.65138 9.30016 4.65234 9.29785C4.65334 9.29547 4.65694 9.28642 4.67188 9.27148L7.95117 5.99219C7.96696 5.9764 7.97663 5.97248 7.97852 5.97168C7.98051 5.97086 7.98651 5.96875 8 5.96875Z"
+          fill="currentColor"
+          stroke="currentColor"
+        ></path>
+      </svg>
+    </button>
+
+    <el-options
+      popover
+      anchor="bottom center"
+      class="origin-top-center min-w-[180px] rounded-none border border-border bg-white py-2 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+    >
+      {% for option in sort_options %}
+        <el-option
+          value="{{ option.value }}"
+          class="text-primary block w-full cursor-pointer px-4 py-2 text-[16px] leading-[24px] transition-colors hover:bg-foreground aria-selected:bg-foreground"
+        >
+          {{ option.label }}
+        </el-option>
+      {% endfor %}
+    </el-options>
+  </el-select>
+</div>
