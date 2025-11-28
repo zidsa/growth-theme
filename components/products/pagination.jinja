@@ -1,0 +1,351 @@
+{# Pagination - Main nav wrapper #}
+{% macro Pagination(id='pagination', ariaLabel='pagination', class='') -%}
+  <nav
+    id="{{ id }}"
+    role="navigation"
+    aria-label="{{ ariaLabel }}"
+    data-slot="pagination"
+    class="{{ class }} relative flex items-center justify-center"
+  >
+    {{ caller() }}
+    <span class="bg-foreground pointer-events-none absolute inset-x-0 bottom-0 h-1 rounded-full"></span>
+  </nav>
+{%- endmacro %}
+
+{# PaginationContent - ul wrapper #}
+{% macro PaginationContent(class='') -%}
+  <ul
+    data-slot="pagination-content"
+    class="{{ class }} relative flex items-center justify-center gap-[10px]"
+  >
+    {{ caller() }}
+  </ul>
+{%- endmacro %}
+
+{# PaginationItem - li wrapper #}
+{% macro PaginationItem() -%}
+  <li data-slot="pagination-item">{{ caller() }}</li>
+{%- endmacro %}
+
+{# PaginationLink - page number link #}
+{% macro PaginationLink(href='', page='', isActive=false, class='') -%}
+  {% if isActive %}
+    <span
+      data-slot="pagination-link"
+      data-active="true"
+      aria-current="page"
+      class="text-primary {{ class }} relative flex size-11 items-center justify-center text-[16px] leading-[24px] [&_.underline]:hidden data-[active=true]:[&_.underline]:block"
+    >
+      {{ page if page else caller() }}
+      <span
+        class="bg-primary pointer-events-none absolute bottom-0 left-1/2 z-10 h-1 w-12 -translate-x-1/2 rounded-full underline"
+      ></span>
+    </span>
+  {% else %}
+    <a
+      href="{{ href }}"
+      data-slot="pagination-link"
+      data-active="false"
+      class="text-primary {{ class }} flex size-11 items-center justify-center text-[16px] leading-[24px]"
+    >
+      {{ page if page else caller() }}
+    </a>
+  {% endif %}
+{%- endmacro %}
+
+{# PaginationEllipsis - dots/ellipsis #}
+{% macro PaginationEllipsis(class='') -%}
+  <span
+    aria-hidden="true"
+    data-slot="pagination-ellipsis"
+    class="text-secondary {{ class }} flex size-11 items-center justify-center text-[16px] leading-[24px]"
+  >
+    ...
+    <span class="sr-only">More pages</span>
+  </span>
+{%- endmacro %}
+
+{# PaginationFirst - first page button #}
+{% macro PaginationFirst(href='', disabled=false, ariaLabel='First page', class='') -%}
+  <a
+    href="{{ href }}"
+    data-slot="pagination-first"
+    aria-label="{{ ariaLabel }}"
+    aria-disabled="{{ 'true' if disabled else 'false' }}"
+    class="text-secondary {% if disabled %}pointer-events-none opacity-50{% endif %} {{ class }} flex size-11 items-center justify-center"
+  >
+    <span class="sr-only">{{ ariaLabel }}</span>
+    <span class="flex size-8 items-center justify-center rtl:scale-x-[-1]">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4.55566 4.78711C4.73061 4.78711 4.87589 4.84613 4.99219 4.96387C5.10822 5.08162 5.16598 5.22647 5.16602 5.40039V13.5439C5.16602 13.7178 5.1076 13.8636 4.98926 13.9814C4.87085 14.0993 4.72462 14.1581 4.5498 14.1582C4.37486 14.1582 4.22945 14.0992 4.11328 13.9814C3.99705 13.8637 3.93945 13.7179 3.93945 13.5439V5.40039C3.93949 5.22646 3.99875 5.08171 4.11719 4.96387C4.23556 4.84612 4.38093 4.7872 4.55566 4.78711ZM13.4463 5.36035C13.6107 5.36035 13.7542 5.41671 13.877 5.53027C13.9988 5.64315 14.0605 5.79039 14.0605 5.97363V12.9707C14.0605 13.1541 13.9989 13.3011 13.877 13.4141C13.7541 13.5278 13.6109 13.585 13.4463 13.585C13.3809 13.5849 13.3204 13.5742 13.2646 13.5537C13.208 13.5328 13.152 13.5031 13.0977 13.4639V13.4629L8.06738 9.9834C7.97101 9.91694 7.90259 9.84075 7.86133 9.75488C7.81953 9.66769 7.79885 9.57349 7.79883 9.47266C7.79883 9.37179 7.81954 9.27765 7.86133 9.19043C7.90256 9.10453 7.97102 9.02839 8.06738 8.96191L13.0977 5.48145C13.152 5.44215 13.208 5.41249 13.2646 5.3916C13.3205 5.37105 13.3809 5.3604 13.4463 5.36035ZM12.7939 7.18457L9.5127 9.45215L9.48242 9.47266L9.5127 9.49316L12.7939 11.7607L12.833 11.7871V7.15723L12.7939 7.18457Z"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="0.05"
+        ></path>
+      </svg>
+    </span>
+  </a>
+{%- endmacro %}
+
+{# PaginationPrevious - previous page button #}
+{% macro PaginationPrevious(href='', disabled=false, ariaLabel='Previous page', class='') -%}
+  <a
+    href="{{ href }}"
+    data-slot="pagination-previous"
+    aria-label="{{ ariaLabel }}"
+    aria-disabled="{{ 'true' if disabled else 'false' }}"
+    class="text-secondary {% if disabled %}pointer-events-none opacity-50{% endif %} {{ class }} flex size-11 items-center justify-center"
+  >
+    <span class="sr-only">{{ ariaLabel }}</span>
+    <span class="flex size-8 items-center justify-center rtl:scale-x-[-1]">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10.5288 5.10938C10.6989 5.10948 10.8445 5.17026 10.9673 5.29297C11.0902 5.41588 11.1519 5.56206 11.1519 5.73242C11.1518 5.90268 11.0901 6.04903 10.9673 6.17188L7.68506 9.4541L10.9673 12.7363C11.0902 12.8592 11.1481 13.0025 11.1421 13.166C11.136 13.3301 11.0719 13.4735 10.9487 13.5967C10.8259 13.7195 10.6795 13.7803 10.5093 13.7803C10.3392 13.7802 10.1936 13.7193 10.0708 13.5967L6.36279 9.88867C6.29615 9.82203 6.24778 9.75258 6.21826 9.68164C6.1887 9.61057 6.17432 9.53478 6.17432 9.4541C6.17432 9.37344 6.18872 9.29762 6.21826 9.22656C6.24778 9.15562 6.29615 9.08617 6.36279 9.01953L10.0894 5.29297C10.2122 5.17013 10.3585 5.10938 10.5288 5.10938Z"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="0.05"
+        ></path>
+      </svg>
+    </span>
+  </a>
+{%- endmacro %}
+
+{# PaginationNext - next page button #}
+{% macro PaginationNext(href='', disabled=false, ariaLabel='Next page', class='') -%}
+  <a
+    href="{{ href }}"
+    data-slot="pagination-next"
+    aria-label="{{ ariaLabel }}"
+    aria-disabled="{{ 'true' if disabled else 'false' }}"
+    class="text-primary {% if disabled %}pointer-events-none opacity-50{% endif %} {{ class }} flex size-11 items-center justify-center"
+  >
+    <span class="sr-only">{{ ariaLabel }}</span>
+    <span class="flex size-8 items-center justify-center rtl:scale-x-[-1]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+      >
+        <path
+          d="M6.2583 4.61328C6.40895 4.6133 6.53825 4.66667 6.64697 4.77539L9.94287 8.07129C10.0018 8.13023 10.0437 8.19134 10.0698 8.25391C10.0961 8.31684 10.1099 8.38455 10.1099 8.45605C10.1098 8.52744 10.096 8.59439 10.0698 8.65723C10.0438 8.71985 10.0019 8.78084 9.94287 8.83984L6.63037 12.1523C6.52165 12.2611 6.39502 12.3119 6.25049 12.3066C6.10542 12.3013 5.97868 12.2448 5.86963 12.1357C5.76097 12.027 5.70752 11.8977 5.70752 11.7471C5.7076 11.5967 5.76116 11.468 5.86963 11.3594L8.77295 8.45605L5.85303 5.53613C5.74431 5.42741 5.69344 5.30078 5.69873 5.15625C5.70413 5.0112 5.76059 4.88443 5.86963 4.77539C5.97836 4.66667 6.10763 4.61328 6.2583 4.61328Z"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="0.05"
+        ></path>
+      </svg>
+    </span>
+  </a>
+{%- endmacro %}
+
+{# PaginationLast - last page button #}
+{% macro PaginationLast(href='', disabled=false, ariaLabel='Last page', class='') -%}
+  <a
+    href="{{ href }}"
+    data-slot="pagination-last"
+    aria-label="{{ ariaLabel }}"
+    aria-disabled="{{ 'true' if disabled else 'false' }}"
+    class="text-primary {% if disabled %}pointer-events-none opacity-50{% endif %} {{ class }} flex size-11 items-center justify-center"
+  >
+    <span class="sr-only">{{ ariaLabel }}</span>
+    <span class="flex size-8 items-center justify-center rtl:scale-x-[-1]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+      >
+        <path
+          d="M11.9561 4.31055C12.1108 4.31056 12.2391 4.36272 12.3418 4.4668C12.4443 4.57082 12.496 4.69886 12.4961 4.85254V12.0918C12.4961 12.2457 12.4436 12.3743 12.3389 12.4785C12.2341 12.5827 12.105 12.6348 11.9502 12.6348C11.7954 12.6348 11.6673 12.5826 11.5645 12.4785C11.4617 12.3743 11.4102 12.2458 11.4102 12.0918V4.85254C11.4103 4.69887 11.4628 4.5709 11.5674 4.4668C11.6722 4.36256 11.8012 4.31055 11.9561 4.31055ZM4.04688 4.82031C4.10496 4.82031 4.15954 4.82943 4.20898 4.84766C4.25892 4.86612 4.30752 4.89306 4.35547 4.92773H4.35645L8.82715 8.02051C8.91256 8.07939 8.97332 8.1468 9.00977 8.22266C9.04675 8.29982 9.06543 8.38336 9.06543 8.47266C9.06541 8.56174 9.0466 8.64468 9.00977 8.72168C8.97333 8.79759 8.91261 8.86589 8.82715 8.9248L4.35645 12.0176H4.35547C4.30753 12.0522 4.2589 12.0792 4.20898 12.0977C4.15954 12.1159 4.10496 12.125 4.04688 12.125C3.90147 12.1249 3.77458 12.0752 3.66602 11.9746C3.55835 11.8748 3.50488 11.7443 3.50488 11.582V5.3623C3.50496 5.2003 3.55854 5.07041 3.66602 4.9707C3.77458 4.87013 3.90147 4.82042 4.04688 4.82031ZM4.58984 10.5361L4.62891 10.5088L7.5459 8.49316L7.57617 8.47266L7.5459 8.45215L4.62891 6.43652L4.58984 6.40918V10.5361Z"
+          fill="currentColor"
+          stroke="currentColor"
+          stroke-width="0.05"
+        ></path>
+      </svg>
+    </span>
+  </a>
+{%- endmacro %}
+
+{# You can keep these two lines as you already have them: #}
+{# {% set totalPages = products.pages_count %} #}
+{# {% set currentPage = products.page %}      #}
+
+{# Optional: read current per-page from query params (default 12) #}
+{% set page_size = session.query_params.get('page_size') or '12' %}
+
+<div
+  data-pagination-root
+  class="flex flex-col-reverse items-center gap-4 md:flex-row"
+>
+  {# Per-page select #}
+  <div class="flex items-center gap-x-3">
+    <span class="text-secondary text-[16px] leading-[24px]">{{ _("Products on page") }}</span>
+    <el-select
+      id="per-page-select"
+      value="{{ page_size }}"
+      onchange="window.productFilter.handlePerPageChange(this.value)"
+    >
+      <button
+        type="button"
+        class="text-primary group inline-flex items-center justify-center gap-2 border-none bg-transparent text-[16px] leading-[24px] focus:ring-0"
+      >
+        <el-selectedcontent class="underline underline-offset-auto"> {{ page_size }} </el-selectedcontent>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          class="transition-transform duration-200 group-aria-expanded:rotate-180"
+        >
+          <path
+            d="M8 5.96875C8.01431 5.96879 8.01997 5.97104 8.02148 5.97168C8.02382 5.97269 8.03271 5.97706 8.04785 5.99219L11.3438 9.28809C11.3597 9.30408 11.3644 9.31349 11.3652 9.31543C11.3656 9.31635 11.3672 9.32094 11.3672 9.33301C11.3671 9.34474 11.3656 9.3487 11.3652 9.34961C11.3645 9.35129 11.3601 9.36063 11.3438 9.37695C11.3289 9.39179 11.3198 9.39549 11.3174 9.39648C11.3148 9.39752 11.3076 9.40039 11.291 9.40039C11.2739 9.40036 11.2668 9.3974 11.2646 9.39648C11.2621 9.39541 11.253 9.39166 11.2383 9.37695L11.2373 9.37598L8.35254 6.50684L7.99902 6.15527L4.76074 9.39355C4.75291 9.40139 4.74699 9.40529 4.74414 9.40723C4.74242 9.40839 4.74153 9.40902 4.74121 9.40918H4.73438C4.71613 9.4085 4.70117 9.40625 4.67188 9.37695C4.65695 9.36203 4.65334 9.35297 4.65234 9.35059C4.65136 9.34822 4.64844 9.34117 4.64844 9.32422C4.64844 9.30715 4.65138 9.30016 4.65234 9.29785C4.65334 9.29547 4.65694 9.28642 4.67188 9.27148L7.95117 5.99219C7.96696 5.9764 7.97663 5.97248 7.97852 5.97168C7.98051 5.97086 7.98651 5.96875 8 5.96875Z"
+            fill="currentColor"
+            stroke="currentColor"
+          ></path>
+        </svg>
+      </button>
+      <el-options
+        popover
+        anchor="bottom center"
+        class="bg-background origin-top-center border-border min-w-[60px] rounded-none border py-2 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+      >
+        {% for value in [12, 24, 48] %}
+          <el-option
+            value="{{ value }}"
+            class="text-primary hover:bg-foreground aria-selected:bg-foreground block w-full cursor-pointer px-4 py-2 text-center text-[16px] leading-[24px] transition-colors"
+          >
+            {{ value }}
+          </el-option>
+        {% endfor %}
+      </el-options>
+    </el-select>
+  </div>
+
+  {# Pagination #}
+  {% if totalPages > 1 %}
+    <div class="mx-auto">
+      {% call Pagination(id='product-pagination', ariaLabel='pagination') %}
+        {# ================= DESKTOP (md and up) ================= #}
+        {% call PaginationContent(class='hidden md:flex') %}
+          {# First page #}
+          {% call PaginationItem() %}
+            {{ PaginationFirst(href=session.url.include_query_params(page=1), disabled=(currentPage == 1), ariaLabel='First page') }}
+          {% endcall %}
+
+          {# Previous page #}
+          {% call PaginationItem() %}
+            {{ PaginationPrevious(href=session.url.include_query_params(page=(currentPage - 1)), disabled=(currentPage == 1), ariaLabel='Previous page') }}
+          {% endcall %}
+
+          {# Window range logic #}
+          {% if currentPage <= 2 %}
+            {% set startPage = 1 %}
+          {% else %}
+            {% set startPage = currentPage - 2 %}
+          {% endif %}
+
+          {% if (currentPage + 2) <= totalPages %}
+            {% set endPage = currentPage + 2 %}
+          {% else %}
+            {% set endPage = totalPages %}
+          {% endif %}
+
+          {# Show first page + ellipsis if needed #}
+          {% if currentPage > 3 and totalPages > 5 %}
+            {% call PaginationItem() %}
+              {{ PaginationLink(href=session.url.include_query_params(page=1), page='1') }}
+            {% endcall %}
+            {% call PaginationItem() %}
+              {{ PaginationEllipsis() }}
+            {% endcall %}
+          {% endif %}
+
+          {# Window of pages #}
+          {% for n in range(startPage, endPage + 1) %}
+            {% set isActive = (n == currentPage) %}
+            {% call PaginationItem() %}
+              {{ PaginationLink(href=session.url.include_query_params(page=n), page=n|string, isActive=isActive) }}
+            {% endcall %}
+          {% endfor %}
+
+          {# Show ellipsis + last page if needed #}
+          {% if currentPage < (totalPages - 3) and totalPages > 5 %}
+            {% call PaginationItem() %}
+              {{ PaginationEllipsis() }}
+            {% endcall %}
+          {% endif %}
+
+          {% if currentPage < (totalPages - 2) and totalPages > 5 %}
+            {% call PaginationItem() %}
+              {{ PaginationLink(href=session.url.include_query_params(page=totalPages), page=totalPages|string) }}
+            {% endcall %}
+          {% endif %}
+
+          {# Next page #}
+          {% call PaginationItem() %}
+            {{ PaginationNext(href=session.url.include_query_params(page=(currentPage + 1)), disabled=(currentPage == totalPages), ariaLabel='Next page') }}
+          {% endcall %}
+
+          {# Last page #}
+          {% call PaginationItem() %}
+            {{ PaginationLast(href=session.url.include_query_params(page=totalPages), disabled=(currentPage == totalPages), ariaLabel='Last page') }}
+          {% endcall %}
+        {% endcall %}
+
+        {# ================= MOBILE (below md) ================= #}
+        {% call PaginationContent(class='flex md:hidden') %}
+          {# First page #}
+          {% call PaginationItem() %}
+            {{ PaginationFirst(href=session.url.include_query_params(page=1), disabled=(currentPage == 1), ariaLabel='First page') }}
+          {% endcall %}
+
+          {# Previous page #}
+          {% call PaginationItem() %}
+            {{ PaginationPrevious(href=session.url.include_query_params(page=(currentPage - 1)), disabled=(currentPage == 1), ariaLabel='Previous page') }}
+          {% endcall %}
+
+          {# Current page (always shown) #}
+          {% call PaginationItem() %}
+            {{ PaginationLink(href='', page=currentPage|string, isActive=true) }}
+          {% endcall %}
+
+          {# Dots + Last page (only if not already on last page) #}
+          {% if currentPage < totalPages %}
+            {% call PaginationItem() %}
+              {{ PaginationEllipsis() }}
+            {% endcall %}
+            {% call PaginationItem() %}
+              {{ PaginationLink(href=session.url.include_query_params(page=totalPages), page=totalPages|string) }}
+            {% endcall %}
+          {% endif %}
+
+          {# Next page #}
+          {% call PaginationItem() %}
+            {{ PaginationNext(href=session.url.include_query_params(page=(currentPage + 1)), disabled=(currentPage == totalPages), ariaLabel='Next page') }}
+          {% endcall %}
+
+          {# Last page #}
+          {% call PaginationItem() %}
+            {{ PaginationLast(href=session.url.include_query_params(page=totalPages), disabled=(currentPage == totalPages), ariaLabel='Last page') }}
+          {% endcall %}
+        {% endcall %}
+      {% endcall %}
+    </div>
+  {% endif %}
+</div>

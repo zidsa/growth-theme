@@ -135,7 +135,7 @@
         content=_("Select options") if (product.has_options or product.has_fields) else _("Add to cart"),
         variant='outlined',
         size='lg',
-        class='w-full md:w-1/2',
+        class='w-full md:group-data-[grid=list]/grid:w-1/2',
         type='button',
         attrs='data-add-to-cart-btn data-product-id="' + product.id + '" data-product-slug="' + product.slug + '"' + (' data-has-options="true" data-open-quick-view="true"' if (product.has_options or product.has_fields) else '')
       %}
