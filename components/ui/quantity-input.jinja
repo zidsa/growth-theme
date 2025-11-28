@@ -1,0 +1,202 @@
+{#
+  Quantity Input Component
+
+  A quantity control for cart items that shows different states based on quantity:
+  - When quantity is 1: Shows delete and plus buttons
+  - When quantity > 1: Shows minus and plus buttons
+
+  Props:
+    - product_id (string, required): The product ID for API calls
+    - quantity (number, required): Current quantity value
+    - product_name (string, optional): Product name for accessibility
+
+  Usage:
+    {% include 'components/ui/quantity-input.jinja' with {
+      product_id: item.product.id,
+      quantity: item.quantity,
+      product_name: item.product.title
+    } %}
+#}
+
+{% set prod_id = product_id %}
+{% set qty = quantity | default(1) %}
+{% set product_label = product_name | default('product') %}
+{% set is_single = qty == 1 %}
+
+<div
+  class="quantity-input group border-secondary relative flex h-12 min-w-[40px] items-center gap-2 rounded border px-3 transition-all hover:border-2"
+  data-quantity-input
+  data-product-id="{{ prod_id }}"
+  data-quantity="{{ qty }}"
+>
+  {# Delete button (shown when quantity is 1) #}
+  {% if is_single %}
+    <button
+      type="button"
+      class="hover:bg-foreground/5 flex size-8 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm transition-colors"
+      data-quantity-action="remove"
+      aria-label="{{ _('Remove') }} {{ product_label }}"
+    >
+      <svg
+        class="size-4"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11.3333 6V12.6667H4.66667V6H11.3333ZM10.1667 2H5.83333L5 2.83333H2V4.5H14V2.83333H11L10.1667 2ZM13 4.33333H3V12.6667C3 13.5833 3.75 14.3333 4.66667 14.3333H11.3333C12.25 14.3333 13 13.5833 13 12.6667V4.33333Z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  {% else %}
+    {# Minus button (shown when quantity > 1) #}
+    <button
+      type="button"
+      class="hover:bg-foreground/5 flex size-8 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm transition-colors"
+      data-quantity-action="decrease"
+      aria-label="{{ _('Decrease quantity') }}"
+    >
+      <svg
+        class="size-4"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4 7.44444V8.55556H12V7.44444H4Z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  {% endif %}
+
+  {# Quantity display #}
+  <div class="flex min-w-12 shrink-0 flex-col items-center justify-center">
+    <span
+      class="text-foreground text-center text-sm leading-[1.75] font-medium"
+      data-quantity-display
+    >
+      {{ qty }}
+    </span>
+  </div>
+
+  {# Plus button (always shown) #}
+  <button
+    type="button"
+    class="hover:bg-foreground/5 flex size-8 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm transition-colors"
+    data-quantity-action="increase"
+    aria-label="{{ _('Increase quantity') }}"
+  >
+    <svg
+      class="size-4"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12.6667 8.66667H8.66667V12.6667H7.33333V8.66667H3.33333V7.33333H7.33333V3.33333H8.66667V7.33333H12.6667V8.66667Z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>
+
+<script>
+  (function () {
+    // Initialize quantity input handlers
+    function initQuantityInputs() {
+      const quantityInputs = document.querySelectorAll("[data-quantity-input]");
+
+      quantityInputs.forEach((input) => {
+        // Remove existing listeners to prevent duplicates
+        const newInput = input.cloneNode(true);
+        input.parentNode.replaceChild(newInput, input);
+
+        const productId = newInput.dataset.productId;
+        const buttons = newInput.querySelectorAll("[data-quantity-action]");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const action = button.dataset.quantityAction;
+            const currentQty = parseInt(newInput.dataset.quantity);
+
+            // Disable all buttons during operation
+            buttons.forEach((btn) => (btn.disabled = true));
+
+            try {
+              if (action === "remove") {
+                await handleRemove(productId);
+              } else if (action === "increase") {
+                await handleIncrease(productId, currentQty);
+              } else if (action === "decrease") {
+                if (currentQty > 1) {
+                  await handleDecrease(productId, currentQty);
+                }
+              }
+            } catch (error) {
+              console.error("Quantity update failed:", error);
+            } finally {
+              // Re-enable buttons
+              buttons.forEach((btn) => (btn.disabled = false));
+            }
+          });
+        });
+      });
+    }
+
+    async function handleRemove(productId) {
+      if (!window.cartManager) {
+        console.error("Cart manager not available");
+        return;
+      }
+
+      const success = await window.cartManager.removeFromCart(productId);
+
+      if (success) {
+        window.location.reload();
+      }
+    }
+
+    async function handleIncrease(productId, currentQty) {
+      if (!window.cartManager) {
+        console.error("Cart manager not available");
+        return;
+      }
+
+      const success = await window.cartManager.updateQuantity(productId, currentQty + 1);
+
+      if (success) {
+        window.location.reload();
+      }
+    }
+
+    async function handleDecrease(productId, currentQty) {
+      if (!window.cartManager) {
+        console.error("Cart manager not available");
+        return;
+      }
+
+      const success = await window.cartManager.updateQuantity(productId, currentQty - 1);
+
+      if (success) {
+        window.location.reload();
+      }
+    }
+
+    // Initialize on page load
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initQuantityInputs);
+    } else {
+      initQuantityInputs();
+    }
+
+    // Re-initialize when cart is updated (for dynamic content)
+    window.addEventListener("cart-updated", () => {
+      setTimeout(initQuantityInputs, 100);
+    });
+  })();
+</script>

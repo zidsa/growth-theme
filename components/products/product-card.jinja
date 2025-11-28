@@ -1,0 +1,146 @@
+<div
+  class="group relative flex h-full flex-col gap-4 group-data-[grid=list]/grid:grid group-data-[grid=list]/grid:grid-cols-2 group-data-[grid=list]/grid:grid-rows-[1fr_auto] group-data-[grid=list]/grid:gap-4 md:group-data-[grid=list]/grid:grid-cols-[auto_1fr] md:group-data-[grid=list]/grid:grid-rows-[auto_auto]"
+  data-product-card="{{ product.id }}"
+>
+  <a
+    href="{{ url_for('product_details', slug=product.slug) }}"
+    class="relative block aspect-[3/4] w-full overflow-hidden rounded group-data-[grid=list]/grid:col-span-1 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:aspect-square md:group-data-[grid=list]/grid:row-span-2 md:group-data-[grid=list]/grid:h-80"
+  >
+    <img
+      {% if product.main_image and product.main_image.image %}
+        src="{{ product.main_image.image.small }}"
+      {% elif product.images and product.images|length > 0 %}
+        src="{{ product.images[0].image.small }}"
+      {% else %}
+        src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
+      {% endif %}
+      alt="{{ product.name }}"
+      class="h-full w-full object-cover object-center"
+      {% if loop and loop.index0 > 3 %}loading="lazy"{% endif %}
+    />
+    <div class="absolute top-4 flex flex-col gap-2 ltr:left-4 rtl:right-4">
+      {# Merchant custom badge #}
+      {% if product.badge %}
+        {% with product=product %}
+          {% include 'components/products/merchant-badge.jinja' %}
+        {% endwith %}
+      {% endif %}
+      {# Sale badge #}
+      {% if (product.sale_price and product.sale_price < product.price) or (product.discount_percentage and product.discount_percentage > 0) %}
+        {% with content=_("SALE"), variant='filled' %}
+          {% include 'components/ui/badge.jinja' %}
+        {% endwith %}
+      {% endif %}
+      {# Out of stock badge #}
+      {% if product.in_stock == false or (product.is_infinite == false and product.quantity is not none and product.quantity <= 0) %}
+        {% with content=_("OUT OF STOCK"), variant='filled' %}
+          {% include 'components/ui/badge.jinja' %}
+        {% endwith %}
+      {% endif %}
+      {# Keyword badges #}
+      {% if product.keywords and product.keywords|length > 0 %}
+        {% for keyword in product.keywords[:2] %}
+          {% with content=keyword|upper, variant='filled' %}
+            {% include 'components/ui/badge.jinja' %}
+          {% endwith %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% with product_id=product.id, class='absolute bottom-4 ltr:right-4 rtl:left-4' %}
+      {% include 'components/products/wishlist-button.jinja' %}
+    {% endwith %}
+  </a>
+  <div
+    class="flex flex-1 flex-col gap-3 group-data-[grid=list]/grid:col-span-1 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:min-w-0 group-data-[grid=list]/grid:self-start"
+  >
+    <div class="flex flex-col gap-2">
+      <h3 class="text-[20px] leading-[28px] [font-variant:all-small-caps]">
+        <a href="{{ url_for('product_details', slug=product.slug) }}"> {{ product.name }} </a>
+      </h3>
+      {% if store.settings.products.reviews_enabled %}
+        {% if product.rating %}
+          <div class="flex items-center gap-2">
+            {% set rating = product.rating.average %}
+            {% include 'components/rating-stars.jinja' %}
+            {% if product.rating.total_count > 0 %}
+              <span class="text-secondary text-[14px] leading-[1.5]">({{ product.rating.total_count }})</span>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+    {# Price Section #}
+    {% if product.formatted_sale_price is not none %}
+      {# Product on sale - show sale price, old price crossed out, and discount #}
+      <div class="flex flex-col gap-1">
+        <p class="text-primary text-[16px] leading-[24px] font-semibold">
+          {% if product.has_options %}{{ _("From") }}{% endif %}
+          {{ product.formatted_sale_price }}
+        </p>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-secondary text-[14px] leading-[21px] line-through"> {{ product.formatted_price }} </span>
+          {% if product.discount_percentage and product.discount_percentage > 0 %}
+            <span
+              class="inline-flex items-center rounded-md bg-[#DDF8DC] px-2 py-1 text-[12px] leading-normal font-medium text-[#649560] [font-variant:all-small-caps]"
+            >
+              {{ _("Discount") }} {{ product.discount_percentage }}%
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      {# Regular price - no sale #}
+      <p class="text-primary text-[16px] leading-[24px]">
+        {% if product.has_options %}{{ _("From") }}{% endif %}
+        {{ product.formatted_price }}
+      </p>
+    {% endif %}
+    {# Description - Only visible in list view #}
+    {% if product.short_description or product.description %}
+      <p
+        class="text-secondary hidden text-[14px] leading-[21px] group-data-[grid=list]/grid:[display:-webkit-box] group-data-[grid=list]/grid:line-clamp-1 md:group-data-[grid=list]/grid:line-clamp-3"
+      >
+        {{ product.short_description|striptags|truncate(200) or product.description|striptags|truncate(200) }}
+      </p>
+    {% endif %}
+  </div>
+  <div
+    class="cart-action-wrapper mt-auto group-data-[grid=list]/grid:col-span-2 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:mt-0 md:group-data-[grid=list]/grid:col-span-1 md:group-data-[grid=list]/grid:col-start-2 md:group-data-[grid=list]/grid:self-start"
+    data-cart-action
+    data-product-id="{{ product.id }}"
+  >
+    {# Quantity Input (hidden by default, shown when product is in cart) #}
+    <div
+      class="quantity-section"
+      data-quantity-section
+      hidden
+    >
+      {%
+        with
+        product_id=product.id,
+        quantity=1,
+        product_name=product.name
+      %}
+        {% include 'components/ui/quantity-input.jinja' %}
+      {% endwith %}
+    </div>
+
+    {# Add to Cart Button (visible by default) #}
+    <div
+      class="button-section"
+      data-button-section
+    >
+      {%
+        with
+        content=_("Select options") if (product.has_options or product.has_fields) else _("Add to cart"),
+        variant='outlined',
+        size='lg',
+        class='w-full md:w-1/2',
+        type='button',
+        attrs='data-add-to-cart-btn data-product-id="' + product.id + '" data-product-slug="' + product.slug + '"' + (' data-has-options="true" data-open-quick-view="true"' if (product.has_options or product.has_fields) else '')
+      %}
+        {% include 'components/ui/button.jinja' %}
+      {% endwith %}
+    </div>
+  </div>
+</div>

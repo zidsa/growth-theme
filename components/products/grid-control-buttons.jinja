@@ -1,0 +1,148 @@
+{# Grid control icons #}
+{% set icon_one_col %}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M12 19V12V5M12 19V5V19Z"
+      fill="currentColor"
+    ></path>
+    <path
+      d="M12 19V5V12V19Z"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+  </svg>
+{% endset %}
+
+
+{% set icon_two_col %}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M14.5 19V12V5M9.5 19V5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    ></path>
+  </svg>
+{% endset %}
+
+
+{% set icon_four_col %}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M9.5 19V5M4.5 19V5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    ></path>
+    <path
+      d="M19.5 19V5M14.5 19V5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    ></path>
+  </svg>
+{% endset %}
+
+
+{% set icon_list %}
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 14.5H5H19ZM19 19.5H5H19Z"
+      fill="#0B0A09"
+    ></path>
+    <path
+      d="M19 14.5H5M19 19.5H5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    ></path>
+    <path
+      d="M19 4.5L5 4.5M19 9.5H5"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    ></path>
+  </svg>
+{% endset %}
+
+{# Mobile view - single column only #}
+{%
+  with
+  name='grid_view_mobile',
+  separated=true,
+  wrapper_class='gap-2 md:hidden',
+  aria_label=_('Select grid layout'),
+  options=[
+    {
+      'icon': icon_one_col,
+      'value': 'one',
+      'icon_only': true,
+      'attrs': 'data-grid-btn="one" aria-label="' ~ _('1-column grid') ~ '"'
+    },
+    {
+      'icon': icon_list,
+      'value': 'list',
+      'icon_only': true,
+      'attrs': 'data-grid-btn="list" aria-label="' ~ _('List view') ~ '"'
+    }
+  ]
+%}
+  {% include 'components/ui/button-group.jinja' %}
+{% endwith %}
+
+{# Desktop view - two, four columns and list #}
+{%
+  with
+  name='grid_view_desktop',
+  separated=true,
+  wrapper_class='hidden gap-2 md:flex',
+  aria_label=_('Select grid layout'),
+  options=[
+    {
+      'icon': icon_two_col,
+      'value': 'two',
+      'icon_only': true,
+      'attrs': 'data-grid-btn="two" aria-label="' ~ _('2-column grid') ~ '"'
+    },
+    {
+      'icon': icon_four_col,
+      'value': 'four',
+      'icon_only': true,
+      'attrs': 'data-grid-btn="four" aria-label="' ~ _('4-column grid') ~ '"'
+    },
+    {
+      'icon': icon_list,
+      'value': 'list',
+      'icon_only': true,
+      'attrs': 'data-grid-btn="list" aria-label="' ~ _('List view') ~ '"'
+    }
+  ]
+%}
+  {% include 'components/ui/button-group.jinja' %}
+{% endwith %}

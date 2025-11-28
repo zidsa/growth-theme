@@ -1,0 +1,43 @@
+{% set filters=products.filters %}
+
+{% set ns = namespace(has_custom_filters=false) %}
+{% if filters and filters.attributes %}
+  {% for attribute in filters.attributes %}
+    {% if attribute.is_enabled and attribute.data|length > 0 %}
+      {% set ns.has_custom_filters = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-center justify-between">
+    {# Filters Drawer - Show based on conditions #}
+    {% if ns.has_custom_filters %}
+      {# Store WITH custom filters: Always show drawer #}
+      {% include 'components/products/filters/advanced-filters.jinja' %}
+    {% else %}
+      {# Store WITHOUT custom filters: Show drawer only on mobile #}
+      <div class="md:hidden">{% include 'components/products/filters/advanced-filters.jinja' %}</div>
+    {% endif %}
+
+    {# Simple Filters (Availability & Price popovers) - Only for stores WITHOUT custom filters on desktop #}
+    {% if not ns.has_custom_filters %}
+      <div class="hidden md:block">{% include 'components/products/filters/default-filters.jinja' %}</div>
+    {% endif %}
+
+    <div class="flex items-center gap-3">
+      <span class="text-secondary hidden text-[16px] leading-[24px] md:block">
+        {% trans current=products.results|length, total=products.count %}
+          {{ current }}
+          out of {{ total }} products
+        {% endtrans %}
+      </span>
+      {% include 'components/products/grid-control-buttons.jinja' %}
+    </div>
+
+    {# Sort dropdown - Always show on desktop, hide on mobile (it's in drawer) #}
+    <div class="hidden md:block">{% include 'components/products/filters/sort-filter.jinja' %}</div>
+  </div>
+
+  {% include 'components/products/filters/applied-filters.jinja' %}
+</div>
