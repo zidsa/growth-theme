@@ -1,0 +1,184 @@
+{# Product Gallery Component - Embla Carousel #}
+{# Parameters: product (object with images array), badges (optional array), gallery_id (optional unique id) #}
+{% set gallery_id = gallery_id|default('product-gallery-' ~ range(1000, 9999)|random) %}
+{% set has_multiple_images = product.images and product.images|length > 1 %}
+
+<div class="space-y-3">
+  {# Main Gallery #}
+  <div class="relative">
+    <div
+      class="product-gallery overflow-hidden rounded"
+      data-gallery-id="{{ gallery_id }}"
+    >
+      <div class="product-gallery__container flex gap-2">
+        {% if product.images and product.images|length > 0 %}
+          {% for image in product.images %}
+            {% set img_src = image.image.medium if image.image else image %}
+            <div class="product-gallery__slide min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
+              <img
+                src="{{ image_url(img_src, w=750, q=85, f='auto') }}"
+                srcset="
+                  {{ image_url(img_src, w=400, q=85, f='auto') }}  400w,
+                  {{ image_url(img_src, w=640, q=85, f='auto') }}  640w,
+                  {{ image_url(img_src, w=750, q=85, f='auto') }}  750w,
+                  {{ image_url(img_src, w=960, q=85, f='auto') }}  960w,
+                  {{ image_url(img_src, w=1200, q=85, f='auto') }} 1200w
+                "
+                sizes="(max-width: 640px) 100vw, 50vw"
+                alt="{{ product.name }} - {{ _('Image') }} {{ loop.index }}"
+                class="aspect-[3/4] w-full rounded object-cover"
+                {% if loop.index > 1 %}loading="lazy"{% endif %}
+              />
+            </div>
+          {% endfor %}
+        {% else %}
+          {# Fallback if no images #}
+          <div class="product-gallery__slide min-w-0 flex-[0_0_100%]">
+            <img
+              src="{{ image_url(('images/placeholder.png' | asset_url), w=750, q=85, f='auto') }}"
+              alt="{{ product.name }}"
+              class="aspect-[3/4] w-full rounded object-cover"
+            />
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# Navigation Buttons - Overlaid on desktop only #}
+    {% if has_multiple_images %}
+      <button
+        class="product-gallery__prev bg-background/30 absolute start-4 top-1/2 hidden -translate-y-1/2 rounded p-2.5 backdrop-blur-xs disabled:opacity-30 md:flex"
+        aria-label="{{ _('Previous image') }}"
+        data-gallery-id="{{ gallery_id }}"
+        type="button"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="rtl:rotate-180"
+        >
+          <path
+            d="M14.0381 6.17383C14.2674 6.17383 14.4645 6.25562 14.6299 6.4209C14.7953 6.5863 14.8779 6.78329 14.8779 7.0127C14.8779 7.2421 14.7953 7.43909 14.6299 7.60449L10.2764 11.957L10.2588 11.9756L10.2764 11.9932L14.6299 16.3457C14.7952 16.511 14.8732 16.7035 14.8652 16.9238C14.8572 17.1448 14.771 17.3382 14.6055 17.5039C14.4401 17.6693 14.243 17.7519 14.0137 17.752C13.7843 17.752 13.5873 17.6693 13.4219 17.5039L8.47754 12.5605C8.38808 12.4711 8.32403 12.378 8.28418 12.2822C8.24425 12.1864 8.22466 12.0842 8.22461 11.9756C8.22461 11.8667 8.24417 11.764 8.28418 11.668C8.32403 11.5722 8.38807 11.4791 8.47754 11.3896L13.4473 6.4209C13.6125 6.25578 13.809 6.17392 14.0381 6.17383Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </button>
+      <button
+        class="product-gallery__next bg-background/30 absolute end-4 top-1/2 hidden -translate-y-1/2 rounded p-2.5 backdrop-blur-xs disabled:opacity-30 md:flex"
+        aria-label="{{ _('Next image') }}"
+        data-gallery-id="{{ gallery_id }}"
+        type="button"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="rtl:rotate-180"
+        >
+          <path
+            d="M9.38672 6.19922C9.61604 6.19922 9.81315 6.28101 9.97852 6.44629L14.9229 11.3906C15.0121 11.4799 15.0764 11.5724 15.1162 11.668C15.1562 11.764 15.1768 11.8667 15.1768 11.9756C15.1768 12.0843 15.1561 12.1864 15.1162 12.2822V12.2832C15.0764 12.3788 15.0121 12.4712 14.9229 12.5605L9.9541 17.5293C9.78883 17.6946 9.59626 17.7726 9.37598 17.7646C9.15496 17.7566 8.96163 17.6705 8.7959 17.5049C8.63049 17.3395 8.54785 17.1425 8.54785 16.9131C8.54785 16.6837 8.63049 16.4867 8.7959 16.3213L13.1416 11.9756L8.77051 7.60449C8.60518 7.43912 8.52709 7.2468 8.53516 7.02637C8.54327 6.80526 8.63013 6.61206 8.7959 6.44629C8.96115 6.28117 9.15761 6.19931 9.38672 6.19922Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </button>
+    {% endif %}
+
+    {# Badges Overlay #}
+    {% if badges %}
+      <div class="absolute start-4 top-4 flex flex-col gap-2">
+        {% for badge in badges %}
+          <span class="bg-background w-fit rounded px-2 text-[16px] leading-normal [font-variant:all-small-caps]">
+            {{ badge }}
+          </span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {# Progress Bar with Navigation Buttons - Mobile only #}
+  {% if has_multiple_images %}
+    <div class="flex items-center gap-2 md:hidden">
+      {# Progress Bar #}
+      <div class="product-gallery__progress bg-foreground h-1 w-full rounded-full">
+        <div
+          class="product-gallery__progress-bar bg-secondary h-1 rounded-full"
+          data-gallery-id="{{ gallery_id }}"
+          style="width: 0%"
+        ></div>
+      </div>
+
+      {# Small Navigation Buttons #}
+      <button
+        class="product-gallery__prev-mobile p-2.5 disabled:opacity-30"
+        aria-label="{{ _('Previous image') }}"
+        data-gallery-id="{{ gallery_id }}"
+        type="button"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="rtl:rotate-180"
+        >
+          <path
+            d="M10.2945 11.9752L14.6477 16.3284C14.8177 16.4984 14.8986 16.6974 14.8902 16.9252C14.8819 17.153 14.7927 17.3519 14.6227 17.5219C14.4527 17.6919 14.2496 17.7769 14.0135 17.7769C13.7773 17.7769 13.5742 17.6919 13.4042 17.5219L8.46022 12.5779C8.36889 12.4866 8.30255 12.3913 8.26122 12.2919C8.21989 12.1928 8.19922 12.0872 8.19922 11.9752C8.19922 11.8632 8.21989 11.7576 8.26122 11.6584C8.30255 11.5591 8.36889 11.4638 8.46022 11.3724L13.4292 6.40344C13.5992 6.23344 13.8023 6.14844 14.0385 6.14844C14.2746 6.14844 14.4777 6.23344 14.6477 6.40344C14.8177 6.57344 14.9027 6.77652 14.9027 7.01269C14.9027 7.24885 14.8177 7.45194 14.6477 7.62194L10.2945 11.9752Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </button>
+      <button
+        class="product-gallery__next-mobile p-2.5 disabled:opacity-30"
+        aria-label="{{ _('Next image') }}"
+        data-gallery-id="{{ gallery_id }}"
+        type="button"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="rtl:rotate-180"
+        >
+          <path
+            d="M13.1081 11.9746L8.7548 7.62135C8.5848 7.45135 8.50397 7.25244 8.5123 7.0246C8.52064 6.79677 8.6098 6.59785 8.7798 6.42785C8.9498 6.25785 9.15289 6.17285 9.38905 6.17285C9.62522 6.17285 9.8283 6.25785 9.9983 6.42785L14.9423 11.3719C15.0336 11.4632 15.1 11.5585 15.1413 11.6579C15.1826 11.757 15.2033 11.8626 15.2033 11.9746C15.2033 12.0866 15.1826 12.1922 15.1413 12.2914C15.1 12.3907 15.0336 12.486 14.9423 12.5774L9.9733 17.5464C9.8033 17.7164 9.60439 17.7972 9.37655 17.7889C9.14872 17.7805 8.9498 17.6914 8.7798 17.5214C8.6098 17.3514 8.5248 17.1483 8.5248 16.9121C8.5248 16.6759 8.6098 16.4729 8.7798 16.3029L13.1081 11.9746Z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  {% endif %}
+
+  {# Thumbnails - Hidden on mobile, shown on desktop #}
+  {% if has_multiple_images %}
+    <div
+      class="product-gallery-thumbs hidden overflow-hidden md:flex"
+      data-gallery-id="{{ gallery_id }}"
+    >
+      <div class="product-gallery-thumbs__container flex gap-2">
+        {% for image in product.images %}
+          {% set thumb_src = image.image.thumbnail if image.image else image %}
+          <button
+            class="product-gallery-thumbs__slide hover:border-primary relative min-w-0 flex-[0_0_calc(25%-8px)] overflow-hidden rounded border-1 border-transparent transition-colors"
+            data-gallery-id="{{ gallery_id }}"
+            type="button"
+          >
+            <img
+              src="{{ image_url(thumb_src, f='auto') }}"
+              alt="{{ _('Thumbnail') }} {{ loop.index }}"
+              class="aspect-square w-full object-cover"
+              loading="lazy"
+            />
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
