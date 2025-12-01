@@ -1,0 +1,244 @@
+{# Metafields Component (Shared) #}
+{# Parameters: entity (any object with metafields - product, category, etc.) #}
+{% if entity and entity.metafields and store and store.settings.products.is_metafields_enabled %}
+  {% for item in entity.metafields %}
+    {# TEXT Type #}
+    {% if item.data_type == 'text' %}
+      {% if item.value and item.value[session.lang] %}
+        <div class="flex flex-wrap items-center gap-2">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd class="text-primary text-[16px] leading-[24px]">
+            {{ item.value[session.lang] }}
+          </dd>
+        </div>
+      {% endif %}
+
+    {# NUMBER Type #}
+    {% elif item.data_type == 'number' %}
+      {% if item.value is not none %}
+        <div class="flex flex-wrap items-center gap-2">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd class="text-primary text-[16px] leading-[24px]">
+            {{ item.value }}
+          </dd>
+        </div>
+      {% endif %}
+
+    {# RICH TEXT Type #}
+    {% elif item.data_type == 'rich_text' %}
+      {% if item.value and item.value[session.lang] %}
+        <div class="flex flex-col gap-1">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd class="text-primary prose prose-sm max-w-none">
+            {{ item.value[session.lang]|safe }}
+          </dd>
+        </div>
+      {% endif %}
+
+    {# IMAGE Type #}
+    {% elif item.data_type == 'image' %}
+      {% if item.value and item.value.small %}
+        <div class="flex flex-col gap-1">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd>
+            <img
+              src="{{ item.value.small }}"
+              alt="{{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}"
+              class="max-w-full rounded"
+              loading="lazy"
+            />
+          </dd>
+        </div>
+      {% endif %}
+
+    {# FILE Type #}
+    {% elif item.data_type == 'file' %}
+      {% if item.value and item.value.url %}
+        <div class="flex flex-col gap-1">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd>
+            <a
+              href="{{ item.value.url }}"
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              class="border-border inline-flex max-w-[300px] items-center gap-3 rounded-lg border px-4 py-3"
+            >
+              {# File Icon #}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-secondary shrink-0"
+              >
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+              </svg>
+              <div class="flex min-w-0 flex-1 flex-col">
+                {% if item.value.name %}
+                  <span class="text-primary truncate text-[12px] font-medium">{{ item.value.name }}</span>
+                {% endif %}
+                {% if item.value.formated_size %}
+                  <span class="text-secondary text-[10px]">{{ item.value.formated_size }}</span>
+                {% endif %}
+              </div>
+              {# Download Icon #}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-secondary shrink-0"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line
+                  x1="12"
+                  y1="15"
+                  x2="12"
+                  y2="3"
+                ></line>
+              </svg>
+            </a>
+          </dd>
+        </div>
+      {% endif %}
+
+    {# TABLE Type #}
+    {% elif item.data_type == 'table' %}
+      {% if item.value %}
+        <div class="flex flex-col gap-1">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd class="overflow-x-auto">
+            <table class="w-full text-[14px]">
+              <thead>
+                <tr class="bg-foreground rounded-lg">
+                  {% for header in item.value.headers %}
+                    <th class="text-primary px-6 py-5 text-start text-[14px] font-semibold first:rounded-e-lg last:rounded-s-lg">
+                      {{ header.name[session.lang] if header.name[session.lang] else header.name.ar }}
+                    </th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for cells in item.value.cells %}
+                  <tr class="border-border border-b first:border-t-0">
+                    {% for cell in cells %}
+                      <td class="text-primary px-6 py-4">
+                        {% if cell.value and cell.value[session.lang] %}
+                          {{ cell.value[session.lang] }}
+                        {% elif cell.value and cell.value.url %}
+                          <a
+                            href="{{ cell.value.url }}"
+                            download
+                            target="_blank"
+                            class="border-border inline-flex max-w-[170px] items-center gap-2 rounded-lg border px-3 py-2"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="text-secondary shrink-0"
+                            >
+                              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                              <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            </svg>
+                            <div class="flex min-w-0 flex-1 flex-col">
+                              {% if cell.value.name %}
+                                <span class="text-primary max-w-[60px] truncate text-[12px] font-medium">{{ cell.value.name }}</span>
+                              {% endif %}
+                              {% if cell.value.formated_size %}
+                                <span class="text-secondary text-[10px]">{{ cell.value.formated_size }}</span>
+                              {% endif %}
+                            </div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="text-secondary shrink-0"
+                            >
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                              <polyline points="7 10 12 15 17 10"></polyline>
+                              <line
+                                x1="12"
+                                y1="15"
+                                x2="12"
+                                y2="3"
+                              ></line>
+                            </svg>
+                          </a>
+                        {% elif cell.value and cell.value.small %}
+                          <img
+                            src="{{ cell.value.small }}"
+                            alt=""
+                            class="size-8 rounded object-cover"
+                            loading="lazy"
+                          />
+                        {% elif cell.value is not iterable and cell.value != false and cell.value is not none %}
+                          {{ cell.value }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </dd>
+        </div>
+      {% endif %}
+
+    {# JSON Type - skip rendering #}
+    {% elif item.data_type == 'json' %}
+
+    {# Fallback for unknown types #}
+    {% else %}
+      {% if item.value %}
+        <div class="flex flex-wrap items-center gap-2">
+          <dt class="text-secondary text-[16px] leading-[24px]">
+            {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
+          </dt>
+          <dd class="text-primary text-[16px] leading-[24px]">
+            {{ item.value }}
+          </dd>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
