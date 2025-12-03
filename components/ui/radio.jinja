@@ -1,6 +1,6 @@
 {# Radio Component #}
 <label
-  class="text-primary {{ wrapper_class|default('') }} flex cursor-pointer items-center gap-2 text-base leading-[1.5] font-normal"
+  class="text-foreground text-body1 {{ wrapper_class|default('') }} flex cursor-pointer items-center gap-2"
 >
   <input
     type="radio"
@@ -10,7 +10,7 @@
     {% if checked %}checked{% endif %}
     {% if disabled %}disabled{% endif %}
     {% if required %}required{% endif %}
-    class="radio border-primary bg-background before:text-background checked:border-primary checked:bg-primary {{ class|default('') }} relative size-4.5 cursor-pointer appearance-none rounded-full border transition-all before:absolute before:inset-0 before:m-auto before:block before:size-2 before:rounded-full before:bg-current before:opacity-0 before:transition-all before:duration-300 before:content-[''] checked:before:opacity-100 disabled:cursor-not-allowed disabled:opacity-50"
+    class="radio border-foreground bg-background before:text-primary-foreground checked:border-foreground checked:bg-foreground {{ class|default('') }} relative size-4.5 cursor-pointer appearance-none rounded-full border transition-all before:absolute before:inset-0 before:m-auto before:block before:size-2 before:rounded-full before:bg-current before:opacity-0 before:transition-all before:duration-300 before:content-[''] checked:before:opacity-100 disabled:cursor-not-allowed disabled:opacity-50"
     {{ attrs|safe }}
   />
   {% if label %}{{ label }}{% endif %}

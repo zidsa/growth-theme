@@ -42,7 +42,7 @@
 <div class="{{ wrapper_class|default('') }}">
   {# Select Container #}
   <div
-    class="{{- ' border-destructive border-2' if error else ' border-[#545352]' }} {{- ' hover:border-2' if not disabled and not error }} {{- ' focus-within:border-primary focus-within:border-2' if not error }} {{- ' bg-[#F2F2F2] border-[#DADADA]' if disabled else '' }} relative flex h-12 items-center gap-2 rounded border px-3 transition-[border-color,border-width]"
+    class="{{- ' border-destructive border-2' if error else ' border-muted' }} {{- ' hover:border-2' if not disabled and not error }} {{- ' focus-within:border-foreground focus-within:border-2' if not error }} {{- ' bg-background-disabled border-border-disabled' if disabled else '' }} relative flex h-12 items-center gap-3 rounded border px-3 transition-[border-color,border-width]"
     {% if disabled %}data-disabled="true"{% endif %}
     {% if error %}data-error="true"{% endif %}
   >
@@ -55,7 +55,7 @@
       {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
       {% if multiple %}multiple{% endif %}
       {% if error %}aria-invalid="true"{% endif %}
-      class="text-primary {{ select_class|default('') }} h-full w-full flex-1 appearance-none bg-transparent text-[16px] leading-[1.5] outline-none disabled:cursor-not-allowed disabled:text-[#B5B5B5]"
+      class="text-foreground {{ select_class|default('') }} text-body1 disabled:text-muted h-full w-full flex-1 appearance-none bg-transparent outline-none disabled:cursor-not-allowed"
       {{ attrs|default('')|safe }}
     >
       {# Placeholder option #}
@@ -76,6 +76,7 @@
             value="{{ option.value }}"
             {% if value == option.value or (option.selected|default(false)) %}selected{% endif %}
             {% if option.disabled|default(false) %}disabled{% endif %}
+            {{ option.attrs|default('')|safe }}
           >
             {{ option.label }}
           </option>
@@ -84,7 +85,7 @@
     </select>
 
     {# Dropdown Icon #}
-    <div class="{{ 'text-[#B5B5B5]' if disabled else 'text-[#858484]' }} pointer-events-none shrink-0">
+    <div class="{{ 'text-muted' if disabled else 'text-foreground' }} pointer-events-none shrink-0">
       <svg
         width="24"
         height="24"
@@ -104,7 +105,7 @@
 
   {# Caption / Error Message #}
   {% if caption or error_message %}
-    <p class="{{ 'text-destructive' if error else 'text-[#858484]' }} mt-2 text-[12px] leading-[1.5]">
+    <p class="{{ 'text-destructive' if error else 'text-muted' }} text-caption mt-2">
       {{ error_message if error and error_message else caption }}
     </p>
   {% endif %}

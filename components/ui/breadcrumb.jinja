@@ -5,7 +5,7 @@
   {{ attrs|default('')|safe }}
 >
   <ol
-    class="text-primary flex flex-wrap items-center gap-2 text-[16px] leading-[24px] break-words [&_a]:underline [&_a]:decoration-solid [&_a]:decoration-auto [&_a]:underline-offset-auto"
+    class="text-foreground text-body1 flex flex-wrap items-center gap-2 break-words [&_a]:underline [&_a]:decoration-solid [&_a]:decoration-auto [&_a]:underline-offset-auto"
   >
     {% for item in items %}
       {# Breadcrumb Item #}
@@ -36,7 +36,7 @@
         <li
           role="presentation"
           aria-hidden="true"
-          class="{{ separator_class|default('') }} [&>svg]:size-3.5 [&>svg]:rtl:rotate-180"
+          class="{{ separator_class|default('') }} [&>svg]:size-4 [&>svg]:rtl:rotate-180"
         >
           {% if separator_icon %}
             {{ separator_icon|safe }}

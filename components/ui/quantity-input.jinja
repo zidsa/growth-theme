@@ -24,7 +24,7 @@
 {% set is_single = qty == 1 %}
 
 <div
-  class="quantity-input group border-secondary relative flex h-12 min-w-[40px] items-center gap-2 rounded border px-3 transition-all hover:border-2"
+  class="quantity-input group border-muted relative flex h-12 min-w-[40px] items-center gap-2 rounded border px-3 transition-all hover:border-2"
   data-quantity-input
   data-product-id="{{ prod_id }}"
   data-quantity="{{ qty }}"
@@ -74,7 +74,7 @@
   {# Quantity display #}
   <div class="flex min-w-12 shrink-0 flex-col items-center justify-center">
     <span
-      class="text-foreground text-center text-sm leading-[1.75] font-medium"
+      class="text-foreground text-body2 text-center font-medium"
       data-quantity-display
     >
       {{ qty }}

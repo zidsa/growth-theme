@@ -12,7 +12,7 @@
     {% set size_classes = option.icon_only and 'size-10 p-0' or 'px-4 py-2' %}
     {% set rounded_classes = is_separated and 'rounded' or (loop.first and 'rounded-s' or (loop.last and 'rounded-e border-s-0' or 'rounded-none border-s-0')) %}
     <label
-      class="text-primary hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-background has-[:checked:disabled]:bg-primary {{ size_classes }} {{ rounded_classes }} {{ option.class|default('') }} border-input has-[:checked:disabled]:border-border has-[:disabled]:border-border has-[:disabled]:text-secondary inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 border bg-transparent text-base leading-[1.5] font-normal transition-all focus-within:z-10 has-[:disabled]:cursor-not-allowed has-[:disabled]:line-through"
+      class="text-foreground text-body1 hover:border-foreground has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-primary-foreground {{ size_classes }} {{ rounded_classes }} {{ option.class|default('') }} border-muted has-[:checked:disabled]:border-border-disabled has-[:disabled]:border-border-disabled has-[:disabled]:text-muted inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 border bg-transparent font-normal transition-all focus-within:z-10 has-[:disabled]:cursor-not-allowed has-[:disabled]:line-through"
       {% if option.onclick %}onclick="{{ option.onclick }}"{% endif %}
     >
       <input

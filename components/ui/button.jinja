@@ -1,21 +1,21 @@
 {# Base classes for all buttons #}
-{% set base_classes = 'inline-flex rounded items-center justify-center gap-2 whitespace-nowrap font-normal transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2' %}
+{% set base_classes = 'inline-flex rounded items-center justify-center gap-2 whitespace-nowrap font-normal transition-all disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2' %}
 
 {# Variant lookup #}
 {%
   set variants = {
-    'filled': 'outline outline-1 outline-primary text-primary-foreground bg-primary hover:outline-2 hover:bg-primary/90 active:outline-2 active:bg-primary/80 disabled:outline-[#DADADA] disabled:bg-foreground disabled:text-secondary',
-    'outlined': 'outline outline-1 outline-primary text-primary bg-background hover:outline-2 active:outline-2 active:bg-[#F6F5F4]',
-    'text': 'outline-0 outline-[#B5B5B5] text-primary hover:outline-1 bg-transparent active:bg-[#F6F5F4]'
+    'filled': 'outline outline-1 outline-foreground text-primary-foreground bg-foreground hover:outline-2 hover:bg-foreground/90 active:outline-2 active:bg-foreground/80 disabled:outline-border-disabled disabled:bg-secondary disabled:text-muted',
+    'outlined': 'outline outline-1 outline-foreground text-foreground bg-background hover:outline-2 active:outline-2 active:bg-secondary disabled:outline-border-disabled disabled:text-muted',
+    'text': 'text-foreground bg-transparent hover:outline hover:outline-1 hover:outline-foreground active:bg-secondary disabled:text-muted'
   }
 %}
 
 {# Size lookup #}
 {%
   set sizes = {
-    'lg': 'px-4 py-3 text-[16px] leading-[24px]',
-    'md': 'px-4 py-2 text-[14px] leading-[21px]',
-    'sm': 'px-2 py-1.5 text-[12px] leading-[18px]',
+    'lg': 'px-4 py-3 text-body1',
+    'md': 'px-4 py-2 text-body2',
+    'sm': 'px-2 py-1.5 text-caption',
     'icon-md': 'size-10 p-2.5',
     'icon-sm': 'size-8 p-2'
   }
@@ -28,7 +28,7 @@
 
 {# Override variant for icon buttons #}
 {% if current_size.startswith('icon-') %}
-  {% set variant_classes = 'text-primary disabled:text-secondary' %}
+  {% set variant_classes = 'text-foreground disabled:text-muted' %}
 {% endif %}
 
 {# Combine all classes #}

@@ -1,6 +1,6 @@
 {# Checkbox Component #}
 <label
-  class="text-primary {{ wrapper_class|default('') }} flex cursor-pointer items-center gap-2 text-base leading-[1.5] font-normal"
+  class="text-foreground text-body1 {{ wrapper_class|default('') }} flex cursor-pointer items-center gap-2"
 >
   <input
     type="checkbox"
@@ -10,7 +10,7 @@
     {% if checked %}checked{% endif %}
     {% if disabled %}disabled{% endif %}
     {% if required %}required{% endif %}
-    class="checkbox border-primary bg-background before:text-background checked:border-primary checked:bg-primary {{ class|default('') }} relative size-4.5 cursor-pointer appearance-none border transition-all before:absolute before:inset-[2.5px] before:block before:rotate-45 before:bg-current before:opacity-0 before:transition-all before:duration-300 before:content-[''] before:[clip-path:polygon(20%_100%,20%_80%,50%_80%,50%_80%,70%_80%,70%_100%)] checked:before:opacity-100 checked:before:[clip-path:polygon(20%_100%,20%_80%,50%_80%,50%_0%,70%_0%,70%_100%)] disabled:cursor-not-allowed disabled:opacity-50"
+    class="checkbox border-foreground bg-background before:text-primary-foreground checked:border-foreground checked:bg-foreground {{ class|default('') }} relative size-4.5 cursor-pointer appearance-none border transition-all before:absolute before:inset-[2.5px] before:block before:rotate-45 before:bg-current before:opacity-0 before:transition-all before:duration-300 before:content-[''] before:[clip-path:polygon(20%_100%,20%_80%,50%_80%,50%_80%,70%_80%,70%_100%)] checked:before:opacity-100 checked:before:[clip-path:polygon(20%_100%,20%_80%,50%_80%,50%_0%,70%_0%,70%_100%)] disabled:cursor-not-allowed disabled:opacity-50"
     {{ attrs|safe }}
   />
   {% if label %}{{ label }}{% endif %}

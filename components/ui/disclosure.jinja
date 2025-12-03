@@ -20,7 +20,7 @@
     class="{{ button_class | default('') }} flex w-full cursor-pointer items-center justify-between gap-3 peer-checked:[&_svg]:rotate-0"
   >
     {# Title #}
-    <span class="text-primary text-[20px] leading-[140%] font-normal [font-variant:all-small-caps]"> {{ title }} </span>
+    <span class="text-foreground text-h6"> {{ title }} </span>
 
     {# Arrow Icon - rotates when checked #}
     <svg
@@ -29,7 +29,7 @@
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      class="text-primary flex-shrink-0 rotate-180 transition-transform duration-200"
+      class="text-foreground flex-shrink-0 rotate-180 transition-transform duration-200"
     >
       <path
         d="M11.999 8.70312C12.0929 8.70312 12.1689 8.73142 12.249 8.81152L17.1924 13.7559C17.2744 13.8378 17.3008 13.9117 17.3008 13.999C17.3008 14.0863 17.2743 14.1602 17.1924 14.2422C17.1143 14.3202 17.0374 14.3506 16.9365 14.3506C16.8359 14.3505 16.7596 14.32 16.6816 14.2422L16.6807 14.2412L12.3516 9.9375L11.998 9.58594L7.31738 14.2666C7.23964 14.3443 7.17341 14.3662 7.09277 14.3633C6.99851 14.3598 6.91711 14.3282 6.83105 14.2422C6.75294 14.1641 6.72266 14.0872 6.72266 13.9863C6.72267 13.8854 6.75294 13.8086 6.83105 13.7305L11.75 8.81152C11.83 8.73152 11.9054 8.7032 11.999 8.70312Z"
