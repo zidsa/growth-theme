@@ -1,11 +1,11 @@
 {% include 'components/header-announcement-bar.jinja' %}
-<header class="border-b border-[#F2F2F2] px-4 py-3 md:px-16 md:py-4">
+<header class="bg-secondary border-border-light border-b px-4 py-3 md:px-16 md:py-4">
   <nav class="theme-container flex items-center justify-between">
     <el-dialog class="group contents">
       <button
         command="show-modal"
         commandfor="mobile-drawer"
-        class="text-primary relative h-10 w-10 p-2 group-data-[transition]:pointer-events-none focus:outline-none md:hidden"
+        class="text-foreground relative h-10 w-10 p-2 group-data-[transition]:pointer-events-none focus:outline-none md:hidden"
         aria-label="Toggle menu"
       >
         <span
@@ -27,7 +27,7 @@
         class="fixed top-[var(--header-h)] right-0 bottom-0 left-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent not-open:hidden backdrop:bg-transparent"
       >
         <el-dialog-backdrop
-          class="absolute top-0 right-0 bottom-0 left-0 bg-black/50 transition-opacity duration-500 ease-in-out data-closed:opacity-0"
+          class="absolute inset-0 bg-black/10 backdrop-blur-sm transition-opacity duration-500 ease-in-out data-closed:opacity-0"
         ></el-dialog-backdrop>
         <div
           tabindex="0"
@@ -36,16 +36,16 @@
           <el-dialog-panel
             class="group/dialog-panel relative block size-full transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
           >
-            <div class="relative flex h-full flex-col bg-white">
+            <div class="relative flex h-full flex-col bg-background">
               <div class="flex h-full flex-col items-start gap-8 overflow-y-auto pt-4">
                 <div class="flex min-h-px w-full min-w-px flex-1 flex-col items-start overflow-clip">
                   {% for menu in store.settings.menus.main_menu.items %}
                     {% if menu.items | length > 0 %}
                       <details class="group w-full">
                         <summary
-                          class="text-primary flex w-full cursor-pointer items-center justify-between gap-1 px-6 py-2 text-base select-none"
+                          class="text-foreground text-body1 flex w-full cursor-pointer items-center justify-between gap-1 px-6 py-2 select-none"
                         >
-                          <span class="text-primary min-h-px min-w-px flex-1 text-start text-[16px] leading-[24px]">
+                          <span class="text-foreground text-body1 min-h-px min-w-px flex-1 text-start">
                             {{ menu.label }}
                           </span>
                           <svg
@@ -66,7 +66,7 @@
                           {% for submenu in menu.items %}
                             <a
                               href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
-                              class="text-primary block px-6 py-2 text-base"
+                              class="text-foreground text-body1 block px-6 py-2"
                             >
                               {{ submenu.label }}
                             </a>
@@ -76,17 +76,17 @@
                     {% else %}
                       <a
                         href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
-                        class="text-primary min-h-px w-full min-w-px px-6 py-2 text-start text-[16px] leading-[24px]"
+                        class="text-foreground text-body1 min-h-px w-full min-w-px px-6 py-2 text-start"
                       >
                         {{ menu.label }}
                       </a>
                     {% endif %}
                   {% endfor %}
                 </div>
-                <div class="flex w-full flex-col items-start gap-[3px] border-t border-[#F2F2F2] pt-4 pb-6">
+                <div class="border-border-light flex w-full flex-col items-start gap-[3px] border-t pt-4 pb-6">
                   <button
                     type="button"
-                    class="text-primary min-h-px w-full min-w-px px-6 py-2 text-start text-[16px] leading-[24px]"
+                    class="text-foreground text-body1 min-h-px w-full min-w-px px-6 py-2 text-start"
                   >
                     Log in
                   </button>
@@ -94,7 +94,7 @@
                     <div class="flex w-full items-start gap-4">
                       <button
                         type="button"
-                        class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                        class="text-foreground text-body1 flex items-center justify-center gap-1 py-2"
                       >
                         Riyadh
                         <svg
@@ -113,7 +113,7 @@
                       </button>
                       <button
                         type="button"
-                        class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                        class="text-foreground text-body1 flex items-center justify-center gap-1 py-2"
                       >
                         SAR
                         <svg
@@ -135,7 +135,7 @@
                           command="show-modal"
                           commandfor="language-selector"
                           type="button"
-                          class="text-primary flex items-center justify-center gap-1 py-2 text-[16px] leading-[24px]"
+                          class="text-foreground text-body1 flex items-center justify-center gap-1 py-2"
                           aria-expanded="false"
                         >
                           EN
@@ -158,7 +158,7 @@
                           class="fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent not-open:hidden backdrop:bg-transparent"
                         >
                           <el-dialog-backdrop
-                            class="bg-primary/10 absolute inset-0 backdrop-blur-xs transition-opacity duration-300 ease-in-out data-closed:opacity-0"
+                            class="bg-foreground/10 absolute inset-0 backdrop-blur-xs transition-opacity duration-300 ease-in-out data-closed:opacity-0"
                             inert=""
                           ></el-dialog-backdrop>
                           <div
@@ -182,9 +182,7 @@
                                       ></path>
                                     </svg>
                                   </div>
-                                  <span class="text-primary flex-1 text-center text-[20px] leading-[28px]"
-                                    >COUNTRY</span
-                                  >
+                                  <span class="text-foreground text-h6 flex-1 text-center">COUNTRY</span>
                                   <button
                                     command="close"
                                     commandfor="language-selector"
@@ -208,19 +206,19 @@
                                 <div class="flex w-full flex-col items-start gap-2 pt-2 pb-4">
                                   <button
                                     type="button"
-                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                    class="text-foreground text-body1 w-full px-6 py-2 text-start"
                                   >
                                     Egypt
                                   </button>
                                   <button
                                     type="button"
-                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                    class="text-foreground text-body1 w-full px-6 py-2 text-start"
                                   >
                                     Saudi Arabia
                                   </button>
                                   <button
                                     type="button"
-                                    class="text-primary w-full px-6 py-2 text-start text-[16px] leading-[24px]"
+                                    class="text-foreground text-body1 w-full px-6 py-2 text-start"
                                   >
                                     Kuwait
                                   </button>
@@ -268,14 +266,14 @@
           <li>
             {% if menu.items | length > 0 %}
               <el-dropdown class="inline-block">
-                <button class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]">
+                <button class="text-foreground text-body1 flex items-center gap-1 py-2 hover:underline">
                   {{ menu.label }}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
                     viewBox="0 0 16 16"
-                    class="text-primary"
+                    class="text-foreground"
                     fill="none"
                   >
                     <path
@@ -289,24 +287,22 @@
                 <el-menu
                   anchor="bottom center"
                   popover
-                  class="origin-bottom-center gap-1 border border-[#F2F2F2] bg-white p-4 transition transition-discrete data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                  class="border-border-light bg-background min-w-30 gap-1 border p-4 transition transition-discrete data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
                   {% for submenu in menu.items %}
-                    <div class="py-2">
-                      <a
-                        href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
-                        class="text-[16px] leading-[24px]"
-                      >
-                        {{ submenu.label }}
-                      </a>
-                    </div>
+                    <a
+                      href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
+                      class="text-foreground text-body1 block py-2 hover:underline"
+                    >
+                      {{ submenu.label }}
+                    </a>
                   {% endfor %}
                 </el-menu>
               </el-dropdown>
             {% else %}
               <a
                 href="{{ menu.url | localized_url if menu.resource_type != 'url' else menu.url }}"
-                class="text-primary py-2 text-[16px] leading-[24px]"
+                class="text-foreground text-body1 py-2 hover:underline"
               >
                 {{ menu.label }}
               </a>
@@ -317,19 +313,19 @@
     </div>
     <ul class="flex items-center gap-1">
       <li>
-        <button class="p-2">
+        <button class="flex size-10 items-center justify-center rounded bg-white/10 backdrop-blur-sm hover:bg-white/20">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            class="text-primary"
+            class="text-foreground"
             fill="none"
           >
             <path
               d="M9.37695 3.37329C11.0475 3.37338 12.4514 3.95645 13.6182 5.1311C14.7863 6.30701 15.3652 7.71368 15.3652 9.37915C15.3652 10.0477 15.2604 10.6838 15.0518 11.2903C14.8436 11.8953 14.5304 12.4664 14.1084 13.0042L13.833 13.3547L14.1494 13.6682L20.1631 19.6321L20.166 19.634C20.2363 19.7029 20.2705 19.7798 20.2705 19.8967C20.2704 19.9847 20.2509 20.0516 20.21 20.1106L20.1621 20.1672L20.1602 20.1692C20.0833 20.2468 20.0021 20.2815 19.8867 20.2815C19.772 20.2815 19.7016 20.2473 19.6377 20.179L19.6318 20.1731L19.625 20.1672L13.6367 14.1838L13.3105 13.8586L12.96 14.1565C12.5697 14.4877 12.1179 14.7581 11.6016 14.9661L11.376 15.052C10.7695 15.2676 10.1165 15.3772 9.41406 15.3772C7.71323 15.3772 6.29193 14.7923 5.11914 13.6184C3.9443 12.4422 3.36235 11.0371 3.3623 9.37524C3.3623 7.71348 3.94477 6.3084 5.12109 5.13208C6.29674 3.95628 7.70599 3.37329 9.37695 3.37329ZM9.39062 4.07642C8.01061 4.07651 6.81093 4.53417 5.81543 5.44165L5.61816 5.62915C4.58695 6.66009 4.06543 7.91834 4.06543 9.37524C4.06548 10.8321 4.5874 12.0894 5.61816 13.1204C6.65036 14.1527 7.91745 14.673 9.39062 14.6731C10.8518 14.6731 12.1081 14.1517 13.1289 13.1184C14.1478 12.087 14.6621 10.8301 14.6621 9.37524C14.6621 7.92014 14.1476 6.66252 13.1279 5.6311C12.1067 4.59801 10.8508 4.07642 9.39062 4.07642Z"
-              fill="#0B0A09"
-              stroke="#0B0A09"
+              fill="currentColor"
+              stroke="currentColor"
             ></path>
           </svg>
         </button>
@@ -339,7 +335,7 @@
           <button
             type="button"
             popovertarget="locale-popover"
-            class="text-primary flex items-center gap-x-2 py-2 text-[16px] leading-[24px]"
+            class="text-foreground text-body1 flex items-center gap-1 py-2 hover:underline"
           >
             Riyadh (SAR) | EN
             <svg
@@ -347,13 +343,13 @@
               width="16"
               height="16"
               viewBox="0 0 16 16"
-              class="text-primary"
+              class="text-foreground"
               fill="none"
             >
               <path
                 d="M4.7251 6.18262C4.74222 6.18262 4.7492 6.18558 4.75146 6.18652L4.77783 6.20605L7.64502 9.09082L7.99854 9.44629L8.354 9.0918L11.2388 6.20605C11.2466 6.19822 11.2525 6.19432 11.2554 6.19238C11.257 6.19127 11.2579 6.19062 11.2583 6.19043H11.2651C11.2834 6.1911 11.2983 6.19338 11.3276 6.22266C11.3426 6.23759 11.3462 6.24664 11.3472 6.24902C11.3481 6.25126 11.3511 6.25818 11.3511 6.27539C11.3511 6.29239 11.3481 6.29941 11.3472 6.30176C11.3462 6.30414 11.3426 6.31319 11.3276 6.32812L8.04834 9.60742C8.03231 9.62345 8.02229 9.62992 8.01904 9.63184C8.0165 9.6329 8.01164 9.63472 8.00049 9.63477C7.989 9.63477 7.98354 9.63291 7.98096 9.63184L7.95166 9.60742L4.65576 6.31152C4.64868 6.30444 4.64476 6.2994 4.64307 6.29688C4.64222 6.29562 4.64233 6.29439 4.64209 6.29395H4.64111C4.64105 6.29372 4.64128 6.29204 4.64111 6.29102C4.64079 6.28895 4.63986 6.28428 4.64014 6.27637C4.64115 6.2478 4.64677 6.23164 4.67236 6.20605C4.68728 6.19115 4.69635 6.18752 4.69873 6.18652C4.70113 6.18553 4.70822 6.18262 4.7251 6.18262Z"
-                fill="#0B0A09"
-                stroke="#0B0A09"
+                fill="currentColor"
+                stroke="currentColor"
               ></path>
             </svg>
           </button>
@@ -371,122 +367,140 @@
               {% set multiple_countries = store.countries | length > 1 %}
               {% set multiple_languages = store.languages | length > 1 %}
               {% if multiple_countries and 'hide_country' not in settings.header_options %}
-                <label
-                  for="country-desktop"
-                  class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
+                <el-select
+                  id="country-desktop"
+                  name="country"
+                  value="{{ session.country.code | lower }}"
+                  class="block"
                 >
-                  <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
-                    >{{ _("Country") }}</span
+                  <button
+                    type="button"
+                    class="border-border text-foreground text-body1 grid w-full cursor-pointer grid-cols-1 rounded border bg-background py-1.5 ps-3 pe-2 outline-1 -outline-offset-1 outline-border focus-visible:outline-2 focus-visible:-outline-offset-2 ltr:text-left rtl:text-right"
                   >
-                  <select
-                    id="country-desktop"
-                    name="country"
-                    class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                    <el-selectedcontent class="col-start-1 row-start-1 truncate pe-6 pt-[18px]">
+                      {{ session.country.names[session.lang] if session.country.names else session.country.name }}
+                    </el-selectedcontent>
+                    <span class="text-muted text-caption absolute top-1 font-normal ltr:left-3 rtl:right-3"
+                      >{{ _("Country") }}</span
+                    >
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="pointer-events-none col-start-1 row-start-1 h-5 w-5 self-center justify-self-end"
+                    >
+                      <path
+                        d="M5 7.5L10 12.5L15 7.5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <el-options
+                    anchor="bottom start"
+                    popover
+                    class="text-foreground text-body1 max-h-60 w-(--button-width) overflow-auto rounded-md border border-foreground/10 bg-background py-1 shadow-lg [--anchor-gap:4px] data-leave:transition data-leave:transition-discrete data-leave:duration-150 data-leave:ease-in data-closed:data-leave:opacity-0"
                   >
                     {% for country in store.countries %}
-                      <option
+                      <el-option
                         value="{{ country.code | lower }}"
-                        {% if session.country.id == country.id %}selected{% endif %}
+                        class="group/option relative block cursor-pointer py-2 ps-3 pe-9 select-none hover:bg-secondary focus:bg-secondary focus:outline-hidden"
                       >
-                        {{ country.names[session.lang] if country.names else country.name }}
-                      </option>
-                    {% endfor %}
-                  </select>
-                  <svg
-                    class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 7.5L10 12.5L15 7.5"
-                      stroke="#0B0A09"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>
-                  </svg>
-                </label>
-                <label
-                  for="city-desktop"
-                  class="border-border relative flex h-12 items-center gap-2 rounded border p-3"
-                >
-                  <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
-                    >{{ _("City") }}</span
-                  >
-                  <select
-                    id="city-desktop"
-                    name="city"
-                    class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
-                  >
-                    {% if session.country.cities %}
-                      {% for city in session.country.cities %}
-                        <option
-                          value="{{ city.id }}"
-                          {% if session.country.city and session.country.city.id == city.id %}selected{% endif %}
+                        <span class="block truncate font-normal group-aria-selected/option:font-semibold">
+                          {{ country.names[session.lang] if country.names else country.name }}
+                        </span>
+                        <span
+                          class="text-foreground absolute inset-y-0 flex items-center pe-4 group-not-aria-selected/option:hidden in-[el-selectedcontent]:hidden ltr:right-0 rtl:left-0"
                         >
-                          {{ city.name }}
-                        </option>
-                      {% endfor %}
-                    {% endif %}
-                  </select>
-                  <svg
-                    class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 7.5L10 12.5L15 7.5"
-                      stroke="#0B0A09"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>
-                  </svg>
-                </label>
+                          <svg
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="size-5"
+                          >
+                            <path
+                              d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                              clip-rule="evenodd"
+                              fill-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      </el-option>
+                    {% endfor %}
+                  </el-options>
+                </el-select>
               {% endif %}
               {% if multiple_languages and 'hide_language' not in settings.header_options %}
-                <label
-                  for="language-desktop"
-                  class="border-border {% if not multiple_countries or 'hide_country' in settings.header_options %}col-span-2{% endif %} relative flex h-12 items-center gap-2 rounded border p-3"
+                <el-select
+                  id="language-desktop"
+                  name="language"
+                  value="{{ session.lang }}"
+                  class="{% if not multiple_countries or 'hide_country' in settings.header_options %}col-span-2{% endif %} block"
                 >
-                  <span class="text-muted absolute top-1 text-xs leading-normal font-normal ltr:left-3 rtl:right-3"
-                    >{{ _("Language") }}</span
+                  <button
+                    type="button"
+                    class="border-border text-foreground text-body1 grid w-full cursor-pointer grid-cols-1 rounded border bg-background py-1.5 ps-3 pe-2 outline-1 -outline-offset-1 outline-border focus-visible:outline-2 focus-visible:-outline-offset-2 ltr:text-left rtl:text-right"
                   >
-                  <select
-                    id="language-desktop"
-                    name="language"
-                    class="text-primary w-full cursor-pointer appearance-none border-none bg-transparent pe-6 pt-[18px] text-[16px] outline-none"
+                    <el-selectedcontent class="col-start-1 row-start-1 truncate pe-6 pt-[18px]">
+                      {% for language in store.languages %}
+                        {% if session.lang == language.code %}{{ language.name }}{% endif %}
+                      {% endfor %}
+                    </el-selectedcontent>
+                    <span class="text-muted text-caption absolute top-1 font-normal ltr:left-3 rtl:right-3"
+                      >{{ _("Language") }}</span
+                    >
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="pointer-events-none col-start-1 row-start-1 h-5 w-5 self-center justify-self-end"
+                    >
+                      <path
+                        d="M5 7.5L10 12.5L15 7.5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <el-options
+                    anchor="bottom start"
+                    popover
+                    class="text-foreground text-body1 max-h-60 w-(--button-width) overflow-auto rounded-md border border-foreground/10 bg-background py-1 shadow-lg [--anchor-gap:4px] data-leave:transition data-leave:transition-discrete data-leave:duration-150 data-leave:ease-in data-closed:data-leave:opacity-0"
                   >
                     {% for language in store.languages %}
-                      <option
+                      <el-option
                         value="{{ language.code }}"
-                        {% if session.lang == language.code %}selected{% endif %}
+                        class="group/option relative block cursor-pointer py-2 ps-3 pe-9 select-none hover:bg-secondary focus:bg-secondary focus:outline-hidden"
                       >
-                        {{ language.name }}
-                      </option>
+                        <span class="block truncate font-normal group-aria-selected/option:font-semibold">
+                          {{ language.name }}
+                        </span>
+                        <span
+                          class="text-foreground absolute inset-y-0 flex items-center pe-4 group-not-aria-selected/option:hidden in-[el-selectedcontent]:hidden ltr:right-0 rtl:left-0"
+                        >
+                          <svg
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            class="size-5"
+                          >
+                            <path
+                              d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                              clip-rule="evenodd"
+                              fill-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      </el-option>
                     {% endfor %}
-                  </select>
-                  <svg
-                    class="pointer-events-none absolute top-1/2 h-5 w-5 -translate-y-1/2 ltr:right-3 rtl:left-3"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 7.5L10 12.5L15 7.5"
-                      stroke="#0B0A09"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    ></path>
-                  </svg>
-                </label>
+                  </el-options>
+                </el-select>
               {% endif %}
               <button
                 type="submit"
-                class="text-primary col-span-2 justify-self-end border-none bg-transparent px-2 py-1.5 text-[12px] leading-[18px]"
+                class="text-foreground text-caption col-span-2 justify-self-end border-none bg-transparent px-2 py-1.5"
               >
                 {{ _("Save") }}
               </button>
@@ -495,41 +509,50 @@
         </el-popover-group>
       </li>
       <li class="hidden md:block">
-        <button class="p-2">
+        <button class="flex size-10 items-center justify-center rounded bg-white/10 backdrop-blur-sm hover:bg-white/20">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            class="text-primary"
+            class="text-foreground"
             fill="none"
           >
             <path
               d="M11.999 13.9229C13.0092 13.9229 14.0076 14.0477 14.9951 14.2979C15.8677 14.5189 16.779 14.8269 17.7285 15.2227L18.1377 15.3975C18.605 15.6053 18.9719 15.9062 19.249 16.3018V16.3008C19.5134 16.6783 19.6552 17.1421 19.6553 17.7158V18.5244C19.6553 18.8592 19.5425 19.1335 19.3027 19.374C19.0645 19.6129 18.7885 19.7275 18.4463 19.7275H5.55371C5.21376 19.7275 4.93928 19.6137 4.70215 19.375C4.46327 19.1345 4.35059 18.8598 4.35059 18.5244V17.7158C4.35064 17.1454 4.49342 16.6821 4.75879 16.3027C5.04025 15.9001 5.39983 15.5959 5.8457 15.3867C6.94406 14.895 7.99428 14.5294 8.99512 14.2861C9.99378 14.0434 10.9952 13.9229 11.999 13.9229ZM11.9971 14.6318C11.0198 14.6318 10.0665 14.7289 9.1377 14.9238C8.19445 15.1218 7.19336 15.484 6.13672 16.002H6.13574C5.81061 16.1618 5.55074 16.4068 5.35547 16.7188H5.35449C5.15849 17.0322 5.05371 17.3756 5.05371 17.7402V19.0244H18.9463V17.7402C18.9463 17.4158 18.8598 17.1098 18.6992 16.8281L18.626 16.709C18.4241 16.4034 18.1635 16.1624 17.8428 16.0039L17.8379 16.001L17.4375 15.8145C16.5127 15.3962 15.646 15.098 14.8398 14.9248C13.9299 14.7293 12.982 14.6318 11.9971 14.6318ZM11.999 4.59863C13.0272 4.59867 13.8317 4.92124 14.457 5.54492H14.458C15.0828 6.16805 15.4052 6.97149 15.4053 7.99902C15.4053 9.02689 15.0829 9.83061 14.458 10.4531C13.8327 11.076 13.0274 11.3974 11.999 11.3975C10.9705 11.3975 10.1671 11.0753 9.54492 10.4531C8.92267 9.83076 8.60059 9.02739 8.60059 7.99902C8.60066 7.03508 8.88347 6.26849 9.43164 5.66309L9.54492 5.54395C10.1672 4.92084 10.9707 4.59863 11.999 4.59863ZM12.001 5.30176C11.2461 5.30184 10.5903 5.55307 10.0732 6.06836V6.06934C9.55621 6.58522 9.30377 7.24022 9.30371 7.99512C9.30371 8.75119 9.55512 9.40783 10.0713 9.9248C10.5875 10.442 11.2435 10.6943 11.999 10.6943C12.6596 10.6943 13.2444 10.5021 13.7266 10.1084L13.9268 9.92676C14.4439 9.41023 14.6963 8.75378 14.6963 7.99805C14.6962 7.24144 14.4446 6.58444 13.9277 6.06836H13.9268C13.4106 5.55332 12.7555 5.30176 12.001 5.30176Z"
-              fill="#0B0A09"
-              stroke="#0B0A09"
+              fill="currentColor"
+              stroke="currentColor"
             ></path>
           </svg>
         </button>
       </li>
       <li>
-        <button class="p-2">
+        <a
+          href="{{ url_for('cart_page') }}"
+          class="relative flex size-10 items-center justify-center rounded bg-white/10 backdrop-blur-sm hover:bg-white/20"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            class="text-primary"
+            class="text-foreground"
             fill="none"
           >
             <path
               d="M11.999 1.8699C13.0632 1.8699 13.965 2.23624 14.7051 2.97049C15.3989 3.65874 15.7709 4.4912 15.8213 5.46854L15.8271 5.66678V5.94119H18.4463C18.901 5.94119 19.2955 6.10766 19.6299 6.44217C19.9643 6.77649 20.1309 7.17105 20.1309 7.62576V20.4461C20.1309 20.899 19.9641 21.2917 19.6299 21.6248C19.2955 21.9581 18.9011 22.1248 18.4463 22.1248H5.55371C5.10067 22.1248 4.70815 21.9581 4.375 21.6248C4.04176 21.2916 3.87598 20.8991 3.87598 20.4461V7.62576C3.87598 7.17098 4.04165 6.77651 4.375 6.44217C4.70814 6.10776 5.10075 5.94122 5.55371 5.94119H8.17285V5.66678C8.1808 4.60339 8.55537 3.70474 9.29492 2.97049C10.0342 2.23651 10.935 1.86992 11.999 1.8699ZM5.5293 20.4715H18.4717V7.60037H15.8271V9.7742C15.8271 10.0081 15.7466 10.2033 15.5869 10.3621C15.4273 10.5209 15.2305 10.6004 14.9951 10.6004C14.7601 10.6003 14.5648 10.5206 14.4082 10.3621C14.2517 10.2034 14.1729 10.008 14.1729 9.7742V7.60037H9.82715V9.7742C9.82711 10.0081 9.74663 10.2033 9.58691 10.3621C9.42732 10.5209 9.23046 10.6004 8.99512 10.6004C8.76014 10.6003 8.56481 10.5206 8.4082 10.3621C8.25168 10.2034 8.17289 10.008 8.17285 9.7742V7.60037H5.5293V20.4715ZM12 3.52908C11.4719 3.52908 11.0147 3.68698 10.6299 4.00272L10.4697 4.14725C10.0535 4.55929 9.84112 5.06599 9.83301 5.6658V5.94119H14.168V5.6658C14.1599 5.06597 13.9469 4.55929 13.5303 4.14725C13.1137 3.7351 12.6031 3.52918 12 3.52908Z"
-              fill="#0B0A09"
-              stroke="#0B0A09"
+              fill="currentColor"
+              stroke="currentColor"
               stroke-width="0.05"
             ></path>
           </svg>
-        </button>
+          <span
+            data-cart-badge
+            class="bg-destructive absolute -top-0.5 -right-0.5 flex hidden h-5 w-5 items-center justify-center rounded-full text-[10px] leading-none text-primary-foreground"
+          >
+            0
+          </span>
+        </a>
       </li>
     </ul>
   </nav>

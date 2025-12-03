@@ -1,4 +1,4 @@
-<footer class="bg-foreground px-4 py-3 md:px-16 md:py-16">
+<footer class="bg-secondary px-4 py-8 md:px-16 md:py-16">
   <div class="theme-container">
     <div class="grid grid-cols-1 gap-8 md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
       <div class="space-y-4">
@@ -25,20 +25,20 @@
             alt="{{ store.name }}"
           />
         {% endif %}
-        <p class="text-[16px] leading-[24px] text-balance">{{ settings.about_us|safe }}</p>
-        <h3 class="text-[16px] leading-[24px] font-semibold">
+        <p class="text-foreground text-body1 text-balance">{{ settings.about_us|safe }}</p>
+        <h3 class="text-foreground text-subtitle1">
           {% if store.settings.contact.title %}
             {{ store.settings.contact.title }}
           {% else %}
             {{ _("Follow us") }}
           {% endif %}
         </h3>
-        <div class="flex gap-x-6">
+        <div class="flex gap-3">
           {% if store.settings.contact.facebook %}
             <a
               href="https://www.facebook.com/{{ store.settings.contact.facebook }}"
               target="_blank"
-              class="text-primary"
+              class="text-foreground"
             >
               <span class="sr-only">Facebook</span>
               <svg
@@ -59,7 +59,7 @@
             <a
               href="https://www.instagram.com/{{ store.settings.contact.instagram }}"
               target="_blank"
-              class="text-primary"
+              class="text-foreground"
             >
               <span class="sr-only">Instagram</span>
               <svg
@@ -80,7 +80,7 @@
             <a
               href="https://twitter.com/{{ store.settings.contact.twitter }}"
               target="_blank"
-              class="text-primary"
+              class="text-foreground"
             >
               <span class="sr-only">X</span>
               <svg
@@ -99,7 +99,7 @@
             <a
               href="https://www.snapchat.com/add/{{ store.settings.contact.snapchat }}"
               target="_blank"
-              class="text-primary"
+              class="text-foreground"
             >
               <span class="sr-only">Snapchat</span>
               <svg
@@ -118,7 +118,7 @@
             <a
               href="https://www.tiktok.com/@{{ store.settings.contact.tiktok }}"
               target="_blank"
-              class="text-primary"
+              class="text-foreground"
             >
               <span class="sr-only">TikTok</span>
               <svg
@@ -170,7 +170,7 @@
       {% if not settings.links_1_hide and settings.links_1_links %}
         <div>
           {% if settings.links_1_title %}
-            <h3 class="text-[16px] leading-[24px] font-semibold">{{ settings.links_1_title }}</h3>
+            <h3 class="text-foreground text-subtitle1">{{ settings.links_1_title }}</h3>
           {% endif %}
           <ul
             role="list"
@@ -180,7 +180,7 @@
               <li class="py-2">
                 <a
                   href="{{ link.url }}"
-                  class="text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 hover:underline"
                 >
                   {{ link.title }}
                 </a>
@@ -192,7 +192,7 @@
       {% if not settings.links_2_hide and settings.links_2_links %}
         <div>
           {% if settings.links_2_title %}
-            <h3 class="text-[16px] leading-[24px] font-semibold">{{ settings.links_2_title }}</h3>
+            <h3 class="text-foreground text-subtitle1">{{ settings.links_2_title }}</h3>
           {% endif %}
           <ul
             role="list"
@@ -202,7 +202,7 @@
               <li class="py-2">
                 <a
                   href="{{ link.url }}"
-                  class="text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 hover:underline"
                 >
                   {{ link.title }}
                 </a>
@@ -214,7 +214,7 @@
       {% if not settings.links_3_hide and settings.links_3_links %}
         <div>
           {% if settings.links_3_title %}
-            <h3 class="text-[16px] leading-[24px] font-semibold">{{ settings.links_3_title }}</h3>
+            <h3 class="text-foreground text-subtitle1">{{ settings.links_3_title }}</h3>
           {% endif %}
           <ul
             role="list"
@@ -224,7 +224,7 @@
               <li class="py-2">
                 <a
                   href="{{ link.url }}"
-                  class="text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 hover:underline"
                 >
                   {{ link.title }}
                 </a>
@@ -234,22 +234,24 @@
         </div>
       {% endif %}
       <div>
-        <h3 class="text-[16px] leading-[24px] font-semibold">Subscribe</h3>
-        <p class="my-4 text-[16px] leading-[24px] text-balance">
+        <h3 class="text-foreground text-subtitle1">Subscribe</h3>
+        <p class="text-foreground text-body1 my-4 text-balance">
           Join our newsletter to stay up to date on features and releases.
         </p>
         <div class="mb-6 flex flex-col gap-2 md:flex-row">
           <input
             type="email"
             placeholder="Enter your email"
-            class="border-border flex-1 rounded border p-3 text-[16px] leading-[24px]"
+            class="border-muted text-body1 placeholder:text-muted-foreground focus:border-foreground flex-1 rounded border p-3 focus:outline-none"
           />
-          <button class="border-primary text-primary rounded border px-4 py-3 text-[16px] leading-[24px]">
+          <button
+            class="border-foreground text-foreground text-body1 hover:bg-foreground hover:text-background rounded border px-4 py-3"
+          >
             Subscribe
           </button>
         </div>
         <div>
-          <h3 class="text-[16px] leading-[24px] font-semibold">
+          <h3 class="text-foreground text-subtitle1">
             {% if settings.contact_info_title %}
               {{ settings.contact_info_title }}
             {% else %}
@@ -282,7 +284,7 @@
                 </div>
                 <a
                   href="mailto:{{ store.settings.contact.email }}"
-                  class="ms-2 text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 ms-2"
                 >
                   {{ store.settings.contact.email }}
                 </a>
@@ -290,7 +292,7 @@
             {% endif %}
             {% if store.settings.general.business_address.show_location %}
               <li class="flex items-center">
-                <div class="shrink-0">
+                <div class="text-foreground shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -300,13 +302,13 @@
                   >
                     <path
                       d="M7.9996 2.13086C9.30577 2.13086 10.4522 2.58386 11.4576 3.50879C12.434 4.4071 12.9371 5.61569 12.9371 7.18945C12.9371 7.82097 12.7983 8.45471 12.5123 9.09375C12.215 9.75799 11.8413 10.3945 11.3912 11.0039C10.9351 11.6215 10.4395 12.1976 9.90488 12.7324C9.35805 13.2796 8.84891 13.7629 8.37753 14.1826L8.36679 14.1934C8.32475 14.2331 8.27727 14.2614 8.21933 14.2803C8.15285 14.3018 8.09124 14.3108 8.03476 14.3145L8.33554 14.042C9.81628 12.6987 10.933 11.4671 11.6656 10.3486C12.3942 9.2361 12.7974 8.17836 12.7975 7.18945C12.7975 5.77661 12.3398 4.58295 11.4049 3.65332C10.4781 2.73207 9.33225 2.27051 7.9996 2.27051C6.66712 2.27056 5.52183 2.73218 4.59531 3.65332C3.66042 4.58295 3.20273 5.7766 3.20273 7.18945C3.2028 8.18171 3.61692 9.24048 4.36288 10.3516C5.1093 11.4632 6.21347 12.6927 7.65976 14.0381L7.95761 14.3145C7.9014 14.311 7.84187 14.3022 7.7789 14.2812C7.7257 14.2635 7.68228 14.2365 7.64316 14.1982L7.63437 14.1904L7.6246 14.1816C7.15102 13.7622 6.6408 13.2792 6.09433 12.7324C5.55983 12.1977 5.06499 11.6214 4.60898 11.0039C4.15903 10.3946 3.78667 9.75773 3.49081 9.09375C3.20602 8.45464 3.06702 7.82125 3.06699 7.18945C3.06699 5.61533 3.57017 4.40708 4.5455 3.50879C5.54935 2.58417 6.69365 2.13095 7.9996 2.13086ZM7.99863 6.36914C8.19888 6.36917 8.35484 6.43397 8.49472 6.57324C8.63395 6.71188 8.69882 6.86674 8.69882 7.06641C8.69881 7.26662 8.63403 7.4214 8.4957 7.55957C8.35729 7.69778 8.20211 7.76268 8.00156 7.7627C7.85056 7.7627 7.72514 7.72653 7.61386 7.65039L7.50742 7.56055C7.37006 7.42371 7.30527 7.26986 7.30527 7.06934C7.30527 6.86807 7.37023 6.71193 7.50839 6.57227C7.64544 6.43393 7.79905 6.36914 7.99863 6.36914Z"
-                      fill="#0B0A09"
-                      stroke="#0B0A09"
+                      fill="currentColor"
+                      stroke="currentColor"
                     ></path>
                   </svg>
                 </div>
                 <a
-                  class="ms-2 text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 ms-2"
                   {% if store.settings.general.business_address.latitude %}
                     target="_blank"
                     href="https://maps.google.com/?q={{ store.settings.general.business_address.latitude }},{{ store.settings.general.business_address.longitude }}"
@@ -322,7 +324,7 @@
             {% endif %}
             {% if store.settings.contact.phone %}
               <li class="flex items-center">
-                <div class="shrink-0">
+                <div class="text-foreground shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -332,15 +334,15 @@
                   >
                     <path
                       d="M2.74603 2.32227H5.07904C5.27395 2.32227 5.43696 2.38407 5.5683 2.50781C5.66741 2.60115 5.74396 2.71701 5.79779 2.85547L5.84369 3.00195L6.29193 5.0293V5.03027C6.31987 5.21923 6.31605 5.38671 6.28119 5.5332C6.24657 5.6787 6.1753 5.8033 6.06635 5.90723L6.06537 5.9082L4.38666 7.56348L4.37299 7.57715L4.38275 7.59375C4.66144 8.06209 4.95717 8.50007 5.26947 8.90723C5.50372 9.21266 5.75691 9.50762 6.03021 9.79102L6.31049 10.0703C6.71156 10.485 7.13012 10.8604 7.56635 11.1963C8.00303 11.5325 8.45889 11.8268 8.93353 12.0781L8.95013 12.0869L8.96381 12.0732L10.5663 10.4277H10.5673C10.6944 10.2898 10.8393 10.1968 11.0019 10.1484C11.1245 10.1121 11.2479 10.0985 11.372 10.1074L11.496 10.124L13.3984 10.5439V10.5449C13.6027 10.6013 13.7668 10.7049 13.8915 10.8555C14.0162 11.006 14.079 11.1811 14.079 11.3809V13.6553C14.0789 13.8903 13.9994 14.0852 13.8417 14.2412C13.6839 14.3974 13.4896 14.4756 13.2578 14.4756C11.9569 14.4755 10.6328 14.1623 9.2851 13.5361C7.93722 12.9099 6.687 12.021 5.5351 10.8691C4.38343 9.71744 3.49366 8.46726 2.86615 7.11816C2.23857 5.76899 1.92572 4.44479 1.92572 3.14648C1.92579 2.91163 2.00418 2.71613 2.16107 2.55859C2.31789 2.401 2.51231 2.32227 2.74603 2.32227ZM8.29584 5.30176C8.40516 5.20388 8.53653 5.17319 8.6933 5.20996C9.27505 5.35132 9.77802 5.63354 10.2011 6.05762C10.5714 6.42884 10.8404 6.86173 11.0078 7.35645L11.0732 7.57227C11.1072 7.72539 11.0749 7.85655 10.9765 7.96777C10.8778 8.07938 10.7441 8.13566 10.5732 8.13574C10.4685 8.13574 10.3678 8.09958 10.2724 8.02637C10.2016 7.97197 10.1466 7.90372 10.1074 7.82129L10.0732 7.7334C9.96355 7.36181 9.772 7.03952 9.49896 6.7666C9.22603 6.49368 8.90376 6.30212 8.53217 6.19238H8.53314C8.40938 6.15239 8.31103 6.08956 8.23822 6.00391C8.16595 5.91889 8.12982 5.81912 8.12982 5.7041C8.12985 5.57628 8.16161 5.46972 8.22357 5.38281L8.29584 5.30176ZM8.63763 2.27441L8.63861 2.27539C10.0494 2.43686 11.2533 3.01635 12.2499 4.01465C13.2462 5.01258 13.8258 6.21619 13.9902 7.62598V7.62695L13.9911 7.62793C14.0121 7.76975 13.9721 7.88817 13.872 7.98633C13.7708 8.08545 13.645 8.13574 13.4931 8.13574C13.3721 8.13569 13.2643 8.09236 13.1699 8.00488C13.0991 7.93928 13.0477 7.86033 13.0165 7.76758L12.9921 7.66992C12.8357 6.52835 12.3496 5.54877 11.5331 4.73242C10.7168 3.91607 9.73723 3.42859 8.59564 3.26953C8.45957 3.24814 8.34819 3.18922 8.26068 3.09375C8.17362 2.99882 8.12982 2.88435 8.12982 2.74902C8.12984 2.60358 8.17935 2.4832 8.27826 2.38672C8.3763 2.291 8.49541 2.25342 8.63763 2.27441ZM3.01849 3.4375C3.03812 3.88998 3.10977 4.36864 3.23236 4.87305C3.35508 5.37785 3.54876 5.94138 3.81342 6.5625L3.82806 6.59668L3.85443 6.57031L5.20013 5.23145L5.2099 5.22266L5.20697 5.20898L4.82806 3.43164L4.82318 3.41211H3.01752L3.01849 3.4375ZM12.9892 11.5703L12.9697 11.5654L11.3124 11.2227L11.2988 11.2197L11.289 11.2305L9.98041 12.6016L9.95599 12.627L9.98822 12.6416C10.4319 12.848 10.915 13.0165 11.4374 13.1475C11.9603 13.2785 12.4691 13.3569 12.9628 13.3818L12.9892 13.3828V11.5703Z"
-                      fill="#0B0A09"
-                      stroke="#0B0A09"
+                      fill="currentColor"
+                      stroke="currentColor"
                       stroke-width="0.05"
                     ></path>
                   </svg>
                 </div>
                 <a
                   href="tel:{{ store.settings.contact.phone }}"
-                  class="ms-2 text-[16px] leading-[24px]"
+                  class="text-foreground text-body1 ms-2"
                 >
                   {{ store.settings.contact.phone }}
                 </a>
@@ -350,13 +352,13 @@
         </div>
       </div>
     </div>
-    <div class="border-background/30 mt-6 border-t pt-6">
+    <div class="border-border-light mt-6 border-t pt-6">
       <div class="flex flex-col items-center justify-between space-y-4 lg:flex-row lg:space-y-0">
-        <div class="text-primary flex items-center gap-x-2 text-[14px] leading-[21px]">
+        <div class="text-foreground text-body2 flex items-center gap-x-2">
           <span>{{ store.settings.branding.copyrights | safe }}</span>
           <span>|</span>
           <div class="flex items-center gap-x-1">
-            <span class="text-[14px] leading-[21px]"> {{ _("Powered by") }} </span>
+            <span class="text-body2"> {{ _("Powered by") }} </span>
             <img
               width="54"
               height="20"
@@ -423,17 +425,17 @@
                 alt="{{ _('Business Center') }}"
                 class="h-6 max-w-13.5 rounded-sm object-contain"
               />
-              <div class="text-primary text-xs">{{ store.settings.contact.business_center }}</div>
+              <div class="text-foreground text-caption">{{ store.settings.contact.business_center }}</div>
             </a>
           {% endif %}
 
           {% if store.settings.general.tax_settings.tax_number %}
-            <span class="text-secondary text-[14px] leading-[21px]">
+            <span class="text-muted text-body2">
               {{ _("VAT number:") }} {{ store.settings.general.tax_settings.tax_number }}
             </span>
           {% endif %}
           {% if store.settings.general.commercial_registration_number %}
-            <span class="text-secondary text-[14px] leading-[21px]">
+            <span class="text-muted text-body2">
               {{ _("The commercial register number:") }} {{ store.settings.general.commercial_registration_number }}
             </span>
           {% endif %}
