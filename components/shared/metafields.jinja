@@ -6,10 +6,10 @@
     {% if item.data_type == 'text' %}
       {% if item.value and item.value[session.lang] %}
         <div class="flex flex-wrap items-center gap-2">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
-          <dd class="text-primary text-[16px] leading-[24px]">{{ item.value[session.lang] }}</dd>
+          <dd class="text-foreground text-body1">{{ item.value[session.lang] }}</dd>
         </div>
       {% endif %}
 
@@ -17,10 +17,10 @@
     {% elif item.data_type == 'number' %}
       {% if item.value is not none %}
         <div class="flex flex-wrap items-center gap-2">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
-          <dd class="text-primary text-[16px] leading-[24px]">{{ item.value }}</dd>
+          <dd class="text-foreground text-body1">{{ item.value }}</dd>
         </div>
       {% endif %}
 
@@ -28,10 +28,10 @@
     {% elif item.data_type == 'rich_text' %}
       {% if item.value and item.value[session.lang] %}
         <div class="flex flex-col gap-1">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
-          <dd class="text-primary prose prose-sm max-w-none">{{ item.value[session.lang]|safe }}</dd>
+          <dd class="text-foreground prose prose-sm max-w-none">{{ item.value[session.lang]|safe }}</dd>
         </div>
       {% endif %}
 
@@ -39,7 +39,7 @@
     {% elif item.data_type == 'image' %}
       {% if item.value and item.value.small %}
         <div class="flex flex-col gap-1">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
           <dd>
@@ -57,7 +57,7 @@
     {% elif item.data_type == 'file' %}
       {% if item.value and item.value.url %}
         <div class="flex flex-col gap-1">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
           <dd>
@@ -79,17 +79,17 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="text-secondary shrink-0"
+                class="text-muted-foreground shrink-0"
               >
                 <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
                 <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
               </svg>
               <div class="flex min-w-0 flex-1 flex-col">
                 {% if item.value.name %}
-                  <span class="text-primary truncate text-[12px] font-medium">{{ item.value.name }}</span>
+                  <span class="text-foreground truncate text-caption font-medium">{{ item.value.name }}</span>
                 {% endif %}
                 {% if item.value.formated_size %}
-                  <span class="text-secondary text-[10px]">{{ item.value.formated_size }}</span>
+                  <span class="text-muted-foreground text-[10px] leading-3">{{ item.value.formated_size }}</span>
                 {% endif %}
               </div>
               {# Download Icon #}
@@ -103,7 +103,7 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="text-secondary shrink-0"
+                class="text-muted-foreground shrink-0"
               >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -123,16 +123,16 @@
     {% elif item.data_type == 'table' %}
       {% if item.value %}
         <div class="flex flex-col gap-1">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
           <dd class="overflow-x-auto">
-            <table class="w-full text-[14px]">
+            <table class="w-full text-body2">
               <thead>
-                <tr class="bg-foreground rounded-lg">
+                <tr class="bg-secondary rounded-lg">
                   {% for header in item.value.headers %}
                     <th
-                      class="text-primary px-6 py-5 text-start text-[14px] font-semibold first:rounded-e-lg last:rounded-s-lg"
+                      class="text-foreground px-6 py-5 text-start text-body2 font-semibold first:rounded-e-lg last:rounded-s-lg"
                     >
                       {{ header.name[session.lang] if header.name[session.lang] else header.name.ar }}
                     </th>
@@ -143,7 +143,7 @@
                 {% for cells in item.value.cells %}
                   <tr class="border-border border-b first:border-t-0">
                     {% for cell in cells %}
-                      <td class="text-primary px-6 py-4">
+                      <td class="text-foreground px-6 py-4">
                         {% if cell.value and cell.value[session.lang] %}
                           {{ cell.value[session.lang] }}
                         {% elif cell.value and cell.value.url %}
@@ -163,19 +163,19 @@
                               stroke-width="2"
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              class="text-secondary shrink-0"
+                              class="text-muted-foreground shrink-0"
                             >
                               <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
                               <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
                             </svg>
                             <div class="flex min-w-0 flex-1 flex-col">
                               {% if cell.value.name %}
-                                <span class="text-primary max-w-[60px] truncate text-[12px] font-medium"
+                                <span class="text-foreground max-w-[60px] truncate text-caption font-medium"
                                   >{{ cell.value.name }}</span
                                 >
                               {% endif %}
                               {% if cell.value.formated_size %}
-                                <span class="text-secondary text-[10px]">{{ cell.value.formated_size }}</span>
+                                <span class="text-muted-foreground text-[10px] leading-3">{{ cell.value.formated_size }}</span>
                               {% endif %}
                             </div>
                             <svg
@@ -188,7 +188,7 @@
                               stroke-width="2"
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              class="text-secondary shrink-0"
+                              class="text-muted-foreground shrink-0"
                             >
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                               <polyline points="7 10 12 15 17 10"></polyline>
@@ -229,10 +229,10 @@
     {% else %}
       {% if item.value %}
         <div class="flex flex-wrap items-center gap-2">
-          <dt class="text-secondary text-[16px] leading-[24px]">
+          <dt class="text-muted-foreground text-body1">
             {{ item.name[session.lang] if item.name[session.lang] else item.name.ar }}:
           </dt>
-          <dd class="text-primary text-[16px] leading-[24px]">{{ item.value }}</dd>
+          <dd class="text-foreground text-body1">{{ item.value }}</dd>
         </div>
       {% endif %}
     {% endif %}

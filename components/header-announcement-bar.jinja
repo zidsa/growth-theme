@@ -5,12 +5,12 @@
         {% if settings.announcement_bar_url %}
           <a
             href="{{ settings.announcement_bar_url }}"
-            class="text-center text-[16px] leading-[24px] hover:underline"
+            class="text-body1 text-center underline"
           >
             {{ settings.announcement_bar_text }}
           </a>
         {% else %}
-          <p class="text-center text-[16px] leading-[24px]">{{ settings.announcement_bar_text }}</p>
+          <p class="text-body1 text-center">{{ settings.announcement_bar_text }}</p>
         {% endif %}
       </div>
     </div>
