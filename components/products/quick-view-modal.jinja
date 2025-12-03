@@ -1,0 +1,121 @@
+{# Quick View Modal - Fetches product page and injects content #}
+<el-dialog id="quick-view-dialog">
+  <dialog
+    id="product-quick-view-modal"
+    aria-labelledby="quick-view-title"
+    class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent"
+    data-error-message="{{ _('Failed to load product. Please try again.') }}"
+    data-go-to-product="{{ _('Go to product page') }}"
+  >
+    <el-dialog-backdrop
+      class="fixed inset-0 bg-black/10 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
+    ></el-dialog-backdrop>
+
+    <div
+      tabindex="0"
+      class="flex min-h-full justify-center p-4 focus:outline-none sm:items-center"
+    >
+      <el-dialog-panel
+        class="bg-background relative w-full max-w-5xl transform overflow-hidden rounded p-4 transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in data-closed:sm:translate-y-0 data-closed:sm:scale-95 md:p-6"
+      >
+        {# Header #}
+        <div class="mb-4 flex items-center justify-between gap-2">
+          <h2
+            id="quick-view-title"
+            class="text-primary text-[24px] leading-[33.6px] [font-variant:all-small-caps]"
+          >
+            {{ _("Quick view") }}
+          </h2>
+          <button
+            command="close"
+            commandfor="product-quick-view-modal"
+            type="button"
+            class="text-secondary hover:text-primary inline-flex size-10 items-center justify-center rounded transition-colors"
+            aria-label="{{ _('Close') }}"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {# Skeleton Loader #}
+        <div
+          id="quick-view-skeleton"
+          class="grid gap-6 sm:grid-cols-2"
+          aria-label="{{ _('Loading product details') }}"
+          aria-busy="true"
+        >
+          {# Gallery Skeleton #}
+          <div class="animate-pulse space-y-3">
+            <div class="bg-foreground aspect-[3/4] rounded"></div>
+            <div class="flex gap-2">
+              <div class="bg-foreground aspect-square w-1/4 rounded"></div>
+              <div class="bg-foreground aspect-square w-1/4 rounded"></div>
+              <div class="bg-foreground aspect-square w-1/4 rounded"></div>
+              <div class="bg-foreground aspect-square w-1/4 rounded"></div>
+            </div>
+          </div>
+
+          {# Details Skeleton #}
+          <div class="animate-pulse space-y-4">
+            <div class="space-y-2">
+              <div class="bg-foreground h-8 w-3/4 rounded"></div>
+              <div class="bg-foreground h-5 w-1/2 rounded"></div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="bg-foreground h-7 w-24 rounded"></div>
+              <div class="bg-foreground h-5 w-20 rounded"></div>
+            </div>
+            <div class="space-y-3">
+              <div class="bg-foreground h-4 w-20 rounded"></div>
+              <div class="flex gap-2">
+                <div class="bg-foreground h-10 w-16 rounded"></div>
+                <div class="bg-foreground h-10 w-16 rounded"></div>
+                <div class="bg-foreground h-10 w-16 rounded"></div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-4">
+              <div class="bg-foreground h-12 w-full rounded"></div>
+            </div>
+          </div>
+        </div>
+
+        {# Content Container - Will receive fetched product content #}
+        <div
+          id="quick-view-content"
+          class="hidden"
+        ></div>
+
+        {# View Full Details Link #}
+        <div
+          id="quick-view-footer"
+          class="border-border mt-4 hidden border-t pt-4 text-center"
+        >
+          <a
+            id="quick-view-product-link"
+            href=""
+            class="text-primary text-[16px] underline hover:no-underline"
+          >
+            {{ _("View full details") }}
+          </a>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+
+<script
+  src="{{ 'js/quick-view-modal.js' | asset_url }}"
+  defer
+></script>

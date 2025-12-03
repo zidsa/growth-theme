@@ -116,14 +116,74 @@
       data-quantity-section
       hidden
     >
-      {%
-        with
-        product_id=product.id,
-        quantity=1,
-        product_name=product.name
-      %}
-        {% include 'components/ui/quantity-input.jinja' %}
-      {% endwith %}
+      <div
+        class="text-primary bg-background outline-primary inline-flex items-center justify-between gap-2 rounded px-4 py-3 outline outline-1 transition-all hover:outline-2 active:bg-[#F6F5F4] active:outline-2"
+        data-class=" hover:outline-2 active:outline-2 active:bg-[#F6F5F4] px-4 py-3 text-[16px] leading-[24px] w-full md:group-data-[grid=list]/grid:w-1/2"
+        data-quantity-input
+        data-product-id="{{ product.id }}"
+        data-quantity="1"
+      >
+        {# Delete button (shown when quantity is 1) #}
+        {% set delete_icon %}
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.3333 6V12.6667H4.66667V6H11.3333ZM10.1667 2H5.83333L5 2.83333H2V4.5H14V2.83333H11L10.1667 2ZM13 4.33333H3V12.6667C3 13.5833 3.75 14.3333 4.66667 14.3333H11.3333C12.25 14.3333 13 13.5833 13 12.6667V4.33333Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        {% endset %}
+        {% with content=delete_icon, variant='outlined', size='icon-sm', aria_label=_('Remove') ~ ' ' ~ product.name, attrs='data-quantity-action="remove"' %}
+          {% include 'components/ui/button.jinja' %}
+        {% endwith %}
+
+        {# Minus button (hidden by default, shown when quantity > 1) #}
+        {% set minus_icon %}
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7.44444V8.55556H12V7.44444H4Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        {% endset %}
+        {% with content=minus_icon, variant='outlined', size='icon-sm', aria_label=_('Decrease quantity'), attrs='data-quantity-action="decrease" hidden' %}
+          {% include 'components/ui/button.jinja' %}
+        {% endwith %}
+
+        {# Quantity display #}
+        <span
+          class="text-primary min-w-[3rem] flex-1 text-center text-sm font-medium"
+          data-quantity-display
+          >1</span
+        >
+
+        {# Plus button #}
+        {% set plus_icon %}
+          <svg
+            class="size-4"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.6667 8.66667H8.66667V12.6667H7.33333V8.66667H3.33333V7.33333H7.33333V3.33333H8.66667V7.33333H12.6667V8.66667Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        {% endset %}
+        {% with content=plus_icon, variant='outlined', size='icon-sm', aria_label=_('Increase quantity'), attrs='data-quantity-action="increase"' %}
+          {% include 'components/ui/button.jinja' %}
+        {% endwith %}
+      </div>
     </div>
 
     {# Add to Cart Button (visible by default) #}

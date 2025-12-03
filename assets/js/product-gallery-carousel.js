@@ -217,6 +217,11 @@
     initializeAllProductGalleries();
   }
 
+  // Re-init gallery when quick view content is loaded
+  window.addEventListener("quick-view-content-loaded", () => {
+    initializeProductGallery("product-gallery");
+  });
+
   // Expose functions globally for dynamic use
   window.initializeProductGallery = initializeProductGallery;
   window.initializeAllProductGalleries = initializeAllProductGalleries;
