@@ -55,11 +55,7 @@
             class="space-y-4"
           >
             <div class="space-y-1">
-              <h1
-                class="text-primary text-[24px] leading-[33.6px] [font-variant:all-small-caps] md:text-[32px] md:leading-[41.6px]"
-              >
-                {{ product.name }}
-              </h1>
+              <h1 class="text-foreground text-h5 text-caps md:text-h4">{{ product.name }}</h1>
               {% if store.settings.products.reviews_enabled %}
                 {% if product.rating %}
                   <div class="flex items-center gap-2">
@@ -68,7 +64,7 @@
                     {% endwith %}
                     <a
                       href="#reviews"
-                      class="text-secondary text-[14px] leading-[1.5] underline"
+                      class="text-muted-foreground text-body2 underline"
                     >
                       {{ _("See reviews") }}
                     </a>
@@ -133,7 +129,7 @@
                   with
                   content=sold_badge,
                   variant='outlined',
-                  class='text-primary border-primary'
+                  class='text-foreground border-foreground'
                 %}
                   {% include 'components/ui/badge.jinja' %}
                 {% endwith %}
@@ -160,7 +156,7 @@
                   with
                   content=stock_badge,
                   variant='outlined',
-                  class='text-primary border-primary'
+                  class='text-foreground border-foreground'
                 %}
                   {% include 'components/ui/badge.jinja' %}
                 {% endwith %}
@@ -171,33 +167,25 @@
               {% if product.formatted_sale_price is not none %}
                 {# Product on sale - show sale price, old price crossed out, and discount #}
                 <div class="flex flex-wrap items-center gap-2">
-                  <p class="text-[24px] leading-[33.6px] [font-variant:all-small-caps]">
-                    {{ product.formatted_sale_price }}
-                  </p>
-                  <span class="text-destructive text-[14px] leading-[21px] line-through">
-                    {{ product.formatted_price }}
-                  </span>
+                  <p class="text-h5 text-caps">{{ product.formatted_sale_price }}</p>
+                  <span class="text-destructive text-body2 line-through"> {{ product.formatted_price }} </span>
                   {% if product.discount_percentage and product.discount_percentage > 0 %}
-                    <span
-                      class="bg-success/20 text-success rounded px-2 py-1 text-[16px] leading-[normal] [font-variant:all-small-caps]"
-                    >
+                    <span class="bg-success/20 text-success text-tagline rounded px-2 py-1">
                       {{ _("Discount") }} {{ product.discount_percentage }}%
                     </span>
                   {% endif %}
                 </div>
               {% else %}
                 {# Regular price - no sale #}
-                <p class="text-[24px] leading-[33.6px] [font-variant:all-small-caps]">{{ product.formatted_price }}</p>
+                <p class="text-h5 text-caps">{{ product.formatted_price }}</p>
               {% endif %}
-              <span class="text-secondary text-[16px] leading-[24px]"> SKU {{ product.sku }} </span>
+              <span class="text-muted-foreground text-body1"> SKU {{ product.sku }} </span>
             </div>
           </div>
 
           {# Short Description #}
           {% if product.short_description %}
-            <div class="prose prose-sm max-w-none [font-variant:all-small-caps]">
-              {{ product.short_description|safe }}
-            </div>
+            <div class="prose prose-sm text-caps max-w-none">{{ product.short_description|safe }}</div>
           {% endif %}
 
           <form
@@ -232,45 +220,70 @@
         {% set has_metafields = product and product.metafields and store and store.settings.products.is_metafields_enabled and product.metafields|length > 0 %}
         {% set has_description = product.description %}
 
+        {# Features & Details Disclosure #}
         {% if has_weight or has_metafields or has_description %}
-          {% set details %}
-            <div class="flex flex-col gap-4">
-              {# Weight #}
-              {% if has_weight %}
-                <div class="flex items-center gap-2">
-                  <dt class="text-secondary text-[16px] leading-[24px]">{{ _("Weight") }}:</dt>
-                  <dd class="text-primary text-[16px] leading-[24px]">
-                    {{ product.selected_product.weight.value }} {{ product.selected_product.weight.unit }}
-                  </dd>
-                </div>
-              {% endif %}
+          <div class="bg-secondary rounded">
+            <button
+              type="button"
+              command="--toggle"
+              commandfor="features-details"
+              class="group flex w-full items-center justify-between gap-3 px-4 py-2"
+              aria-expanded="false"
+            >
+              <span class="text-foreground text-h6">{{ _("Features & details") }}</span>
+              <span
+                class="text-foreground inline-flex size-10 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  class="transition-transform duration-200 group-aria-expanded:rotate-180"
+                >
+                  <path
+                    d="M11.999 8.70312C12.0929 8.70312 12.1689 8.73142 12.249 8.81152L17.1924 13.7559C17.2744 13.8378 17.3008 13.9117 17.3008 13.999C17.3008 14.0863 17.2743 14.1602 17.1924 14.2422C17.1143 14.3202 17.0374 14.3506 16.9365 14.3506C16.8359 14.3505 16.7596 14.32 16.6816 14.2422L16.6807 14.2412L12.3516 9.9375L11.998 9.58594L7.31738 14.2666C7.23964 14.3443 7.17341 14.3662 7.09277 14.3633C6.99851 14.3598 6.91711 14.3282 6.83105 14.2422C6.75294 14.1641 6.72266 14.0872 6.72266 13.9863C6.72267 13.8854 6.75294 13.8086 6.83105 13.7305L11.75 8.81152C11.83 8.73152 11.9054 8.7032 11.999 8.70312Z"
+                    fill="currentColor"
+                    stroke="currentColor"
+                  ></path>
+                </svg>
+              </span>
+            </button>
+            <el-disclosure
+              id="features-details"
+              hidden
+              class="transition duration-200 data-closed:opacity-0"
+            >
+              <div class="flex flex-col gap-4 px-4 pb-4">
+                {# Weight #}
+                {% if has_weight %}
+                  <div class="flex items-center gap-2">
+                    <dt class="text-muted-foreground text-body1">{{ _("Weight") }}:</dt>
+                    <dd class="text-foreground text-body1">
+                      {{ product.selected_product.weight.value }} {{ product.selected_product.weight.unit }}
+                    </dd>
+                  </div>
+                {% endif %}
 
-              {# Metafields #}
-              {% if has_metafields %}
-                {% with entity=product %}
-                  {% include 'components/shared/metafields.jinja' %}
-                {% endwith %}
-              {% endif %}
+                {# Metafields #}
+                {% if has_metafields %}
+                  {% with entity=product %}
+                    {% include 'components/shared/metafields.jinja' %}
+                  {% endwith %}
+                {% endif %}
 
-              {# Product Description #}
-              {% if has_description %}
-                <div class="text-primary prose prose-sm max-w-none">{{ product.description|safe }}</div>
-              {% endif %}
-            </div>
-          {% endset %}
-          {%
-            with
-            id='features-details',
-            title=_('Features & details'),
-            content=details,
-            button_class='bg-foreground rounded px-4 py-2'
-          %}
-            {% include 'components/ui/disclosure.jinja' %}
-          {% endwith %}
+                {# Product Description #}
+                {% if has_description %}
+                  <div class="text-foreground prose prose-sm max-w-none">{{ product.description|safe }}</div>
+                {% endif %}
+              </div>
+            </el-disclosure>
+          </div>
         {% endif %}
 
+        {# Product Options Disclosure #}
         {% if product.variants and product.variants|length > 0 %}
-          {% set productOptions %}
           {# Filter in-stock variants #}
           {% set in_stock_variants = [] %}
           {% for variant in product.variants %}
@@ -279,50 +292,105 @@
             {% endif %}
           {% endfor %}
 
-          {# Calculate split point (left column gets more if odd) #}
-          {% set total_variants = in_stock_variants | length %}
-          {% set left_count = ((total_variants + 1) / 2) | int %}
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {# Left Column #}
-              <div class="flex flex-col gap-4">
-                {% for variant in in_stock_variants[:left_count] %}
-                  {% include 'components/products/product-variant.jinja' %}
-                {% endfor %}
-              </div>
+          {% if in_stock_variants|length > 0 %}
+            <div class="bg-secondary rounded">
+              <button
+                type="button"
+                command="--toggle"
+                commandfor="product-options"
+                class="group flex w-full items-center justify-between gap-3 px-4 py-2"
+                aria-expanded="false"
+              >
+                <span class="text-foreground text-h6">{{ _("Product options") }}</span>
+                <span
+                  class="text-foreground inline-flex size-10 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    class="transition-transform duration-200 group-aria-expanded:rotate-180"
+                  >
+                    <path
+                      d="M11.999 8.70312C12.0929 8.70312 12.1689 8.73142 12.249 8.81152L17.1924 13.7559C17.2744 13.8378 17.3008 13.9117 17.3008 13.999C17.3008 14.0863 17.2743 14.1602 17.1924 14.2422C17.1143 14.3202 17.0374 14.3506 16.9365 14.3506C16.8359 14.3505 16.7596 14.32 16.6816 14.2422L16.6807 14.2412L12.3516 9.9375L11.998 9.58594L7.31738 14.2666C7.23964 14.3443 7.17341 14.3662 7.09277 14.3633C6.99851 14.3598 6.91711 14.3282 6.83105 14.2422C6.75294 14.1641 6.72266 14.0872 6.72266 13.9863C6.72267 13.8854 6.75294 13.8086 6.83105 13.7305L11.75 8.81152C11.83 8.73152 11.9054 8.7032 11.999 8.70312Z"
+                      fill="currentColor"
+                      stroke="currentColor"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
+              <el-disclosure
+                id="product-options"
+                hidden
+                class="transition duration-200 data-closed:opacity-0"
+              >
+                {# Calculate split point (left column gets more if odd) #}
+                {% set total_variants = in_stock_variants | length %}
+                {% set left_count = ((total_variants + 1) / 2) | int %}
+                <div class="grid grid-cols-1 gap-6 px-4 pb-4 md:grid-cols-2">
+                  {# Left Column #}
+                  <div class="flex flex-col gap-4">
+                    {% for variant in in_stock_variants[:left_count] %}
+                      {% include 'components/products/product-variant.jinja' %}
+                    {% endfor %}
+                  </div>
 
-              {# Right Column #}
-              <div class="flex flex-col gap-4">
-                {% for variant in in_stock_variants[left_count:] %}
-                  {% include 'components/products/product-variant.jinja' %}
-                {% endfor %}
-              </div>
+                  {# Right Column #}
+                  <div class="flex flex-col gap-4">
+                    {% for variant in in_stock_variants[left_count:] %}
+                      {% include 'components/products/product-variant.jinja' %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </el-disclosure>
             </div>
-          {% endset %}
-          {%
-            with
-            id='product-options',
-            title=_('Product options'),
-            content=productOptions,
-            button_class='bg-foreground rounded px-4 py-2'
-          %}
-            {% include 'components/ui/disclosure.jinja' %}
-          {% endwith %}
+          {% endif %}
         {% endif %}
-        {% set faq %}
-          {% with questions=product.questions %}
-            {% include 'components/products/product-questions.jinja' %}
-          {% endwith %}
-          {% include 'components/products/question-form.jinja' %}
-        {% endset %}
-        {%
-          with
-          id='faq',
-          title='FAQ',
-          content=faq,
-          button_class='bg-foreground rounded px-4 py-2'
-        %}
-          {% include 'components/ui/disclosure.jinja' %}
-        {% endwith %}
+
+        {# FAQ Disclosure #}
+        <div class="bg-secondary rounded">
+          <button
+            type="button"
+            command="--toggle"
+            commandfor="faq"
+            class="group flex w-full items-center justify-between gap-3 px-4 py-2"
+            aria-expanded="false"
+          >
+            <span class="text-foreground text-h6">{{ _("FAQ") }}</span>
+            <span
+              class="text-foreground inline-flex size-10 shrink-0 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                class="transition-transform duration-200 group-aria-expanded:rotate-180"
+              >
+                <path
+                  d="M11.999 8.70312C12.0929 8.70312 12.1689 8.73142 12.249 8.81152L17.1924 13.7559C17.2744 13.8378 17.3008 13.9117 17.3008 13.999C17.3008 14.0863 17.2743 14.1602 17.1924 14.2422C17.1143 14.3202 17.0374 14.3506 16.9365 14.3506C16.8359 14.3505 16.7596 14.32 16.6816 14.2422L16.6807 14.2412L12.3516 9.9375L11.998 9.58594L7.31738 14.2666C7.23964 14.3443 7.17341 14.3662 7.09277 14.3633C6.99851 14.3598 6.91711 14.3282 6.83105 14.2422C6.75294 14.1641 6.72266 14.0872 6.72266 13.9863C6.72267 13.8854 6.75294 13.8086 6.83105 13.7305L11.75 8.81152C11.83 8.73152 11.9054 8.7032 11.999 8.70312Z"
+                  fill="currentColor"
+                  stroke="currentColor"
+                ></path>
+              </svg>
+            </span>
+          </button>
+          <el-disclosure
+            id="faq"
+            hidden
+            class="transition duration-200 data-closed:opacity-0"
+          >
+            <div class="px-4 pb-4">
+              {% with questions=product.questions %}
+                {% include 'components/products/product-questions.jinja' %}
+              {% endwith %}
+              {% include 'components/products/question-form.jinja' %}
+            </div>
+          </el-disclosure>
+        </div>
       </div>
 
       {# Reviews Section #}

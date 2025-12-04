@@ -9,41 +9,137 @@
           "min_height_desktop": 700,
           "transition_effect": "fade",
           "autoplay_enabled": true,
-          "autoplay_delay": 5000,
+          "autoplay_delay": 4000,
           "show_dots": true,
           "slides": [
             {
-              "background_image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=1920&h=800&fit=crop&q=90",
+              "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
               "background_position": "center",
-              "overlay_opacity": 5,
+              "overlay_opacity": 10,
               "text_alignment": "start",
               "badge_text": "مجموعة جديدة",
-              "heading": "مجموعة الخريف الجديدة",
-              "description": "اكتشف التصاميم الأنيقة والمريحة",
+              "heading": "مجموعة الربيع 2025",
+              "description": "ادخل الموسم بأناقة انسيابية وجمال بسيط",
+              "button_text": "تسوق المجموعة",
+              "button_url": "/p"
+            },
+            {
+              "background_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "background_position": "center",
+              "overlay_opacity": 15,
+              "text_alignment": "start",
+              "badge_text": "عروض حصرية",
+              "heading": "تخفيضات نهاية الموسم",
+              "description": "خصومات تصل إلى 50% على أفضل المنتجات",
               "button_text": "تسوق الآن",
-              "button_url": "/products"
+              "button_url": "/p"
             },
             {
-              "background_image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1920&h=800&fit=crop&q=90",
+              "background_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
               "background_position": "center",
-              "overlay_opacity": 5,
+              "overlay_opacity": 20,
               "text_alignment": "center",
-              "badge_text": "أساسيات",
-              "heading": "الأساسيات الخالدة",
-              "description": "قطع كلاسيكية لخزانة ملابس عصرية",
-              "button_text": "استكشف المجموعة",
-              "button_url": "/collections/new-arrivals"
-            },
-            {
-              "background_image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1920&h=800&fit=crop&q=90",
-              "background_position": "center",
-              "overlay_opacity": 5,
-              "text_alignment": "center",
-              "badge_text": "فاخر",
-              "heading": "البساطة الفاخرة",
-              "description": "تصاميم نقية، جودة استثنائية",
+              "badge_text": "",
+              "heading": "أناقة لا تُنسى",
+              "description": "اكتشف تصاميم فريدة تعكس شخصيتك",
               "button_text": "اكتشف المزيد",
-              "button_url": "/collections/best-sellers"
+              "button_url": "/p"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "is_primary_hero": true,
+          "style_variant": "default",
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "background_position": "center",
+          "overlay_opacity": 5,
+          "badge_text": "مجموعة جديدة",
+          "heading": "مجموعة الربيع 2025",
+          "description": "ادخل الموسم بأناقة انسيابية وجمال بسيط",
+          "button_text": "تسوق المجموعة",
+          "button_url": "/p",
+          "min_height_mobile": 700,
+          "min_height_desktop": 700
+        }
+      },
+      {
+        "template": "sections/categories.jinja",
+        "settings": {
+          "title": "تصفح التصنيفات",
+          "display_more": true,
+          "more_text": "عرض الكل",
+          "categories": []
+        }
+      },
+      {
+        "template": "sections/products.jinja",
+        "settings": {
+          "title": "منتجات مميزة",
+          "display_more": true,
+          "more_text": "عرض الكل",
+          "products": []
+        }
+      },
+      {
+        "template": "sections/testimonials.jinja",
+        "settings": {
+          "title": "آراء عملائنا",
+          "testimonials": [
+            {
+              "rating": 5,
+              "text": "تجربة تسوق رائعة! المنتجات ذات جودة عالية والتوصيل سريع جداً. سأتسوق منهم مرة أخرى بالتأكيد.",
+              "name": "أحمد محمد"
+            },
+            {
+              "rating": 5,
+              "text": "خدمة عملاء ممتازة وأسعار منافسة. أنصح الجميع بالتسوق من هنا.",
+              "name": "سارة الخالد"
+            },
+            {
+              "rating": 4,
+              "text": "منتجات أصلية 100% والتغليف احترافي. شكراً لكم على الاهتمام بالتفاصيل.",
+              "name": "محمد العتيبي"
+            },
+            {
+              "rating": 5,
+              "text": "أفضل متجر إلكتروني تعاملت معه. السرعة والجودة لا مثيل لهما.",
+              "name": "نورة السعيد"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/partners.jinja",
+        "settings": {
+          "title": "شركاؤنا",
+          "store_partners": [
+            {
+              "image": "https://placehold.co/200x200?text=Partner+1",
+              "url": "https://example.com",
+              "name": "شريك 1"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+2",
+              "url": "https://example.com",
+              "name": "شريك 2"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+3",
+              "url": "",
+              "name": "شريك 3"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+4",
+              "url": "https://example.com",
+              "name": "شريك 4"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+5",
+              "url": "",
+              "name": "شريك 5"
             }
           ]
         }
@@ -51,27 +147,139 @@
       {
         "template": "sections/gallery.jinja",
         "settings": {
-          "title": "نمط الحياة",
+          "title": "ليلة صيفية",
           "gallery": [
             {
-              "src": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1000&fit=crop&q=90",
-              "alt": "الأناقة اليومية",
-              "image_title": "الأناقة اليومية",
-              "primary_button_text": "تسوق الآن",
-              "primary_button_url": "/collections/casual",
-              "secondary_button_text": "",
-              "secondary_button_url": ""
+              "src": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+              "url": "/p"
             },
             {
-              "src": "https://images.unsplash.com/photo-1544441893-675973e31985?w=800&h=1000&fit=crop&q=90",
-              "alt": "المظهر المثالي",
-              "image_title": "المظهر المثالي",
-              "primary_button_text": "اكتشف المزيد",
-              "primary_button_url": "/collections/formal",
-              "secondary_button_text": "",
-              "secondary_button_url": ""
+              "src": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "url": "/p"
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+              "url": ""
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+              "url": ""
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd",
+              "url": "/p"
             }
           ]
+        }
+      },
+      {
+        "template": "sections/benefits.jinja",
+        "settings": {
+          "store_features": [
+            {
+              "image": "https://placehold.co/200x200?text=شحن+مجاني",
+              "title": "شحن مجاني",
+              "description": "لجميع الطلبات فوق 500 ريال"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=إرجاع+سهل",
+              "title": "إرجاع سهل",
+              "description": "خلال 30 يوم من الشراء"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=دفع+آمن",
+              "title": "دفع آمن",
+              "description": "معاملات محمية 100%"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=دعم+24/7",
+              "title": "دعم 24/7",
+              "description": "خدمة عملاء على مدار الساعة"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "صيف الأحلام - MP4",
+          "poster_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          "autoplay": false
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "فيديو تلقائي - WebM",
+          "poster_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+          "video": "https://test-videos.co.uk/vids/bigbuckbunny/webm/vp8/720/Big_Buck_Bunny_720_10s_1MB.webm",
+          "autoplay": true
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "فيديو آخر - MP4",
+          "poster_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+          "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+          "autoplay": false
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "وقت محدود فقط",
+          "title": "تخفيضات كبرى حتى 40%",
+          "description": "تسوق مجموعتنا من الحقائب الحصرية والحقائب الظهر بأسعار مخفضة خلال التخفيضات الكبرى. أسرع!",
+          "end_date": "2025-12-31 23:59",
+          "button_text": "تسوق الآن",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+          "overlay_opacity": 50
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "عرض خاص",
+          "title": "عرض محدود - ينتهي قريباً",
+          "description": "لا تفوت فرصتك للحصول على أفضل العروض على منتجاتنا المميزة.",
+          "end_date": "2025-11-01 12:00",
+          "button_text": "اشتري الآن",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+          "overlay_opacity": 30
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "انتهى",
+          "title": "عرض منتهي",
+          "description": "هذا مثال على عرض منتهي - سيتم إخفاء القسم بالكامل.",
+          "end_date": "2024-01-01 00:00",
+          "button_text": "تصفح المنتجات",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "overlay_opacity": 60
+        }
+      },
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "is_primary_hero": false,
+          "style_variant": "compact",
+          "background_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+          "background_position": "center",
+          "overlay_opacity": 5,
+          "badge_text": "",
+          "heading": "اجعل كل مدخل لا يُنسى",
+          "description": "اكتشف تصاميم خالدة للمناسبات الرسمية، مصممة لجعل كل لحظة لا تُنسى. من الفساتين الأنيقة إلى الإكسسوارات الراقية، اعثر على كل ما تحتاجه.",
+          "button_text": "تسوق الآن",
+          "button_url": "/p",
+          "min_height_mobile": 700,
+          "min_height_desktop": 480
         }
       }
     ],
@@ -84,41 +292,154 @@
           "min_height_desktop": 700,
           "transition_effect": "fade",
           "autoplay_enabled": true,
-          "autoplay_delay": 5000,
+          "autoplay_delay": 4000,
           "show_dots": true,
           "slides": [
             {
-              "background_image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=1920&h=800&fit=crop&q=90",
+              "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
               "background_position": "center",
-              "overlay_opacity": 5,
-              "text_alignment": "center",
-              "badge_text": "New Collection",
-              "heading": "New Fall Collection",
-              "description": "Discover elegant and comfortable designs",
+              "overlay_opacity": 10,
+              "text_alignment": "start",
+              "badge_text": "NEW COLLECTION",
+              "heading": "Superbloom 2025",
+              "description": "Step into the season with flowing silhouettes and effortless elegance.",
+              "button_text": "Shop the Collection",
+              "button_url": "/p"
+            },
+            {
+              "background_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "background_position": "center",
+              "overlay_opacity": 15,
+              "text_alignment": "start",
+              "badge_text": "EXCLUSIVE OFFERS",
+              "heading": "End of Season Sale",
+              "description": "Up to 50% off on the best products",
               "button_text": "Shop Now",
-              "button_url": "/products"
+              "button_url": "/p"
             },
             {
-              "background_image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1920&h=800&fit=crop&q=90",
+              "background_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
               "background_position": "center",
-              "overlay_opacity": 5,
+              "overlay_opacity": 20,
               "text_alignment": "center",
-              "badge_text": "Essentials",
-              "heading": "Timeless Essentials",
-              "description": "Classic pieces for a modern wardrobe",
-              "button_text": "Explore Collection",
-              "button_url": "/collections/new-arrivals"
+              "badge_text": "",
+              "heading": "Unforgettable Elegance",
+              "description": "Discover unique designs that reflect your personality",
+              "button_text": "Explore More",
+              "button_url": "/p"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "is_primary_hero": true,
+          "style_variant": "default",
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "background_position": "center",
+          "overlay_opacity": 5,
+          "badge_text": "NEW COLLECTION",
+          "heading": "Superbloom 2025",
+          "description": "Step into the season with flowing silhouettes and effortless elegance.",
+          "button_text": "Shop the Collection",
+          "button_url": "/p",
+          "min_height_mobile": 700,
+          "min_height_desktop": 700
+        }
+      },
+      {
+        "template": "sections/hero.jinja",
+        "settings": {
+          "is_primary_hero": false,
+          "style_variant": "compact",
+          "background_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+          "background_position": "center",
+          "overlay_opacity": 5,
+          "badge_text": "",
+          "heading": "Make every entrance unforgettable",
+          "description": "Discover timeless designs for formal occasions, crafted to make every moment unforgettable. From elegant gowns to refined accessories, find everything you need.",
+          "button_text": "Shop now",
+          "button_url": "/p",
+          "min_height_mobile": 700,
+          "min_height_desktop": 480
+        }
+      },
+      {
+        "template": "sections/categories.jinja",
+        "settings": {
+          "title": "Browse Categories",
+          "display_more": true,
+          "more_text": "View All",
+          "categories": []
+        }
+      },
+      {
+        "template": "sections/products.jinja",
+        "settings": {
+          "title": "Featured Products",
+          "display_more": true,
+          "more_text": "View All",
+          "products": []
+        }
+      },
+      {
+        "template": "sections/testimonials.jinja",
+        "settings": {
+          "title": "Customer Testimonials",
+          "testimonials": [
+            {
+              "rating": 5,
+              "text": "Amazing shopping experience! High quality products and super fast delivery. Will definitely shop again.",
+              "name": "John Smith"
             },
             {
-              "background_image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=1920&h=800&fit=crop&q=90",
-              "background_position": "center",
-              "overlay_opacity": 5,
-              "text_alignment": "center",
-              "badge_text": "Luxury",
-              "heading": "Luxury Simplicity",
-              "description": "Pure designs, exceptional quality",
-              "button_text": "Discover More",
-              "button_url": "/collections/best-sellers"
+              "rating": 5,
+              "text": "Excellent customer service and competitive prices. I recommend everyone to shop here.",
+              "name": "Sarah Johnson"
+            },
+            {
+              "rating": 4,
+              "text": "100% authentic products and professional packaging. Thank you for the attention to detail.",
+              "name": "Michael Brown"
+            },
+            {
+              "rating": 5,
+              "text": "Best online store I've dealt with. Speed and quality are unmatched.",
+              "name": "Emily Davis"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/partners.jinja",
+        "settings": {
+          "title": "Our Partners",
+          "store_partners": [
+            {
+              "image": "https://placehold.co/200x200?text=Partner+1",
+              "url": "https://example.com",
+              "name": "Partner 1"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+2",
+              "url": "https://example.com",
+              "name": "Partner 2"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+3",
+              "url": "",
+              "name": "Partner 3"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+4",
+              "url": "https://example.com",
+              "name": "Partner 4"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Partner+5",
+              "url": "",
+              "name": "Partner 5"
             }
           ]
         }
@@ -126,27 +447,122 @@
       {
         "template": "sections/gallery.jinja",
         "settings": {
-          "title": "Lifestyle",
+          "title": "Summer night mode",
           "gallery": [
             {
-              "src": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1000&fit=crop&q=90",
-              "alt": "Everyday Elegance",
-              "image_title": "Everyday Elegance",
-              "primary_button_text": "Shop Now",
-              "primary_button_url": "/collections/casual",
-              "secondary_button_text": "",
-              "secondary_button_url": ""
+              "image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+              "url": "/p"
             },
             {
-              "src": "https://images.unsplash.com/photo-1544441893-675973e31985?w=800&h=1000&fit=crop&q=90",
-              "alt": "Refined Look",
-              "image_title": "Refined Look",
-              "primary_button_text": "Discover More",
-              "primary_button_url": "/collections/formal",
-              "secondary_button_text": "",
-              "secondary_button_url": ""
+              "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+              "url": "/p"
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+              "url": ""
+            },
+            {
+              "image": "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd",
+              "url": "/p"
             }
           ]
+        }
+      },
+      {
+        "template": "sections/benefits.jinja",
+        "settings": {
+          "store_features": [
+            {
+              "image": "https://placehold.co/200x200?text=Free+Shipping",
+              "title": "Free Shipping",
+              "description": "For all orders over 500 SAR"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Easy+Returns",
+              "title": "Easy Returns",
+              "description": "Within 30 days of purchase"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=Secure+Payment",
+              "title": "Secure Payment",
+              "description": "100% protected transactions"
+            },
+            {
+              "image": "https://placehold.co/200x200?text=24/7+Support",
+              "title": "24/7 Support",
+              "description": "Round-the-clock customer service"
+            }
+          ]
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "Dreamy Summer - MP4",
+          "poster_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          "autoplay": false
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "Auto Video - WebM",
+          "poster_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+          "video": "https://test-videos.co.uk/vids/bigbuckbunny/webm/vp8/720/Big_Buck_Bunny_720_10s_1MB.webm",
+          "autoplay": true
+        }
+      },
+      {
+        "template": "sections/video.jinja",
+        "settings": {
+          "title": "Another Video - MP4",
+          "poster_image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
+          "video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+          "autoplay": false
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "Limited Time Only",
+          "title": "Super Sale Up To 40% Off",
+          "description": "Shop our collection of exclusive handbags and backpacks at reduced price during super sale. Hurry up!",
+          "end_date": "2025-12-31 23:59",
+          "button_text": "Shop Now",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1445205170230-053b83016050",
+          "overlay_opacity": 50
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "Special Offer",
+          "title": "Limited Offer - Ending Soon",
+          "description": "Don't miss your chance to get the best deals on our featured products.",
+          "end_date": "2025-11-01 12:00",
+          "button_text": "Buy Now",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1483985988355-763728e1935b",
+          "overlay_opacity": 30
+        }
+      },
+      {
+        "template": "sections/countdown.jinja",
+        "settings": {
+          "badge_text": "Ended",
+          "title": "Expired Offer",
+          "description": "This is an example of an ended offer - the entire section will be hidden.",
+          "end_date": "2024-01-01 00:00",
+          "button_text": "Browse Products",
+          "button_url": "/p",
+          "background_image": "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+          "overlay_opacity": 60
         }
       }
     ]
