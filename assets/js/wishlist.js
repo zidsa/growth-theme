@@ -97,6 +97,9 @@ class WishlistManager {
     // Subscribe to products-updated event (AJAX filtering)
     window.addEventListener("products-updated", () => this.updateAllButtons());
 
+    // Re-sync buttons when quick view modal loads content
+    window.addEventListener("quick-view-content-loaded", () => this.updateAllButtons());
+
     this.isInitialized = true;
   }
 
