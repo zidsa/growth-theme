@@ -33,18 +33,18 @@
     <div class="space-y-1">
       {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
       {% for value, label in availability_options.items() %}
-        {%
-          with
-          label=label,
-          id='availability-' ~ value,
-          name='availability',
-          value=value,
-          checked=(value in availability_values),
-          wrapper_class='py-2',
-          attrs='onchange="window.productFilter.handleAvailability()"'
-        %}
-          {% include 'components/ui/checkbox.jinja' %}
-        {% endwith %}
+        <label class="form-control py-2">
+          <input
+            type="checkbox"
+            id="availability-{{ value }}"
+            name="availability"
+            value="{{ value }}"
+            {% if value in availability_values %}checked{% endif %}
+            onchange="window.productFilter.handleAvailability()"
+            class="form-checkbox"
+          />
+          {{ label }}
+        </label>
       {% endfor %}
     </div>
   </el-popover>

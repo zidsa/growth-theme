@@ -57,16 +57,37 @@
           class="{{ 'hidden' if cart.loyalty_applied_redemption_method }} flex items-center gap-2"
           data-loyalty-redemption-form
         >
-          {%
-            with
-            name="loyalty_redemption",
-            id="loyalty-redemption-select",
-            placeholder=_("Select redemption"),
-            wrapper_class="flex-1",
-            attrs='data-loyalty-redemption-select'
-          %}
-            {% include 'components/ui/select.jinja' %}
-          {% endwith %}
+          <div class="form-select-wrapper flex-1">
+            <select
+              name="loyalty_redemption"
+              id="loyalty-redemption-select"
+              data-loyalty-redemption-select
+            >
+              <option
+                value=""
+                disabled
+                selected
+              >
+                {{ _("Select redemption") }}
+              </option>
+            </select>
+            <div data-slot="icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </div>
+          </div>
           <button
             class="btn btn-filled btn-lg"
             disabled

@@ -1,9 +1,0 @@
-<label
-  {% if for %}for="{{ for }}"{% endif %}
-  class="text-muted text-tagline {{ class|default('') }} inline-flex items-center gap-1 data-[disabled=true]:opacity-50"
-  {% if disabled %}data-disabled="true"{% endif %}
-  {{ attrs|default('')|safe }}
->
-  {%- if content %}{{ content }}{% endif -%}
-  {%- if required %}<span class="text-destructive">*</span>{% endif -%}
-</label>

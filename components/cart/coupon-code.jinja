@@ -58,17 +58,17 @@
       class="flex items-center gap-2"
       data-coupon-form
     >
-      {%
-        with
-        name="coupon_code",
-        id="coupon-code-input",
-        placeholder=_("Coupon code or gift card"),
-        wrapper_class="flex-1",
-        required=true,
-        attrs='data-coupon-input'
-      %}
-        {% include 'components/ui/input.jinja' %}
-      {% endwith %}
+      <div class="flex-1">
+        <input
+          type="text"
+          name="coupon_code"
+          id="coupon-code-input"
+          placeholder="{{ _('Coupon code or gift card') }}"
+          required
+          data-coupon-input
+          class="form-input"
+        />
+      </div>
       <button
         type="submit"
         class="btn btn-filled btn-lg"

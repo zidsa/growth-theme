@@ -22,19 +22,20 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         {# Email Input #}
         <div class="grid w-full items-center gap-2">
-          {% with for='question_email', content=_('Email'), required=true %}
-            {% include 'components/ui/label.jinja' %}
-          {% endwith %}
-          {%
-            with
-            id='question_email',
-            name='question_email',
-            type='email',
-            required=true,
-            autocomplete='email'
-          %}
-            {% include 'components/ui/input.jinja' %}
-          {% endwith %}
+          <label
+            for="question_email"
+            class="form-label"
+          >
+            {{ _('Email') }}<span class="form-label-required">*</span>
+          </label>
+          <input
+            type="email"
+            id="question_email"
+            name="question_email"
+            required
+            autocomplete="email"
+            class="form-input"
+          />
           <p
             id="email-error"
             class="text-destructive text-caption hidden"
@@ -45,18 +46,20 @@
 
         {# Name Input #}
         <div class="grid w-full items-center gap-2">
-          {% with for='question_name', content=_('Name'), required=true %}
-            {% include 'components/ui/label.jinja' %}
-          {% endwith %}
-          {%
-            with
-            id='question_name',
-            name='question_name',
-            required=true,
-            autocomplete='name'
-          %}
-            {% include 'components/ui/input.jinja' %}
-          {% endwith %}
+          <label
+            for="question_name"
+            class="form-label"
+          >
+            {{ _('Name') }}<span class="form-label-required">*</span>
+          </label>
+          <input
+            type="text"
+            id="question_name"
+            name="question_name"
+            required
+            autocomplete="name"
+            class="form-input"
+          />
           <p
             id="name-error"
             class="text-destructive text-caption hidden"
@@ -68,16 +71,19 @@
 
       {# Question Textarea #}
       <div class="grid w-full items-center gap-2">
-        {% with for='question_text', content=_('Your question'), required=true %}
-          {% include 'components/ui/label.jinja' %}
-        {% endwith %}
+        <label
+          for="question_text"
+          class="form-label"
+        >
+          {{ _('Your question') }}<span class="form-label-required">*</span>
+        </label>
         <textarea
           id="question_text"
           name="question_text"
           placeholder="{{ _('Enter your question here') }}"
           rows="3"
           required
-          class="border-input text-body1 placeholder:text-muted-foreground focus:border-foreground w-full resize-none rounded border px-3 py-3 transition-[border-color,border-width] outline-none hover:border-2 focus:border-2"
+          class="form-textarea"
         ></textarea>
         <p
           id="question-error"
@@ -88,14 +94,15 @@
       </div>
 
       {# Anonymous Checkbox #}
-      {%
-        with
-        label=_('Do not show my name in the comments'),
-        id='is_anonymous',
-        name='is_anonymous'
-      %}
-        {% include 'components/ui/checkbox.jinja' %}
-      {% endwith %}
+      <label class="form-control">
+        <input
+          type="checkbox"
+          id="is_anonymous"
+          name="is_anonymous"
+          class="form-checkbox"
+        />
+        {{ _('Do not show my name in the comments') }}
+      </label>
 
       {# Submit Button #}
       <button

@@ -65,18 +65,19 @@
               {% set rating_key = 'ratings_' ~ i %}
               {% set rating_data = product.rating[rating_key] if product.rating else none %}
               {% set count = rating_data.count if rating_data else 0 %}
-              {%
-                with
-                label=i ~ ' ' ~ (_('star') if i == 1 else _('stars')) ~ ' (' ~ count ~ ')',
-                id='review-rating-' ~ i,
-                name='review_rating',
-                value=i|string,
-                checked=(i|string in selected_ratings),
-                wrapper_class='py-2',
-                attrs='data-review-filter="rating" data-value="' ~ i ~ '"'
-              %}
-                {% include 'components/ui/checkbox.jinja' %}
-              {% endwith %}
+              <label class="form-control py-2">
+                <input
+                  type="checkbox"
+                  id="review-rating-{{ i }}"
+                  name="review_rating"
+                  value="{{ i }}"
+                  {% if i|string in selected_ratings %}checked{% endif %}
+                  data-review-filter="rating"
+                  data-value="{{ i }}"
+                  class="form-checkbox"
+                />
+                {{ i }} {{ _('star') if i == 1 else _('stars') }} ({{ count }})
+              </label>
             {% endfor %}
           </div>
         </el-popover>
@@ -110,30 +111,32 @@
           class="origin-top-center border-border-light bg-background min-w-[200px] rounded-none border p-4 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
         >
           <div class="space-y-1">
-            {%
-              with
-              label=_('With media'),
-              id='review-type-with-media',
-              name='review_type',
-              value='with_media',
-              checked=(selected_type == 'with_media'),
-              wrapper_class='py-2',
-              attrs='data-review-filter="type" data-value="with_media"'
-            %}
-              {% include 'components/ui/checkbox.jinja' %}
-            {% endwith %}
-            {%
-              with
-              label=_('Without media'),
-              id='review-type-without-media',
-              name='review_type',
-              value='without_media',
-              checked=(selected_type == 'without_media'),
-              wrapper_class='py-2',
-              attrs='data-review-filter="type" data-value="without_media"'
-            %}
-              {% include 'components/ui/checkbox.jinja' %}
-            {% endwith %}
+            <label class="form-control py-2">
+              <input
+                type="checkbox"
+                id="review-type-with-media"
+                name="review_type"
+                value="with_media"
+                {% if selected_type == 'with_media' %}checked{% endif %}
+                data-review-filter="type"
+                data-value="with_media"
+                class="form-checkbox"
+              />
+              {{ _('With media') }}
+            </label>
+            <label class="form-control py-2">
+              <input
+                type="checkbox"
+                id="review-type-without-media"
+                name="review_type"
+                value="without_media"
+                {% if selected_type == 'without_media' %}checked{% endif %}
+                data-review-filter="type"
+                data-value="without_media"
+                class="form-checkbox"
+              />
+              {{ _('Without media') }}
+            </label>
           </div>
         </el-popover>
       </div>

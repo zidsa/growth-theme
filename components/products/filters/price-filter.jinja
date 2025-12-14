@@ -11,35 +11,37 @@
   ></div>
   <div class="flex items-center gap-3">
     <div class="grid flex-1 items-center gap-2">
-      {% with for=min_input_id|default('price_min'), content=_("From") ~ ", " ~ session.currency %}
-        {% include 'components/ui/label.jinja' %}
-      {% endwith %}
-      {%
-        with
-        id=min_input_id|default('price_min'),
-        name='from_price',
-        type='text',
-        inputmode='numeric',
-        placeholder='0'
-      %}
-        {% include 'components/ui/input.jinja' %}
-      {% endwith %}
+      <label
+        for="{{ min_input_id|default('price_min') }}"
+        class="form-label"
+      >
+        {{ _("From") }}, {{ session.currency }}
+      </label>
+      <input
+        type="text"
+        id="{{ min_input_id|default('price_min') }}"
+        name="from_price"
+        inputmode="numeric"
+        placeholder="0"
+        class="form-input"
+      />
     </div>
     <span class="text-muted-foreground text-body1 mt-7">—</span>
     <div class="grid flex-1 items-center gap-2">
-      {% with for=max_input_id|default('price_max'), content=_("To") ~ ", " ~ session.currency %}
-        {% include 'components/ui/label.jinja' %}
-      {% endwith %}
-      {%
-        with
-        id=max_input_id|default('price_max'),
-        name='to_price',
-        type='text',
-        inputmode='numeric',
-        placeholder=_("No limit")
-      %}
-        {% include 'components/ui/input.jinja' %}
-      {% endwith %}
+      <label
+        for="{{ max_input_id|default('price_max') }}"
+        class="form-label"
+      >
+        {{ _("To") }}, {{ session.currency }}
+      </label>
+      <input
+        type="text"
+        id="{{ max_input_id|default('price_max') }}"
+        name="to_price"
+        inputmode="numeric"
+        placeholder="{{ _('No limit') }}"
+        class="form-input"
+      />
     </div>
   </div>
 </div>

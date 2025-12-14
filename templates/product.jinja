@@ -213,9 +213,11 @@
               class="{{ 'hidden' if not product.in_stock }} grid w-full items-center gap-2"
               data-quantity-wrapper
             >
-              {% with for='product-quantity', content=_('Quantity') %}
-                {% include 'components/ui/label.jinja' %}
-              {% endwith %}
+              <label
+                for="product-quantity"
+                class="form-label"
+                >{{ _('Quantity') }}</label
+              >
               {% with quantity=1, min=1, max=product.quantity if not product.is_infinite else none %}
                 {% include 'components/products/headless/quantity-input.jinja' %}
               {% endwith %}

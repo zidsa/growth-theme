@@ -1,17 +1,26 @@
 {% macro render_attr_option(option, attr_slug, idx, selected_values) %}
   {% if option.type == 'default' %}
-    {%
-      with
-      label=option.value,
-      id=attr_slug ~ '-' ~ idx,
-      name='attributes[' ~ attr_slug ~ '][]',
-      value=option.value,
-      checked=(option.value in selected_values)
-    %}
-      {% include 'components/ui/checkbox.jinja' %}
-    {% endwith %}
+    <label class="form-control">
+      <input
+        type="checkbox"
+        id="{{ attr_slug }}-{{ idx }}"
+        name="attributes[{{ attr_slug }}][]"
+        value="{{ option.value }}"
+        {% if option.value in selected_values %}checked{% endif %}
+        class="form-checkbox"
+      />
+      {{ option.value }}
+    </label>
   {% elif option.type == 'color' %}
-    {% set color_label %}
+    <label class="form-control">
+      <input
+        type="checkbox"
+        id="{{ attr_slug }}-color-{{ idx }}"
+        name="attributes[{{ attr_slug }}][]"
+        value="{{ option.value }}"
+        {% if option.value in selected_values %}checked{% endif %}
+        class="form-checkbox"
+      />
       <span class="flex size-8 shrink-0 items-center justify-center rounded p-0.5">
         <span
           class="block size-full rounded"
@@ -20,19 +29,17 @@
         ></span>
       </span>
       <span class="text-body1">{{ option.value }}</span>
-    {% endset %}
-    {%
-      with
-      label=color_label,
-      id=attr_slug ~ '-color-' ~ idx,
-      name='attributes[' ~ attr_slug ~ '][]',
-      value=option.value,
-      checked=(option.value in selected_values)
-    %}
-      {% include 'components/ui/checkbox.jinja' %}
-    {% endwith %}
+    </label>
   {% elif option.type == 'icon' and option.type_value.thumbnail %}
-    {% set icon_label %}
+    <label class="form-control">
+      <input
+        type="checkbox"
+        id="{{ attr_slug }}-icon-{{ idx }}"
+        name="attributes[{{ attr_slug }}][]"
+        value="{{ option.value }}"
+        {% if option.value in selected_values %}checked{% endif %}
+        class="form-checkbox"
+      />
       <span class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded p-0.5">
         <img
           src="{{ option.type_value.thumbnail }}"
@@ -41,17 +48,7 @@
         />
       </span>
       <span class="text-body1">{{ option.value }}</span>
-    {% endset %}
-    {%
-      with
-      label=icon_label,
-      id=attr_slug ~ '-icon-' ~ idx,
-      name='attributes[' ~ attr_slug ~ '][]',
-      value=option.value,
-      checked=(option.value in selected_values)
-    %}
-      {% include 'components/ui/checkbox.jinja' %}
-    {% endwith %}
+    </label>
   {% endif %}
 {% endmacro %}
 
@@ -169,17 +166,18 @@
                 />
                 <div class="space-y-3">
                   {% for option in sort_options %}
-                    {%
-                      with
-                      label=option.label,
-                      id='sort-' ~ loop.index,
-                      name='sort_option',
-                      value=option.value,
-                      checked=(current_sort_value == option.value),
-                      attrs='onchange="window.productFilter.setSortParams(this, \'' ~ option.sort_by ~ '\', \'' ~ option.order ~ '\')"'
-                    %}
-                      {% include 'components/ui/radio.jinja' %}
-                    {% endwith %}
+                    <label class="form-control">
+                      <input
+                        type="radio"
+                        id="sort-{{ loop.index }}"
+                        name="sort_option"
+                        value="{{ option.value }}"
+                        {% if current_sort_value == option.value %}checked{% endif %}
+                        onchange="window.productFilter.setSortParams(this, '{{ option.sort_by }}', '{{ option.order }}')"
+                        class="form-radio"
+                      />
+                      {{ option.label }}
+                    </label>
                   {% endfor %}
                 </div>
               {% endset %}
@@ -204,16 +202,17 @@
               {% set availability_content %}
                 <div class="space-y-3">
                   {% for value, label in availability_options.items() %}
-                    {%
-                      with
-                      label=label,
-                      id='availability-' ~ value ~ '-drawer',
-                      name='availability',
-                      value=value,
-                      checked=(value in availability_values)
-                    %}
-                      {% include 'components/ui/checkbox.jinja' %}
-                    {% endwith %}
+                    <label class="form-control">
+                      <input
+                        type="checkbox"
+                        id="availability-{{ value }}-drawer"
+                        name="availability"
+                        value="{{ value }}"
+                        {% if value in availability_values %}checked{% endif %}
+                        class="form-checkbox"
+                      />
+                      {{ label }}
+                    </label>
                   {% endfor %}
                 </div>
               {% endset %}
