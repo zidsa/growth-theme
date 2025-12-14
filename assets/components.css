@@ -1,75 +1,54 @@
 /* ========== BUTTON COMPONENT ========== */
-/* Maps to Figma: Button component (12896-333) */
-/* Uses Tailwind @apply for design token consistency */
-
-/* Base button styles */
+/* Base styles */
 .btn {
   @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded border border-transparent font-normal whitespace-nowrap transition-all outline-none;
 }
-
 .btn:focus-visible {
   @apply border-ring ring-ring/50 ring-[3px];
 }
-
 .btn:disabled {
   @apply pointer-events-none cursor-not-allowed;
 }
-
 .btn svg {
   @apply pointer-events-none shrink-0;
 }
 
 /* ---------- Button Variants ---------- */
-
-/* Filled (Primary) - Figma: Type=Filled */
 .btn-filled {
   @apply bg-primary text-primary-foreground border-primary;
 }
-
 .btn-filled:hover {
   @apply opacity-90;
 }
-
 .btn-filled:active {
-  /* Figma: Pressed uses Neutral/Neutral Dark = --muted (#545352) */
   @apply bg-muted text-primary-foreground border-primary;
 }
-
 .btn-filled:disabled {
   @apply bg-secondary text-muted-foreground border-transparent opacity-60;
 }
 
-/* Outlined - Figma: Type=Outlined */
 .btn-outlined {
   @apply text-foreground border-foreground bg-transparent;
 }
-
 .btn-outlined:hover {
   @apply ring-foreground ring-1;
 }
-
 .btn-outlined:active {
   @apply bg-secondary ring-foreground ring-1;
 }
-
 .btn-outlined:disabled {
-  /* Figma: Outline/outlinedDisable = border-border/50 */
   @apply text-muted-foreground border-border/50 opacity-60;
 }
 
-/* Text (Ghost) - Figma: Type=Text */
 .btn-text {
   @apply text-foreground border-transparent bg-transparent;
 }
-
 .btn-text:hover {
   @apply border-foreground;
 }
-
 .btn-text:active {
   @apply bg-secondary border-foreground;
 }
-
 .btn-text:disabled {
   @apply text-muted-foreground opacity-60;
 }
@@ -78,36 +57,27 @@
 .btn-destructive {
   @apply bg-destructive text-destructive-foreground border-destructive;
 }
-
 .btn-destructive:hover {
   @apply opacity-90;
 }
-
 .btn-destructive:active {
   @apply opacity-80;
 }
-
 .btn-destructive:disabled {
   @apply opacity-50;
 }
 
 /* ---------- Button Sizes ---------- */
-
-/* Large - Figma: Size=Large (16px text, 12px/16px padding) */
 .btn-lg {
   @apply px-4 py-3;
   font-size: var(--font-body1--size);
   line-height: var(--font-body1--line-height);
 }
-
-/* Medium - Figma: Size=Medium (14px text, 8px/16px padding) */
 .btn-md {
   @apply px-4 py-2;
   font-size: var(--font-body2--size);
   line-height: var(--font-body2--line-height);
 }
-
-/* Small - Figma: Size=Small (12px text, 6px/12px padding) */
 .btn-sm {
   @apply px-3 py-1.5;
   font-size: var(--font-caption--size);
@@ -115,40 +85,56 @@
 }
 
 /* ---------- Icon Buttons ---------- */
-
 .btn-icon {
   @apply text-foreground border-none bg-transparent p-0;
 }
-
 .btn-icon:hover {
   @apply text-muted;
 }
-
 .btn-icon:disabled {
   @apply text-muted-foreground opacity-60;
 }
-
-/* Icon button sizes - Figma: Icon/icon-300 (24px), Icon/icon-200 (16px) */
 .btn-icon-lg {
   @apply size-10;
 }
-
 .btn-icon-lg svg {
   @apply size-6;
 }
-
 .btn-icon-md {
   @apply size-8;
 }
-
 .btn-icon-md svg {
   @apply size-4;
 }
-
 .btn-icon-sm {
   @apply size-6;
 }
-
 .btn-icon-sm svg {
   @apply size-3;
+}
+
+/* ========== BADGE/TAG COMPONENT ========== */
+
+/* Base badge styles */
+.badge {
+  @apply inline-flex w-fit items-center gap-1 rounded px-2 py-1;
+  font-size: var(--font-tagline--size);
+  line-height: var(--font-tagline--line-height);
+  font-weight: var(--font-tagline--weight);
+  font-variant: all-small-caps;
+}
+.badge svg {
+  @apply pointer-events-none size-4 shrink-0;
+}
+
+/* ---------- Badge Variants ---------- */
+
+/* Filled */
+.badge-filled {
+  @apply bg-secondary text-foreground;
+}
+
+/* Outlined */
+.badge-outlined {
+  @apply border-border text-foreground border bg-transparent;
 }

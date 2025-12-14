@@ -196,9 +196,13 @@
       >
         {# Rating Tags #}
         {% for rating in selected_ratings %}
-          {% set badge_content %}
-            {{ rating }}
-            {{ _('STARS') }}
+          <button
+            type="button"
+            class="badge badge-outlined shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70"
+            data-remove-filter="rating"
+            data-value="{{ rating }}"
+          >
+            {{ rating }} {{ _('STARS') }}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -210,23 +214,18 @@
                 d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
               />
             </svg>
-          {% endset %}
-          {%
-            with
-            content=badge_content,
-            tag='button',
-            variant='outlined',
-            class='shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70 [font-variant:all-small-caps]',
-            attrs='data-remove-filter="rating" data-value="' ~ rating ~ '"'
-          %}
-            {% include 'components/ui/badge.jinja' %}
-          {% endwith %}
+          </button>
         {% endfor %}
 
         {# Type Tag #}
         {% if selected_type %}
           {% set type_label = _('With media') if selected_type == 'with_media' else _('Without media') %}
-          {% set badge_content %}
+          <button
+            type="button"
+            class="badge badge-outlined shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70"
+            data-remove-filter="type"
+            data-value="{{ selected_type }}"
+          >
             {{ type_label }}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -239,17 +238,7 @@
                 d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
               />
             </svg>
-          {% endset %}
-          {%
-            with
-            content=badge_content,
-            tag='button',
-            variant='outlined',
-            class='shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70 [font-variant:all-small-caps]',
-            attrs='data-remove-filter="type" data-value="' ~ selected_type ~ '"'
-          %}
-            {% include 'components/ui/badge.jinja' %}
-          {% endwith %}
+          </button>
         {% endif %}
 
         {# Clear All Button #}

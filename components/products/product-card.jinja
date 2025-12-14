@@ -28,22 +28,16 @@
       {% endif %}
       {# Sale badge #}
       {% if (product.sale_price and product.sale_price < product.price) or (product.discount_percentage and product.discount_percentage > 0) %}
-        {% with content=_("SALE"), variant='filled' %}
-          {% include 'components/ui/badge.jinja' %}
-        {% endwith %}
+        <span class="badge badge-filled">{{ _("SALE") }}</span>
       {% endif %}
       {# Out of stock badge #}
       {% if product.in_stock == false or (product.is_infinite == false and product.quantity is not none and product.quantity <= 0) %}
-        {% with content=_("OUT OF STOCK"), variant='filled' %}
-          {% include 'components/ui/badge.jinja' %}
-        {% endwith %}
+        <span class="badge badge-filled">{{ _("OUT OF STOCK") }}</span>
       {% endif %}
       {# Keyword badges #}
       {% if product.keywords and product.keywords|length > 0 %}
         {% for keyword in product.keywords[:2] %}
-          {% with content=keyword|upper, variant='filled' %}
-            {% include 'components/ui/badge.jinja' %}
-          {% endwith %}
+          <span class="badge badge-filled">{{ keyword|upper }}</span>
         {% endfor %}
       {% endif %}
     </div>

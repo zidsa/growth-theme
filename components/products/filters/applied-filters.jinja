@@ -89,7 +89,15 @@
     </div>
 
     {% for filter in active_filters %}
-      {% set badge_content %}
+      <button
+        type="button"
+        class="badge badge-outlined shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70"
+        aria-label="{{ _('Remove filter') }}: {{ filter.label }}"
+        data-filter-type="{{ filter.type }}"
+        data-filter-slug="{{ filter.attribute_slug | default('') }}"
+        data-filter-value="{{ filter.value | default('') }}"
+        onclick="window.productFilter.removeFilter(this.dataset.filterType, this.dataset.filterSlug, this.dataset.filterValue)"
+      >
         {{ filter.label }}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -105,18 +113,7 @@
             stroke="currentColor"
           ></path>
         </svg>
-      {% endset %}
-      {%
-        with
-        content=badge_content,
-        tag='button',
-        variant='outlined',
-        aria_label=_('Remove filter') ~ ': ' ~ filter.label,
-        class='shrink-0 cursor-pointer whitespace-nowrap transition-opacity hover:opacity-70',
-        attrs='data-filter-type="' ~ filter.type ~ '" data-filter-slug="' ~ (filter.attribute_slug | default('')) ~ '" data-filter-value="' ~ (filter.value | default('')) ~ '" onclick="window.productFilter.removeFilter(this.dataset.filterType, this.dataset.filterSlug, this.dataset.filterValue)"'
-      %}
-        {% include 'components/ui/badge.jinja' %}
-      {% endwith %}
+      </button>
     {% endfor %}
   </div>
 {% endif %}
