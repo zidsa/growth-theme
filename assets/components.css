@@ -461,7 +461,7 @@
   @apply ring-input ring-1;
 }
 .qty-input:focus-within {
-  @apply border-foreground border-2;
+  @apply ring-foreground ring-1;
 }
 
 /* Full width modifier (for product cards) */
@@ -476,9 +476,6 @@
 .qty-input-btn:hover {
   @apply bg-secondary;
 }
-.qty-input-btn:active {
-  @apply bg-muted;
-}
 .qty-input-btn:disabled {
   @apply text-muted-foreground/60 cursor-not-allowed;
 }
@@ -488,7 +485,7 @@
 
 /* Display (span for cards) */
 .qty-input-display {
-  @apply text-foreground min-w-12 shrink-0 font-medium inline-flex items-center justify-center;
+  @apply text-foreground inline-flex min-w-12 shrink-0 items-center justify-center font-medium;
   font-size: var(--font-body2--size);
   line-height: var(--font-body2--line-height);
 }

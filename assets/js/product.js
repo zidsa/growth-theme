@@ -349,4 +349,7 @@
   } else {
     init();
   }
+
+  // Re-init when quick view content loads
+  window.addEventListener("quick-view-content-loaded", initQuantityHandlers);
 })();

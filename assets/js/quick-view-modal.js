@@ -44,6 +44,10 @@ class QuickViewManager {
     this.currentHoveredCard = null;
     this.currentPrefetchUrl = null;
 
+    // SDK script state
+    this.sdkScriptLoaded = false;
+    this.sdkScriptUrl = null;
+
     // Bound methods for event listeners
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
@@ -72,24 +76,25 @@ class QuickViewManager {
   /**
    * Get item from cache (moves to end for LRU)
    * @param {string} url - Cache key
-   * @returns {string|null} Cached HTML or null
+   * @returns {Object|null} Cached data { html, productObj } or null
    */
   cacheGet(url) {
-    const html = this.cache.get(url);
-    if (!html) return null;
+    const data = this.cache.get(url);
+    if (!data) return null;
 
     // Move to end for LRU ordering
     this.cache.delete(url);
-    this.cache.set(url, html);
-    return html;
+    this.cache.set(url, data);
+    return data;
   }
 
   /**
    * Set item in cache with LRU eviction
    * @param {string} url - Cache key
    * @param {string} html - HTML content to cache
+   * @param {Object|null} productObj - Product object to cache
    */
-  cacheSet(url, html) {
+  cacheSet(url, html, productObj) {
     // Remove if exists (to update position)
     this.cache.delete(url);
 
@@ -99,7 +104,7 @@ class QuickViewManager {
       this.cache.delete(oldestKey);
     }
 
-    this.cache.set(url, html);
+    this.cache.set(url, { html, productObj });
   }
 
   /**
@@ -149,6 +154,55 @@ class QuickViewManager {
     return section ? section.outerHTML : null;
   }
 
+  /**
+   * Extract productObj from page HTML
+   * @param {string} html - Full page HTML
+   * @returns {Object|null} Product object or null
+   */
+  extractProductObj(html) {
+    const match = html.match(/window\.productObj\s*=\s*(\{[\s\S]*?\});?\s*<\/script>/);
+    if (match && match[1]) {
+      try {
+        return JSON.parse(match[1]);
+      } catch (e) {
+        console.warn("[QuickView] Failed to parse productObj:", e);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Extract SDK product.js URL from page HTML
+   * @param {string} html - Full page HTML
+   * @returns {string|null} Script URL or null
+   */
+  extractSdkScriptUrl(html) {
+    const match = html.match(/<script[^>]+src="([^"]*theme-statics\/product\.js[^"]*)"/);
+    return match ? match[1] : null;
+  }
+
+  /**
+   * Load SDK product.js script dynamically
+   * @returns {Promise<void>}
+   */
+  loadSdkScript() {
+    // Already loaded or no URL
+    if (this.sdkScriptLoaded || !this.sdkScriptUrl) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = this.sdkScriptUrl;
+      script.onload = () => {
+        this.sdkScriptLoaded = true;
+        resolve();
+      };
+      script.onerror = () => reject(new Error("[QuickView] Failed to load SDK script"));
+      document.head.appendChild(script);
+    });
+  }
+
   // ============================================
   // Prefetch Methods
   // ============================================
@@ -176,9 +230,15 @@ class QuickViewManager {
 
       const html = await response.text();
       const sectionHtml = this.extractProductSection(html);
+      const productObj = this.extractProductObj(html);
+
+      // Extract SDK script URL (only once)
+      if (!this.sdkScriptUrl) {
+        this.sdkScriptUrl = this.extractSdkScriptUrl(html);
+      }
 
       if (sectionHtml) {
-        this.cacheSet(productUrl, sectionHtml);
+        this.cacheSet(productUrl, sectionHtml, productObj);
       }
     } catch (err) {
       // Ignore abort errors, warn on others
@@ -374,11 +434,14 @@ class QuickViewManager {
     const messages = this.getMessages(modal);
 
     // Check cache first
-    const cachedHtml = this.cacheGet(baseUrl);
+    const cachedData = this.cacheGet(baseUrl);
 
-    if (cachedHtml) {
-      // Instant render from cache
-      content.innerHTML = cachedHtml;
+    if (cachedData) {
+      // Set productObj BEFORE loading SDK script (SDK needs it on init)
+      if (cachedData.productObj) window.productObj = cachedData.productObj;
+      await this.loadSdkScript();
+
+      content.innerHTML = cachedData.html;
       productLink.href = baseUrl;
       this.setModalState(elements, "content");
       dialog.show();
@@ -402,13 +465,25 @@ class QuickViewManager {
 
       const html = await response.text();
       const sectionHtml = this.extractProductSection(html);
+      const productObj = this.extractProductObj(html);
 
       if (!sectionHtml) {
         throw new Error("Product section not found");
       }
 
+      // Extract SDK script URL (only once)
+      if (!this.sdkScriptUrl) {
+        this.sdkScriptUrl = this.extractSdkScriptUrl(html);
+      }
+
+      // Set productObj BEFORE loading SDK script (SDK needs it on init)
+      if (productObj) window.productObj = productObj;
+
+      // Load SDK script
+      await this.loadSdkScript();
+
       // Cache for next time
-      this.cacheSet(baseUrl, sectionHtml);
+      this.cacheSet(baseUrl, sectionHtml, productObj);
 
       // Render content
       content.innerHTML = sectionHtml;
