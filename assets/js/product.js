@@ -294,12 +294,12 @@
   // ─────────────────────────────────────────────────────────────
 
   function initQuantityHandlers() {
-    // For headless quantity-input component
-    const decreaseBtn = document.querySelector(".quantity-input__decrease");
-    const increaseBtn = document.querySelector(".quantity-input__increase");
     const quantityInput = document.querySelector("#product-quantity");
-
     if (!quantityInput) return;
+
+    const wrapper = quantityInput.closest(".qty-input");
+    const decreaseBtn = wrapper?.querySelector('[data-quantity-action="decrease"]');
+    const increaseBtn = wrapper?.querySelector('[data-quantity-action="increase"]');
 
     // Update productObj when quantity changes
     const updateSelectedQuantity = () => {
@@ -311,24 +311,26 @@
     quantityInput.addEventListener("change", updateSelectedQuantity);
     quantityInput.addEventListener("input", updateSelectedQuantity);
 
-    // Button handlers for input type
-    if (decreaseBtn && quantityInput.tagName === "INPUT") {
+    // Decrease button handler
+    if (decreaseBtn) {
       decreaseBtn.addEventListener("click", () => {
         const current = parseInt(quantityInput.value) || 1;
-        if (current > 1) {
+        const min = parseInt(quantityInput.min) || 1;
+        if (current > min) {
           quantityInput.value = current - 1;
-          quantityInput.dispatchEvent(new Event("change"));
+          quantityInput.dispatchEvent(new Event("change", { bubbles: true }));
         }
       });
     }
 
-    if (increaseBtn && quantityInput.tagName === "INPUT") {
+    // Increase button handler
+    if (increaseBtn) {
       increaseBtn.addEventListener("click", () => {
-        const max = parseInt(quantityInput.max) || 100;
         const current = parseInt(quantityInput.value) || 1;
+        const max = quantityInput.max ? parseInt(quantityInput.max) : Infinity;
         if (current < max) {
           quantityInput.value = current + 1;
-          quantityInput.dispatchEvent(new Event("change"));
+          quantityInput.dispatchEvent(new Event("change", { bubbles: true }));
         }
       });
     }

@@ -218,8 +218,8 @@
                 class="form-label"
                 >{{ _('Quantity') }}</label
               >
-              {% with quantity=1, min=1, max=product.quantity if not product.is_infinite else none %}
-                {% include 'components/products/headless/quantity-input.jinja' %}
+              {% with mode='product', quantity=1, min=1, max=product.quantity if not product.is_infinite else none %}
+                {% include 'components/ui/quantity-input.jinja' %}
               {% endwith %}
             </div>
 

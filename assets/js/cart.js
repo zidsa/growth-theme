@@ -400,9 +400,11 @@ class CartManager {
     if (!card) return;
 
     const addBtn = card.querySelector("[data-add-to-cart]");
+    const quickViewBtn = card.querySelector("[data-open-quick-view]");
     const qtySection = card.querySelector("[data-quantity-section]");
 
     if (addBtn) addBtn.hidden = true;
+    if (quickViewBtn) quickViewBtn.hidden = true;
     if (qtySection) {
       qtySection.hidden = false;
       const wrapper = qtySection.querySelector("[data-quantity-input]");
@@ -416,9 +418,11 @@ class CartManager {
     if (!card) return;
 
     const addBtn = card.querySelector("[data-add-to-cart]");
+    const quickViewBtn = card.querySelector("[data-open-quick-view]");
     const qtySection = card.querySelector("[data-quantity-section]");
 
     if (addBtn) addBtn.hidden = false;
+    if (quickViewBtn) quickViewBtn.hidden = false;
     if (qtySection) qtySection.hidden = true;
   }
 
