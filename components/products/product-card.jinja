@@ -118,10 +118,11 @@
 
     {# Quantity Input (hidden, shown after adding to cart) #}
     <div
+      class="w-full md:group-data-[grid=list]/grid:w-1/2"
       data-quantity-section
       hidden
     >
-      {% with product_id=product.id, quantity=1 %}
+      {% with id='card-qty-' ~ product.id, product_id=product.id, quantity=1, show_delete=true, full_width=true %}
         {% include 'components/ui/quantity-input.jinja' %}
       {% endwith %}
     </div>

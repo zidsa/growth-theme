@@ -178,66 +178,16 @@
     {# Column 2: Quantity (w-48 on desktop, row on mobile) #}
     <div class="flex items-center justify-between gap-4 lg:w-48 lg:flex-col lg:items-start lg:justify-start lg:gap-2">
       {% if product.product_class != 'crowdfunding_project' %}
-        {# Quantity Input with −/+ buttons #}
-        <div
-          class="border-muted flex h-12 w-[180px] items-center overflow-hidden rounded border lg:w-full"
-          data-quantity-wrapper="{{ product.id }}"
-        >
-          {# Decrease Button #}
-          <button
-            type="button"
-            class="hover:bg-secondary flex size-8 shrink-0 items-center justify-center transition-colors"
-            data-action="quantity"
-            data-cart-id="{{ product.id }}"
-            data-product-id="{{ product.product_id }}"
-            data-delta="-1"
-            aria-label="{{ _('Decrease quantity') }}"
-          >
-            <svg
-              class="text-foreground size-4"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3.333 8H12.667"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-
-          {# Quantity Display #}
-          <div class="text-foreground text-body2 flex min-w-12 flex-1 items-center justify-center">
-            <span data-quantity-value="{{ product.id }}">{{ product.quantity }}</span>
-          </div>
-
-          {# Increase Button #}
-          <button
-            type="button"
-            class="hover:bg-secondary flex size-8 shrink-0 items-center justify-center transition-colors"
-            data-action="quantity"
-            data-cart-id="{{ product.id }}"
-            data-product-id="{{ product.product_id }}"
-            data-delta="1"
-            aria-label="{{ _('Increase quantity') }}"
-          >
-            <svg
-              class="text-foreground size-4"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 3.333V12.667M3.333 8H12.667"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-        </div>
+        {# Quantity Input #}
+        {% with
+          id='cart-qty-' ~ product.id,
+          quantity=product.quantity,
+          cart_product_id=product.id,
+          max=product.original_product_quantity,
+          full_width=true
+        %}
+          {% include 'components/ui/quantity-input.jinja' %}
+        {% endwith %}
 
         {# Stock Warning (optional) - shown below quantity on desktop, separate on mobile #}
         {% if product.original_product_quantity and product.original_product_quantity <= 5 %}

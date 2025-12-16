@@ -126,9 +126,9 @@
   {% if has_multiple_images %}
     <div class="flex items-center gap-2 md:hidden">
       {# Progress Bar #}
-      <div class="product-gallery__progress bg-foreground h-1 w-full rounded-full">
+      <div class="product-gallery__progress bg-secondary h-1 w-full rounded-full">
         <div
-          class="product-gallery__progress-bar bg-secondary h-1 rounded-full"
+          class="product-gallery__progress-bar bg-accent h-1 rounded-full"
           data-gallery-id="{{ gallery_id }}"
           style="width: 0%"
         ></div>
@@ -136,15 +136,13 @@
 
       {# Small Navigation Buttons #}
       <button
-        class="product-gallery__prev-mobile p-2.5 disabled:opacity-30"
+        class="btn btn-icon btn-icon-lg product-gallery__prev-mobile bg-background/10 backdrop-blur-sm"
         aria-label="{{ _('Previous image') }}"
         data-gallery-id="{{ gallery_id }}"
         type="button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
           viewBox="0 0 24 24"
           fill="none"
           class="rtl:rotate-180"
@@ -156,15 +154,13 @@
         </svg>
       </button>
       <button
-        class="product-gallery__next-mobile p-2.5 disabled:opacity-30"
+        class="btn btn-icon btn-icon-lg product-gallery__next-mobile bg-background/10 backdrop-blur-sm"
         aria-label="{{ _('Next image') }}"
         data-gallery-id="{{ gallery_id }}"
         type="button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
           viewBox="0 0 24 24"
           fill="none"
           class="rtl:rotate-180"

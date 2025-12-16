@@ -102,7 +102,7 @@
               {% set sold_count = product.sold_products_count or (product.selected_product and product.selected_product.sold_products_count) %}
               <span
                 data-sold-count-badge
-                class="badge badge-outlined border-foreground {{ 'hidden' if not sold_count }}"
+                class="badge badge-outlined border-foreground {{ '!hidden' if not sold_count }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@
               {# Remaining Stock Badge #}
               <span
                 data-low-stock-badge
-                class="badge badge-outlined border-foreground {{ 'hidden' if not product.low_stock_quantity }}"
+                class="badge badge-outlined border-foreground {{ '!hidden' if not product.low_stock_quantity }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -356,7 +356,7 @@
               hidden
               class="transition duration-200 data-closed:opacity-0"
             >
-              <div class="flex flex-col gap-4 px-4 pb-4">
+              <div class="flex flex-col gap-4 px-4 pb-4 mt-4">
                 {# Weight #}
                 <div
                   class="{{ 'hidden' if not has_weight }} flex items-center gap-2"
@@ -437,7 +437,7 @@
                 {# Calculate split point (left column gets more if odd) #}
                 {% set total_variants = in_stock_variants | length %}
                 {% set left_count = ((total_variants + 1) / 2) | int %}
-                <div class="grid grid-cols-1 gap-6 px-4 pb-4 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-6 px-4 pb-4 md:grid-cols-2 mt-4">
                   {# Left Column #}
                   <div class="flex flex-col gap-4">
                     {% for variant in in_stock_variants[:left_count] %}
@@ -491,7 +491,7 @@
             hidden
             class="transition duration-200 data-closed:opacity-0"
           >
-            <div class="px-4 pb-4">
+            <div class="px-4 pb-4 mt-4">
               {% with questions=product.questions %}
                 {% include 'components/products/product-questions.jinja' %}
               {% endwith %}
