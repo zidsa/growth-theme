@@ -13,6 +13,7 @@
     - show_delete (boolean, optional): Show delete icon at qty=1 (default: false)
     - full_width (boolean, optional): Full width style (default: false)
     - cart_product_id (string, optional): Cart product ID for cart page integration
+    - product_id (string, optional): Original product ID for cart page integration
 
   Usage:
     {% with id='product-quantity', quantity=1, min=1, max=10 %}
@@ -20,7 +21,7 @@
     {% endwith %}
 
   Cart page usage:
-    {% with id='cart-qty-' ~ product.id, quantity=product.quantity, cart_product_id=product.id, show_delete=true %}
+    {% with id='cart-qty-' ~ product.id, quantity=product.quantity, cart_product_id=product.id, product_id=product.product_id %}
       {% include 'components/ui/quantity-input.jinja' %}
     {% endwith %}
 
@@ -43,6 +44,7 @@
 {% set has_delete = show_delete | default(false) %}
 {% set is_full_width = full_width | default(false) %}
 {% set cart_id = cart_product_id %}
+{% set orig_product_id = product_id %}
 
 {# Icon definitions #}
 {% set delete_icon %}
@@ -91,6 +93,8 @@
   data-qty-input="{{ input_id }}"
   {% if sync_target %}data-qty-sync="{{ sync_target }}"{% endif %}
   {% if cart_id %}data-cart-product-id="{{ cart_id }}"{% endif %}
+  {% if orig_product_id %}data-product-id="{{ orig_product_id }}"{% endif %}
+  {% if cart_id %}data-template="template_for_cart_products_list"{% endif %}
 >
   {% if has_delete %}
     {# Delete button (visible when qty = 1) #}

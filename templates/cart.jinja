@@ -95,6 +95,15 @@
   <script>
     // Initialize CartPage module after DOM is ready
     document.addEventListener("DOMContentLoaded", function () {
+    // This must happen BEFORE any cart operations to prevent default HTML replacement
+    (function registerHandler() {
+      if (window.ZidCart && window.ZidCart.registerCustomHandler) {
+        window.ZidCart.registerCustomHandler();
+      } else {
+        // If ZidCart isn't ready yet, try again on next tick
+        setTimeout(registerHandler, 10);
+      }
+    })();
       CartPage.init({
         cart: {{ cart | tojson }},
         loyaltyEnabled: {{ (store.settings.checkout.is_loyalty_enabled | default(false)) | tojson }},

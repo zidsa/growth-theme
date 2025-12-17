@@ -179,10 +179,12 @@
     <div class="flex items-center justify-between gap-4 lg:w-48 lg:flex-col lg:items-start lg:justify-start lg:gap-2">
       {% if product.product_class != 'crowdfunding_project' %}
         {# Quantity Input #}
-        {% with
+        {%
+          with
           id='cart-qty-' ~ product.id,
           quantity=product.quantity,
           cart_product_id=product.id,
+          product_id=product.product_id,
           max=product.original_product_quantity,
           full_width=true
         %}

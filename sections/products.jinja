@@ -1,17 +1,19 @@
-<section
-  section-id="{{ sectionId }}"
-  class="px-4 pb-6 md:px-16 md:pb-16"
->
-  <div class="theme-container">
-    {%
-      with
-      products=settings.products.results,
-      title=settings.title,
-      more_url=(settings.products.url or url_for('list_products')) if settings.display_more else none,
-      more_text=settings.more_text if settings.display_more else none,
-      carousel_id=sectionId
-    %}
-      {% include 'components/products/products-carousel.jinja' %}
-    {% endwith %}
-  </div>
-</section>
+{% if settings.products and settings.products.results %}
+  <section
+    section-id="{{ sectionId }}"
+    class="px-4 pb-6 md:px-16 md:pb-16"
+  >
+    <div class="theme-container">
+      {%
+        with
+        products=settings.products.results,
+        title=settings.title,
+        more_url=(settings.products.url or url_for('list_products')) if settings.display_more else none,
+        more_text=settings.more_text if settings.display_more else none,
+        carousel_id=sectionId
+      %}
+        {% include 'components/products/products-carousel.jinja' %}
+      {% endwith %}
+    </div>
+  </section>
+{% endif %}

@@ -13,7 +13,8 @@ window.CartPage = (function () {
   const state = {
     cart: null,
     loyaltyPoints: 0,
-    redemptionMethods: []
+    redemptionMethods: [],
+    isRefreshing: false
   };
 
   // ===== Configuration (set from template) =====
@@ -30,6 +31,16 @@ window.CartPage = (function () {
       discount: "Discount",
       loyalty: "Loyalty"
     }
+  };
+
+  // ===== Selectors for AJAX refresh =====
+  const selectors = {
+    cartContainer: ".cart-with-products",
+    productsList: "[data-cart-products-list]",
+    orderSummary: "[data-cart-totals]",
+    shippingProgress: "[data-free-shipping-bar]",
+    paymentWidgets: "[data-payment-widgets]",
+    emptyState: ".theme-container"
   };
 
   // ===== Initialization =====
@@ -50,6 +61,12 @@ window.CartPage = (function () {
 
     // Setup coupon input handler
     setupCouponInput();
+
+    // Setup quantity input handlers for cart
+    setupQuantityInputHandlers();
+
+    // Setup ZidCart event listeners for AJAX refresh
+    setupZidCartEventListeners();
 
     // Initialize loyalty program if enabled
     if (config.loyaltyEnabled) {
@@ -191,8 +208,8 @@ window.CartPage = (function () {
   }
 
   /**
-   * Update cart product quantity
-   * Uses Zid SDK with platform-compatible parameters
+   * Update cart product quantity (legacy - for data-action="quantity" buttons)
+   * New approach uses qty:change events from quantity-input component
    */
   async function updateQuantity(cartProductId, productId, delta) {
     const valueEl = document.querySelector('[data-quantity-value="' + cartProductId + '"]');
@@ -207,6 +224,9 @@ window.CartPage = (function () {
     if (valueEl) valueEl.textContent = newQty;
     if (valueMobileEl) valueMobileEl.textContent = newQty;
 
+    // Show loading state
+    setCartLoadingState(true, cartProductId);
+
     try {
       if (newQty === 0) {
         // Remove product from cart
@@ -216,14 +236,14 @@ window.CartPage = (function () {
         await zid.cart.updateProduct({ product_id: cartProductId, quantity: newQty }, { showErrorNotification: true });
       }
 
-      // Refresh page to show updated totals
-      // TODO: Implement client-side DOM updates instead of page reload for smoother UX
-      window.location.reload();
+      // Refresh cart via AJAX instead of full page reload
+      await refreshCartPage();
     } catch (error) {
       console.error("Error updating cart:", error);
       // Revert the display on error
       if (valueEl) valueEl.textContent = currentQty;
       if (valueMobileEl) valueMobileEl.textContent = currentQty;
+      setCartLoadingState(false);
     }
   }
 
@@ -370,7 +390,7 @@ window.CartPage = (function () {
       .addRedemptionMethod(selectedMethod, { showErrorNotification: true })
       .then(function (response) {
         if (response.ok) {
-          window.location.reload();
+          refreshCartPage();
         } else {
           return response.json();
         }
@@ -407,7 +427,7 @@ window.CartPage = (function () {
       .removeRedemptionMethod({ showErrorNotification: true })
       .then(function (response) {
         if (response.ok) {
-          window.location.reload();
+          refreshCartPage();
         } else {
           return response.json();
         }
@@ -439,6 +459,290 @@ window.CartPage = (function () {
     }
   }
 
+  // ===== Quantity Input Handlers =====
+
+  function setupQuantityInputHandlers() {
+    // Listen for qty:change events from quantity inputs with cart context
+    document.addEventListener("qty:change", function (e) {
+      const wrapper = e.target.closest("[data-qty-input]");
+      if (!wrapper) return;
+
+      // Only handle if this is a cart quantity input (has cart-product-id)
+      const cartProductId = wrapper.dataset.cartProductId;
+      const productId = wrapper.dataset.productId;
+      if (!cartProductId) return;
+
+      const newQty = e.detail.value;
+      handleCartQuantityChange(cartProductId, productId, newQty);
+    });
+
+    // Listen for qty:remove events (delete button clicked at qty=1)
+    document.addEventListener("qty:remove", function (e) {
+      const wrapper = e.target.closest("[data-qty-input]");
+      if (!wrapper) return;
+
+      const cartProductId = wrapper.dataset.cartProductId;
+      const productId = wrapper.dataset.productId;
+      if (!cartProductId) return;
+
+      handleCartProductRemove(cartProductId, productId);
+    });
+  }
+
+  function handleCartQuantityChange(cartProductId, productId, quantity) {
+    // Dispatch loading event
+    window.dispatchEvent(
+      new CustomEvent("zidcart:loading", {
+        detail: { cartProductId, productId, operation: "update", quantity }
+      })
+    );
+
+    // Call the system's API function
+    if (typeof window.updateProductQuantityApiCall === "function") {
+      window.updateProductQuantityApiCall(cartProductId, productId, quantity, "template_for_cart_products_list");
+    } else {
+      // Fallback: use Zid SDK directly
+      zid.cart
+        .updateProduct({ product_id: cartProductId, quantity: quantity }, { showErrorNotification: true })
+        .then(function () {
+          refreshCartPage();
+        })
+        .catch(function (error) {
+          console.error("Error updating cart quantity:", error);
+          window.dispatchEvent(
+            new CustomEvent("zidcart:error", {
+              detail: { cartProductId, productId, operation: "update", error: error.message || error }
+            })
+          );
+        });
+    }
+  }
+
+  function handleCartProductRemove(cartProductId, productId) {
+    // Call the system's remove function
+    if (typeof window.removeProductApiCall === "function") {
+      window.removeProductApiCall(cartProductId, productId, "template_for_cart_products_list");
+    } else {
+      // Fallback: use Zid SDK directly
+      window.dispatchEvent(
+        new CustomEvent("zidcart:loading", {
+          detail: { cartProductId, productId, operation: "remove" }
+        })
+      );
+
+      zid.cart
+        .removeProduct({ product_id: cartProductId }, { showErrorNotification: true })
+        .then(function () {
+          refreshCartPage();
+        })
+        .catch(function (error) {
+          console.error("Error removing product:", error);
+          window.dispatchEvent(
+            new CustomEvent("zidcart:error", {
+              detail: { cartProductId, productId, operation: "remove", error: error.message || error }
+            })
+          );
+        });
+    }
+  }
+
+  // ===== ZidCart Event Listeners =====
+
+  function setupZidCartEventListeners() {
+    // Loading state - show spinner/overlay
+    window.addEventListener("zidcart:loading", handleCartLoading);
+
+    // Cart updated - refresh the page content via AJAX
+    window.addEventListener("zidcart:updated", handleCartUpdated);
+
+    // Error state - hide loading and show error
+    window.addEventListener("zidcart:error", handleCartError);
+  }
+
+  function handleCartLoading(e) {
+    const detail = e.detail || {};
+    setCartLoadingState(true, detail.cartProductId);
+  }
+
+  function handleCartUpdated(e) {
+    // Refresh the cart page content via AJAX
+    refreshCartPage();
+  }
+
+  function handleCartError(e) {
+    const detail = e.detail || {};
+    console.error("Cart error:", detail.error);
+    setCartLoadingState(false);
+  }
+
+  // ===== AJAX Cart Refresh =====
+
+  function setCartLoadingState(isLoading, targetProductId) {
+    const productsList = document.querySelector(selectors.productsList);
+
+    if (isLoading) {
+      // Add loading class to products list
+      if (productsList) {
+        productsList.classList.add("opacity-50");
+        productsList.style.pointerEvents = "none";
+        productsList.setAttribute("aria-busy", "true");
+      }
+
+      // Show spinner on specific product if provided
+      if (targetProductId) {
+        const productCard = document.querySelector('[data-cart-product-id="' + targetProductId + '"]');
+        if (productCard) {
+          productCard.classList.add("opacity-50");
+        }
+      }
+    } else {
+      // Remove loading state
+      if (productsList) {
+        productsList.classList.remove("opacity-50");
+        productsList.style.pointerEvents = "";
+        productsList.setAttribute("aria-busy", "false");
+      }
+    }
+  }
+
+  async function refreshCartPage() {
+    if (state.isRefreshing) return;
+    state.isRefreshing = true;
+
+    try {
+      const response = await fetch(window.location.href, {
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+
+      // Check if cart is now empty
+      const newCartContainer = doc.querySelector(selectors.cartContainer);
+      const currentCartContainer = document.querySelector(selectors.cartContainer);
+
+      if (!newCartContainer && currentCartContainer) {
+        // Cart is now empty - reload to show empty state
+        window.location.reload();
+        return;
+      }
+
+      // Swap products list
+      swapElement(selectors.productsList, doc);
+
+      // Swap order summary
+      swapElement(selectors.orderSummary, doc);
+
+      // Swap shipping progress
+      swapElement(selectors.shippingProgress, doc);
+
+      // Swap payment widgets
+      swapElement(selectors.paymentWidgets, doc);
+
+      // Re-initialize quantity inputs
+      if (window.initQtyInputs) {
+        window.initQtyInputs();
+      }
+
+      // Update cart badge in header
+      if (window.cartManager && window.cartManager.refreshBadge) {
+        window.cartManager.refreshBadge();
+      }
+
+      // Update payment widgets (Tamara, Tabby) and loyalty calculations
+      updatePaymentWidgets();
+      updateLoyaltyDisplay();
+
+      // Dispatch event for other components
+      window.dispatchEvent(new CustomEvent("cart-updated"));
+    } catch (error) {
+      console.error("Error refreshing cart:", error);
+      // Fallback to page reload on error
+      window.location.reload();
+    } finally {
+      state.isRefreshing = false;
+      setCartLoadingState(false);
+    }
+  }
+
+  function swapElement(selector, newDoc) {
+    const currentEl = document.querySelector(selector);
+    const newEl = newDoc.querySelector(selector);
+
+    if (currentEl && newEl) {
+      currentEl.innerHTML = newEl.innerHTML;
+    }
+  }
+
+  /**
+   * Update payment widgets (Tamara, Tabby) after cart changes
+   */
+  function updatePaymentWidgets() {
+    const cartObj = window.cartObj;
+    if (!cartObj || !cartObj.totals) return;
+
+    const totalAmount = cartObj.totals.find(function (t) {
+      return t.code === "total";
+    });
+    if (!totalAmount) return;
+
+    // Update Tamara widget
+    try {
+      const tamaraWidget = document.querySelector("tamara-widget");
+      if (tamaraWidget && window.TamaraWidgetV2) {
+        tamaraWidget.setAttribute("amount", totalAmount.value);
+        window.TamaraWidgetV2.refresh();
+      }
+    } catch (err) {
+      console.error("Tamara update error:", err);
+    }
+
+    // Update Tabby widget
+    try {
+      const tabbyElm = document.querySelector(".tabby-cart-widget");
+      if (tabbyElm && window.TabbyPromo) {
+        window.TabbyPromo = new TabbyPromo.constructor({
+          selector: ".tabby-cart-widget",
+          currency: tabbyElm.getAttribute("data-currency"),
+          lang: tabbyElm.getAttribute("data-lang"),
+          price: totalAmount.value,
+          installmentsCount: 4,
+          source: "cart"
+        });
+      }
+    } catch (err) {
+      console.error("Tabby update error:", err);
+    }
+  }
+
+  /**
+   * Update loyalty points display after cart changes
+   */
+  function updateLoyaltyDisplay() {
+    const cartObj = window.cartObj;
+    if (!cartObj || !cartObj.totals) return;
+
+    const totalAmount = cartObj.totals.find(function (t) {
+      return t.code === "total";
+    });
+    if (!totalAmount) return;
+
+    // Call system's loyalty calculation if available
+    if (window.loyaltyCalculations) {
+      window.loyaltyCalculations(totalAmount.value);
+    }
+
+    // Also recalculate using our method
+    if (config.loyaltyEnabled) {
+      calculateLoyaltyPoints(totalAmount.value);
+    }
+  }
+
   function applyCoupon() {
     const btn = document.querySelector("[data-coupon-submit-btn]");
     const text = document.querySelector("[data-coupon-submit-text]");
@@ -456,7 +760,7 @@ window.CartPage = (function () {
     zid.cart
       .applyCoupon({ coupon_code: input.value.trim() }, { showErrorNotification: true })
       .then(function () {
-        window.location.reload();
+        refreshCartPage();
       })
       .catch(function () {
         // Reset button state on error
@@ -482,7 +786,7 @@ window.CartPage = (function () {
     zid.cart
       .removeCoupons({ showErrorNotification: true })
       .then(function () {
-        window.location.reload();
+        refreshCartPage();
       })
       .catch(function () {
         if (btn) btn.disabled = false;
@@ -784,7 +1088,7 @@ window.CartPage = (function () {
   }
 
   function updateFreeShippingProgress(cart) {
-    const freeShippingSection = document.querySelector("[data-free-shipping-section]");
+    const freeShippingSection = document.querySelector("[data-free-shipping-bar]");
     if (!freeShippingSection) return;
 
     if (cart.free_shipping_rule) {
@@ -859,7 +1163,10 @@ window.CartPage = (function () {
     handleGiftCardClick: handleGiftCardClick,
 
     // Platform integration
-    cartProductsHtmlChanged: cartProductsHtmlChanged
+    cartProductsHtmlChanged: cartProductsHtmlChanged,
+
+    // AJAX refresh
+    refreshCartPage: refreshCartPage
   };
 })();
 
@@ -876,3 +1183,4 @@ window.editGiftCard = CartPage.editGiftCard;
 window.deleteGiftCard = CartPage.deleteGiftCard;
 window.handleGiftCardClick = CartPage.handleGiftCardClick;
 window.cartProductsHtmlChanged = CartPage.cartProductsHtmlChanged;
+window.refreshCartPage = CartPage.refreshCartPage;
