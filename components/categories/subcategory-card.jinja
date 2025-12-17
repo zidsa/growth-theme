@@ -1,0 +1,41 @@
+{#
+  Subcategory Card Component
+
+  Displays a subcategory with image and name centered on the image.
+  Used in carousels for subcategories.
+
+  Variables:
+  - subcategory: object (required) - Subcategory object with id, slug, name, image, image_full_size
+  - index: number (optional) - Card index for lazy loading
+#}
+{% set card_index = index | default(0) %}
+
+<a
+  href="{{ url_for('category_details', category_id=subcategory.id, slug=subcategory.slug) }}"
+  class="group relative flex aspect-square items-center justify-center overflow-hidden rounded"
+>
+  {% if subcategory.image_full_size or subcategory.image %}
+    {# Has image #}
+    <img
+      {% if subcategory.image_full_size %}
+        src="{{ image_url(subcategory.image_full_size, w=320, q=90, f='auto') }}"
+      {% else %}
+        src="{{ image_url(subcategory.image, w=320, q=90, f='auto') }}"
+      {% endif %}
+      alt="{{ subcategory.name }}"
+      class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+      {% if card_index > 5 %}loading="lazy"{% endif %}
+    />
+    <div class="pointer-events-none absolute inset-0 bg-white/10"></div>
+  {% else %}
+    {# No image fallback #}
+    <div class="bg-secondary absolute inset-0">
+      <div class="absolute inset-0 bg-white/10"></div>
+    </div>
+  {% endif %}
+
+  {# Centered Title with backdrop blur #}
+  <div class="relative flex items-center justify-center backdrop-blur-[2px]">
+    <h4 class="text-foreground text-h4 px-4 text-center">{{ subcategory.name }}</h4>
+  </div>
+</a>

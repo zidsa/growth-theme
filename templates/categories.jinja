@@ -1,0 +1,73 @@
+{% extends "layout.jinja" %}
+
+{% block title %}{{ store.name }} – {{ _('All Categories') }}{% endblock %}
+
+{% block content %}
+  {# Hero Section #}
+  {%
+    with
+    title=_("Explore Our Categories"),
+    description=_("Browse our complete collection of products organized by category")
+  %}
+    {% include 'components/categories/category-hero.jinja' %}
+  {% endwith %}
+
+  {# Breadcrumb Section #}
+  <section class="px-4 py-6 md:px-16">
+    <div class="theme-container">
+      {%
+        with
+        items=[
+          {'href': url_for('home'), 'label': _("Home")},
+          {'label': _("All Categories")}
+        ]
+      %}
+        {% include 'components/ui/breadcrumb.jinja' %}
+      {% endwith %}
+    </div>
+  </section>
+
+  {# Main Categories Grid #}
+  <section class="px-4 pb-16 md:px-16">
+    <div class="theme-container">
+      <div class="flex flex-col gap-6">
+        {# Section Title #}
+        <h2 class="text-foreground text-h3">{{ _("Shop by Categories") }}</h2>
+
+        {# Categories Grid - 3 columns #}
+        {% if categories and categories|length > 0 %}
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+            {% for category in categories %}
+              {% with category=category, index=loop.index0 %}
+                {% include 'components/categories/category-card.jinja' %}
+              {% endwith %}
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="bg-secondary flex flex-col items-center justify-center rounded-lg py-16">
+            <p class="text-muted text-body1">{{ _("No categories found") }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {# Subcategories Carousels - Show for each parent category that has children #}
+  {% for parent_category in categories %}
+    {% if parent_category.sub_categories and parent_category.sub_categories|length > 0 %}
+      <section class="px-4 pb-16 md:px-16">
+        <div class="theme-container">
+          {%
+            with
+            subcategories=parent_category.sub_categories,
+            title=parent_category.name,
+            more_url=url_for('category_details', category_id=parent_category.id, slug=parent_category.slug),
+            carousel_id='subcategories-' ~ parent_category.id
+          %}
+            {% include 'components/categories/subcategories-carousel.jinja' %}
+          {% endwith %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

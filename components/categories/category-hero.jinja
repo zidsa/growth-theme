@@ -1,0 +1,33 @@
+{#
+  Category Hero Component
+
+  Displays a hero banner with background image, title, and optional description.
+  Used on both categories listing page and single category pages.
+
+  Variables:
+  - title: string (required) - Hero title
+  - description: string (optional) - Hero description
+  - image: string (optional) - Background image URL
+#}
+<section class="relative flex min-h-[300px] items-center overflow-hidden px-4 py-6 md:min-h-[400px] md:px-16 md:py-16">
+  {% if image %}
+    <div
+      class="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+      style="background-image: url('{{ image }}')"
+    >
+      <div class="absolute inset-0 bg-white/20"></div>
+    </div>
+  {% else %}
+    <div class="bg-secondary absolute inset-0 -z-10"></div>
+  {% endif %}
+  <div class="theme-container">
+    <div class="flex max-w-[768px] flex-col gap-4">
+      {% if title %}
+        <h1 class="text-foreground text-h4 md:text-h2">{{ title }}</h1>
+      {% endif %}
+      {% if description %}
+        <p class="text-foreground text-body1 md:text-h6">{{ description }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
