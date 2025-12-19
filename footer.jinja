@@ -204,7 +204,9 @@
                 placeholder="{{ settings.newsletter_placeholder | default(_("Enter your email")) }}"
                 class="form-input flex-1"
               />
-              <button class="btn btn-outlined btn-lg">{{ settings.newsletter_button_label | default(_("Subscribe")) }}</button>
+              <button class="btn btn-outlined btn-lg">
+                {{ settings.newsletter_button_label | default(_("Subscribe")) }}
+              </button>
             </div>
           </div>
         {% endif %}

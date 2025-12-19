@@ -32,9 +32,7 @@
                   {% if slide.badge_text %}
                     <span class="text-foreground text-tagline">{{ slide.badge_text }}</span>
                   {% endif %}
-                  <h2 class="text-foreground text-h3 md:text-h1">
-                    {{ slide.heading }}
-                  </h2>
+                  <h2 class="text-foreground text-h3 md:text-h1">{{ slide.heading }}</h2>
                   {% if slide.description %}
                     <p class="text-foreground text-h6">{{ slide.description }}</p>
                   {% endif %}
@@ -66,7 +64,7 @@
     {% endif %}
   </div>
 
-  {# prettier-ignore-start #}
+  <!-- prettier-ignore-start -->
     <style>
         [section-id="{{ sectionId }}"] .embla__slide {
             min-height: {{ settings.min_height_mobile | default(700) }}px;
@@ -93,9 +91,10 @@
             }
         {% endif %}
     </style>
-    {# prettier-ignore-end #}
+  <!-- prettier-ignore-end -->
 </section>
 
+<!-- prettier-ignore-start -->
 <script>
   (function () {
     const root = document.querySelector('[section-id="{{ sectionId }}"]');
@@ -166,3 +165,4 @@
     embla.on("select", setActiveDot);
   })();
 </script>
+<!-- prettier-ignore-end -->

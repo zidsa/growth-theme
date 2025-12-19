@@ -54,8 +54,7 @@
 
     lightbox = new PhotoSwipeLightbox({
       dataSource: imageData,
-      pswpModule: () =>
-        import("https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js"),
+      pswpModule: () => import("https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js"),
 
       // UI options
       bgOpacity: 1,

@@ -11,7 +11,16 @@
   const initializedForms = new WeakSet();
 
   // Form elements (will be set during init)
-  let form, productIdInput, nameInput, emailInput, countryCodeSelect, phoneInput, submitBtn, submitText, submitSpinner, dialog;
+  let form,
+    productIdInput,
+    nameInput,
+    emailInput,
+    countryCodeSelect,
+    phoneInput,
+    submitBtn,
+    submitText,
+    submitSpinner,
+    dialog;
 
   // Show loading state
   function setLoading(loading) {

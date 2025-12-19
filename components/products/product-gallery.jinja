@@ -4,7 +4,10 @@
 {% set has_multiple_images = product.images and product.images|length > 1 %}
 
 {# Hidden lightbox gallery for PhotoSwipe #}
-<div id="product-gallery-lightbox" class="hidden">
+<div
+  id="product-gallery-lightbox"
+  class="hidden"
+>
   {% if product.images and product.images|length > 0 %}
     {% for image in product.images %}
       {% set full_src = image.image.full_size if image.image else image %}
