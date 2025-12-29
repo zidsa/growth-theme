@@ -1,0 +1,208 @@
+{#
+  Phone Input Component with Country Selector
+
+  Usage:
+    {% include 'components/ui/phone-input.jinja' with context %}
+
+  Variables:
+    - name: Input name attribute (default: "phone")
+    - id: Unique ID for the component (default: "phone-input")
+    - value: Initial phone number value
+    - country_code: Initial country code (default: "+966")
+    - placeholder: Input placeholder text
+    - required: Whether the input is required
+    - disabled: Whether the input is disabled
+    - error: Whether to show error state
+    - countries: List of country objects with code, dial_code, name, flag properties
+    - all_countries: If true, loads all countries from CountriesData.js (default: false)
+#}
+
+{% set input_id = id | default('phone-input-' ~ range(1000, 9999) | random) %}
+{% set input_name = name | default('phone') %}
+{% set current_country_code = country_code | default('+966') %}
+{% set popover_id = input_id ~ '-country-popover' %}
+
+{# Default MENA countries if not provided #}
+{%
+  set default_countries = [
+    {"code": "SA", "dial_code": "+966", "name": "Saudi Arabia", "name_ar": "السعودية"},
+    {"code": "AE", "dial_code": "+971", "name": "United Arab Emirates", "name_ar": "الإمارات"},
+    {"code": "BH", "dial_code": "+973", "name": "Bahrain", "name_ar": "البحرين"},
+    {"code": "QA", "dial_code": "+974", "name": "Qatar", "name_ar": "قطر"},
+    {"code": "KW", "dial_code": "+965", "name": "Kuwait", "name_ar": "الكويت"},
+    {"code": "OM", "dial_code": "+968", "name": "Oman", "name_ar": "عمان"},
+    {"code": "EG", "dial_code": "+20", "name": "Egypt", "name_ar": "مصر"},
+    {"code": "JO", "dial_code": "+962", "name": "Jordan", "name_ar": "الأردن"},
+    {"code": "LB", "dial_code": "+961", "name": "Lebanon", "name_ar": "لبنان"},
+    {"code": "IQ", "dial_code": "+964", "name": "Iraq", "name_ar": "العراق"},
+    {"code": "SY", "dial_code": "+963", "name": "Syria", "name_ar": "سوريا"},
+    {"code": "YE", "dial_code": "+967", "name": "Yemen", "name_ar": "اليمن"},
+    {"code": "PS", "dial_code": "+970", "name": "Palestine", "name_ar": "فلسطين"},
+    {"code": "SD", "dial_code": "+249", "name": "Sudan", "name_ar": "السودان"},
+    {"code": "LY", "dial_code": "+218", "name": "Libya", "name_ar": "ليبيا"},
+    {"code": "TN", "dial_code": "+216", "name": "Tunisia", "name_ar": "تونس"},
+    {"code": "DZ", "dial_code": "+213", "name": "Algeria", "name_ar": "الجزائر"},
+    {"code": "MA", "dial_code": "+212", "name": "Morocco", "name_ar": "المغرب"}
+  ]
+%}
+
+{% set country_list = countries | default(default_countries) %}
+
+{# Find current country #}
+{% set current_country = namespace(found=none) %}
+{% for country in country_list %}
+  {% if country.dial_code == current_country_code %}
+    {% set current_country.found = country %}
+  {% endif %}
+{% endfor %}
+{% if not current_country.found %}
+  {% set current_country.found = country_list[0] %}
+{% endif %}
+
+<div
+  class="border-input data-[disabled=true]:border-border/50 data-[disabled=true]:bg-secondary data-[error=true]:border-destructive relative flex h-12 items-stretch rounded border data-[error=true]:border-2 rtl:flex-row-reverse"
+  data-phone-input
+  data-phone-input-id="{{ input_id }}"
+  {% if all_countries %}data-all-countries="true"{% endif %}
+  {% if disabled %}data-disabled="true"{% endif %}
+  {% if error %}data-error="true"{% endif %}
+>
+  {# Hidden input to store full phone number #}
+  <input
+    type="hidden"
+    name="{{ input_name }}"
+    id="{{ input_id }}"
+    data-phone-full-value
+    value="{{ current_country.found.dial_code }}{{ value | default('') }}"
+  />
+
+  {# Hidden input to store country code separately #}
+  <input
+    type="hidden"
+    name="{{ input_name }}_country_code"
+    data-phone-country-code
+    value="{{ current_country.found.dial_code }}"
+  />
+
+  {# Country Code Selector Button #}
+  <button
+    type="button"
+    class="text-body1 text-foreground focus:ring-ring disabled:text-muted-foreground/60 flex shrink-0 cursor-pointer items-center gap-2 rounded-l bg-transparent px-4 py-2 outline-none focus:z-10 focus:ring-2 disabled:cursor-not-allowed"
+    data-slot="country-trigger"
+    popovertarget="{{ popover_id }}"
+    {% if disabled %}disabled{% endif %}
+    aria-label="{{ _('Select country code') }}"
+  >
+    <span
+      dir="ltr"
+      data-phone-country-display
+      >{{ current_country.found.dial_code }}</span
+    >
+    <span class="text-foreground shrink-0">
+      <svg
+        class="size-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 9L12 15L18 9" />
+      </svg>
+    </span>
+  </button>
+
+  {# Divider #}
+  <div class="bg-input w-px"></div>
+
+  {# Phone Number Input #}
+  <input
+    type="tel"
+    inputmode="numeric"
+    dir="ltr"
+    class="text-body1 text-foreground placeholder:text-muted-foreground focus:ring-ring disabled:text-muted-foreground/60 h-full w-full flex-1 rounded-r bg-transparent px-3 py-2 outline-none focus:z-10 focus:ring-2 disabled:cursor-not-allowed"
+    data-phone-number-input
+    placeholder="{{ placeholder | default(_('Phone number')) }}"
+    value="{{ value | default('') }}"
+    {% if required %}required{% endif %}
+    {% if disabled %}disabled{% endif %}
+    autocomplete="tel-national"
+  />
+
+  {# Country Selector Popover - Simple popover with custom JS filtering #}
+  <el-popover
+    id="{{ popover_id }}"
+    popover
+    anchor="bottom"
+    class="border-border-light bg-background w-[300px] overflow-hidden rounded border shadow-lg transition transition-discrete [--anchor-gap:4px] data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+  >
+    {# Search Input #}
+    <input
+      type="text"
+      class="text-body1 text-foreground border-border-light placeholder:text-muted-foreground w-full border-b bg-transparent px-3 py-3 outline-none"
+      placeholder="{{ _('Search country...') }}"
+      autocomplete="off"
+      data-phone-country-search
+    />
+
+    {# Country List #}
+    <div
+      class="max-h-60 overflow-y-auto"
+      data-phone-country-list
+    >
+      {% for country in country_list %}
+        <button
+          type="button"
+          class="group text-body1 text-foreground hover:bg-secondary aria-selected:bg-secondary flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors"
+          data-country-code="{{ country.code }}"
+          data-dial-code="{{ country.dial_code }}"
+          data-country-name="{{ country.name }}"
+          data-country-name-ar="{{ country.name_ar | default('') }}"
+          {% if country.dial_code == current_country.found.dial_code %}aria-selected="true"{% endif %}
+        >
+          <span class="flex h-4 w-6 shrink-0 items-center justify-center overflow-hidden rounded-sm">
+            <img
+              class="h-full w-full object-cover"
+              src="https://flagcdn.com/w40/{{ country.code | lower }}.png"
+              srcset="https://flagcdn.com/w80/{{ country.code | lower }}.png 2x"
+              alt="{{ country.name }}"
+              loading="lazy"
+            />
+          </span>
+          <span class="flex-1 truncate text-start">
+            {% if session.lang == 'ar' and country.name_ar %}
+              {{ country.name_ar }}
+            {% else %}
+              {{ country.name }}
+            {% endif %}
+          </span>
+          <span class="text-muted-foreground shrink-0">{{ country.dial_code }}</span>
+          <span class="text-foreground shrink-0 opacity-0 group-aria-selected:opacity-100">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </span>
+        </button>
+      {% endfor %}
+    </div>
+
+    {# No Results #}
+    <div
+      class="text-body1 text-muted-foreground px-3 py-6 text-center"
+      data-phone-no-results
+      hidden
+    >
+      {{ _('No country found') }}
+    </div>
+  </el-popover>
+</div>

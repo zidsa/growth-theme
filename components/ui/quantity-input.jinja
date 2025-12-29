@@ -100,9 +100,10 @@
     {# Delete button (visible when qty = 1) #}
     <button
       type="button"
-      class="qty-input-btn{{ ' hidden' if qty > 1 else '' }}"
+      class="qty-input-btn"
       aria-label="{{ _('Remove') }}"
       data-qty-action="remove"
+      {% if qty > 1 %}hidden{% endif %}
     >
       {{ delete_icon }}
     </button>
@@ -110,9 +111,10 @@
     {# Minus button (visible when qty > 1) #}
     <button
       type="button"
-      class="qty-input-btn{{ ' hidden' if qty == 1 else '' }}"
+      class="qty-input-btn"
       aria-label="{{ _('Decrease quantity') }}"
       data-qty-action="decrease"
+      {% if qty == 1 %}hidden{% endif %}
     >
       {{ minus_icon }}
     </button>
