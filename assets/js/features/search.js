@@ -1,18 +1,8 @@
 /**
- * Search Manager
+ * Search Module
  *
  * Handles search dialog with live results.
- * Uses el-dialog for modal behavior - open/close handled by command attributes.
- *
- * Usage:
- * - data-search-input: The search input field
- * - data-search-clear: Button to clear input
- * - data-search-results: Results content container
- * - data-search-products: Products grid
- * - data-search-loading: Loading state
- * - data-search-empty: Empty state
- * - data-search-all-link: Link to full search page
- * - data-search-all-text: Text showing search query
+ * Uses el-dialog for modal behavior.
  */
 
 class SearchManager {
@@ -31,12 +21,9 @@ class SearchManager {
     this.debounceDelay = 300;
     this.minQueryLength = 2;
     this.maxResults = 8;
-
-    this.init();
   }
 
   init() {
-    // Get the el-dialog wrapper (parent of the dialog element)
     this.dialog = document.getElementById("search-dialog-wrapper");
     this.input = document.querySelector("[data-search-input]");
     this.clearBtn = document.querySelector("[data-search-clear]");
@@ -53,10 +40,8 @@ class SearchManager {
   }
 
   bindEvents() {
-    // Input handler with debounce
     this.input.addEventListener("input", () => this.handleInput());
 
-    // Clear button
     if (this.clearBtn) {
       this.clearBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -65,7 +50,6 @@ class SearchManager {
       });
     }
 
-    // Handle Enter key to navigate to search results
     this.input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -76,14 +60,11 @@ class SearchManager {
       }
     });
 
-    // Focus input when dialog opens
     if (this.dialog) {
       this.dialog.addEventListener("open", () => {
-        // Wait for next paint frame to ensure dialog is fully rendered before focusing
         requestAnimationFrame(() => this.input.focus());
       });
 
-      // Clear input when dialog closes
       this.dialog.addEventListener("close", () => {
         this.clearInput();
         this.hideAllStates();
@@ -94,15 +75,12 @@ class SearchManager {
   handleInput() {
     const query = this.input.value.trim();
 
-    // Show/hide clear button
     if (this.clearBtn) {
       this.clearBtn.classList.toggle("hidden", query.length === 0);
     }
 
-    // Update search all link text
     this.updateSearchAllLink(query);
 
-    // Debounce search
     clearTimeout(this.debounceTimeout);
 
     if (query.length < this.minQueryLength) {
@@ -120,10 +98,7 @@ class SearchManager {
 
     try {
       const response = await zid.products.list(
-        {
-          page_size: this.maxResults,
-          q: query
-        },
+        { page_size: this.maxResults, q: query },
         { showErrorNotification: false }
       );
 
@@ -152,18 +127,15 @@ class SearchManager {
     const badges = [];
     const lang = document.documentElement.lang || "ar";
 
-    // Merchant custom badge
     if (product.badge?.body) {
       const badgeText = product.badge.body[lang] || product.badge.body.ar || product.badge.body.en || "";
       if (badgeText) badges.push(badgeText);
     }
 
-    // Sale badge
     if (product.sale_price && product.sale_price < product.price) {
       badges.push(lang === "ar" ? "تخفيض" : "SALE");
     }
 
-    // Out of stock badge
     if (
       product.in_stock === false ||
       (product.is_infinite === false && product.quantity !== null && product.quantity <= 0)
@@ -171,7 +143,6 @@ class SearchManager {
       badges.push(lang === "ar" ? "نفذت الكمية" : "OUT OF STOCK");
     }
 
-    // Keyword badges (max 2 total badges)
     if (product.keywords?.length > 0 && badges.length < 2) {
       const remaining = 2 - badges.length;
       badges.push(...product.keywords.slice(0, remaining).map((k) => k.toUpperCase()));
@@ -215,25 +186,20 @@ class SearchManager {
   renderRating(rating) {
     if (!rating || !rating.average) return "";
 
-    // Round to nearest 0.5 (same logic as rating-stars.jinja)
     const ratingRounded = Math.ceil(rating.average * 2) / 2;
-
     const starPath =
       "M8 11.1733L11.5733 13.3333L10.6933 9.30667L13.7333 6.59333L9.63333 6.28L8 2.5L6.36667 6.28L2.26667 6.59333L5.30667 9.30667L4.42667 13.3333L8 11.1733Z";
 
     let starsHtml = "";
     for (let n = 1; n <= 5; n++) {
       if (n <= ratingRounded) {
-        // Full star
         starsHtml += `<svg class="size-4 text-foreground" viewBox="0 0 16 16" fill="currentColor"><path d="${starPath}"/></svg>`;
       } else if (n <= ratingRounded + 0.5) {
-        // Half star with gradient
         starsHtml += `<svg class="size-4" viewBox="0 0 16 16" fill="none">
           <defs><linearGradient id="half-star-search-${n}"><stop offset="50%" stop-color="var(--color-foreground)"/><stop offset="50%" stop-color="var(--color-text-disabled)"/></linearGradient></defs>
           <path d="${starPath}" fill="url(#half-star-search-${n})"/>
         </svg>`;
       } else {
-        // Empty star
         starsHtml += `<svg class="size-4 text-text-disabled" viewBox="0 0 16 16" fill="currentColor"><path d="${starPath}"/></svg>`;
       }
     }
@@ -326,12 +292,26 @@ class SearchManager {
   }
 }
 
-// Initialize when DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-  window.searchManager = new SearchManager();
-});
+// ─────────────────────────────────────────────────────────────
+// Global Instance
+// ─────────────────────────────────────────────────────────────
 
-// Export for module usage
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = SearchManager;
+const searchManager = new SearchManager();
+window.searchManager = searchManager;
+
+// ─────────────────────────────────────────────────────────────
+// Initialization
+// ─────────────────────────────────────────────────────────────
+
+export function init() {
+  searchManager.init();
 }
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+export { searchManager };
+export default SearchManager;

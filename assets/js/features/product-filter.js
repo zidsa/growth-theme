@@ -1,9 +1,8 @@
 /**
- * Product Filter Manager
+ * Product Filter Module
  *
  * Handles AJAX-based filtering without page reloads.
- * Uses native fetch() and History API
- *
+ * Uses native fetch() and History API.
  */
 
 class ProductFilter {
@@ -11,22 +10,12 @@ class ProductFilter {
     this.contentSelector = options.contentSelector || "#products-content";
     this.loadingClass = options.loadingClass || "opacity-50";
     this.isLoading = false;
-
-    this.init();
   }
 
-  /**
-   * Initialize event listeners
-   */
   init() {
     window.addEventListener("popstate", () => this.fetchProducts());
   }
 
-  /**
-   * Apply filters and fetch new products
-   * @param {Object} params - Filter parameters { key: value, key2: null (to remove) }
-   * @param {Object} options - Options { resetPage: true }
-   */
   async applyFilter(params = {}, options = {}) {
     const { resetPage = true } = options;
     const url = new URL(window.location.href);
@@ -52,11 +41,6 @@ class ProductFilter {
     await this.fetchProducts();
   }
 
-  /**
-   * Build URL string with unencoded brackets for cleaner URLs
-   * @param {URL} url - URL object
-   * @returns {string} Clean URL string
-   */
   buildCleanUrl(url) {
     const params = [];
 
@@ -68,9 +52,6 @@ class ProductFilter {
     return url.pathname + queryString;
   }
 
-  /**
-   * Fetch products and update the DOM
-   */
   async fetchProducts() {
     if (this.isLoading) return;
 
@@ -112,11 +93,6 @@ class ProductFilter {
     }
   }
 
-  /**
-   * Set loading state on content
-   * @param {HTMLElement} element - Content element
-   * @param {boolean} isLoading - Loading state
-   */
   setLoadingState(element, isLoading) {
     if (isLoading) {
       element.classList.add(this.loadingClass);
@@ -129,38 +105,20 @@ class ProductFilter {
     }
   }
 
-  /**
-   * Re-initialize components after content swap
-   * @param {HTMLElement} container - Content container
-   */
   reinitializeComponents(container) {
     window.dispatchEvent(new CustomEvent("products-updated", { detail: { container } }));
   }
 
-  /**
-   * Get current filter value from URL
-   * @param {string} key - Parameter key
-   * @returns {string|null} Parameter value
-   */
   getFilter(key) {
     const url = new URL(window.location.href);
     return url.searchParams.get(key);
   }
 
-  /**
-   * Get all values for a filter (for multi-select filters)
-   * @param {string} key - Parameter key
-   * @returns {string[]} Array of values
-   */
   getFilterAll(key) {
     const url = new URL(window.location.href);
     return url.searchParams.getAll(key);
   }
 
-  /**
-   * Clear all filters except specified keys
-   * @param {string[]} keepKeys - Keys to preserve
-   */
   async clearFilters(keepKeys = ["page_size", "q"]) {
     const url = new URL(window.location.href);
     const keysToRemove = [];
@@ -179,12 +137,6 @@ class ProductFilter {
     await this.fetchProducts();
   }
 
-  /**
-   * Remove a single filter value
-   * @param {string} type - Filter type (sort, attribute, availability, price)
-   * @param {string} slug - Attribute slug (for attribute type)
-   * @param {string} value - Value to remove
-   */
   removeFilter(type, slug, value) {
     const url = new URL(window.location.href);
 
@@ -216,18 +168,11 @@ class ProductFilter {
     this.fetchProducts();
   }
 
-  /**
-   * Handle sort select change
-   * @param {string} value - Combined value (e.g., "price-asc")
-   */
   handleSortChange(value) {
     const [sortBy, order] = value.split("-");
     this.applyFilter({ sort_by: sortBy, order });
   }
 
-  /**
-   * Handle availability checkbox change
-   */
   handleAvailability() {
     const checked = document.querySelectorAll('input[name="availability"]:checked');
     const values = Array.from(checked).map((box) => box.value);
@@ -238,13 +183,6 @@ class ProductFilter {
     this.applyFilter({ availability: values.length > 0 ? values : null });
   }
 
-  /**
-   * Handle price filter form submit
-   * @param {Event} event - Submit event
-   * @param {string} minId - Min input element ID
-   * @param {string} maxId - Max input element ID
-   * @returns {boolean} False to prevent form submission
-   */
   handlePriceSubmit(event, minId, maxId) {
     event.preventDefault();
 
@@ -262,12 +200,6 @@ class ProductFilter {
     return false;
   }
 
-  /**
-   * Set sort params in drawer form
-   * @param {HTMLElement} radio - Radio input element
-   * @param {string} sortBy - Sort field
-   * @param {string} order - Sort order
-   */
   setSortParams(radio, sortBy, order) {
     const form = radio.closest("form");
     if (!form) return;
@@ -293,9 +225,6 @@ class ProductFilter {
     orderInput.value = order;
   }
 
-  /**
-   * Clear filters from drawer
-   */
   clearDrawerFilters() {
     const dialog = document.getElementById("filters-drawer");
     if (dialog) dialog.close();
@@ -303,11 +232,6 @@ class ProductFilter {
     this.clearFilters();
   }
 
-  /**
-   * Submit filters form from drawer
-   * @param {Event} event - Submit event
-   * @returns {boolean} False to prevent form submission
-   */
   submitDrawerForm(event) {
     event.preventDefault();
 
@@ -340,19 +264,31 @@ class ProductFilter {
     return false;
   }
 
-  /**
-   * Handle per-page select change
-   * @param {string|number} perPage - Products per page
-   */
   handlePerPageChange(perPage) {
     this.applyFilter({ page_size: perPage, page: null }, { resetPage: false });
   }
 }
 
-// Initialize global instance
-window.productFilter = new ProductFilter();
+// ─────────────────────────────────────────────────────────────
+// Global Instance
+// ─────────────────────────────────────────────────────────────
 
-// Export for module usage
-if (typeof module !== "undefined" && module.exports) {
-  module.exports = ProductFilter;
+const productFilter = new ProductFilter();
+window.productFilter = productFilter;
+
+// ─────────────────────────────────────────────────────────────
+// Initialization
+// ─────────────────────────────────────────────────────────────
+
+export function init() {
+  productFilter.init();
 }
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+export { productFilter };
+export default ProductFilter;

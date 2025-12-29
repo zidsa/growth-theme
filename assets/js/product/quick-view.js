@@ -1,39 +1,39 @@
 /**
- * Quick View Modal Manager
+ * Quick View Module
  *
  * Fetches product page content and displays in a modal with caching and prefetching.
  * Uses in-memory LRU cache for optimal performance.
  *
  * Usage:
- * 1. Include this script in your layout
- * 2. Add the quick-view-modal component to your page
- * 3. Call window.quickViewManager.open(productSlug, productUrl) to open
+ * - Include in main bundle via import
+ * - Add quick-view-modal component to your page
+ * - Call window.quickViewManager.open(productSlug, productUrl)
  */
 
+// ─────────────────────────────────────────────────────────────
+// Configuration
+// ─────────────────────────────────────────────────────────────
+
+const CONFIG = {
+  maxCacheSize: 15,
+  hoverDelay: 200,
+  productSectionId: "product-main-section"
+};
+
+const ELEMENTS = {
+  dialog: "quick-view-dialog",
+  modal: "product-quick-view-modal",
+  skeleton: "quick-view-skeleton",
+  content: "quick-view-content",
+  footer: "quick-view-footer",
+  productLink: "quick-view-product-link"
+};
+
+// ─────────────────────────────────────────────────────────────
+// Quick View Manager Class
+// ─────────────────────────────────────────────────────────────
+
 class QuickViewManager {
-  // Configuration
-  static CONFIG = {
-    maxCacheSize: 15,
-    hoverDelay: 200,
-    productSectionId: "product-main-section"
-  };
-
-  // Element IDs
-  static ELEMENTS = {
-    dialog: "quick-view-dialog",
-    modal: "product-quick-view-modal",
-    skeleton: "quick-view-skeleton",
-    content: "quick-view-content",
-    footer: "quick-view-footer",
-    productLink: "quick-view-product-link"
-  };
-
-  // Custom events
-  static EVENTS = {
-    contentLoaded: "quick-view-content-loaded",
-    cartUpdated: "cart-updated"
-  };
-
   constructor() {
     // LRU Cache using Map (maintains insertion order)
     this.cache = new Map();
@@ -52,32 +52,12 @@ class QuickViewManager {
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
     this.handleCartUpdated = this.handleCartUpdated.bind(this);
-
-    // Initialize when DOM is ready
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => this.init());
-    } else {
-      this.init();
-    }
   }
 
-  /**
-   * Initialize the manager
-   */
-  init() {
-    this.setupPrefetchListeners();
-    this.setupCartListener();
-  }
-
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
   // Cache Methods (LRU using Map)
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Get item from cache (moves to end for LRU)
-   * @param {string} url - Cache key
-   * @returns {Object|null} Cached data { html, productObj } or null
-   */
   cacheGet(url) {
     const data = this.cache.get(url);
     if (!data) return null;
@@ -88,18 +68,10 @@ class QuickViewManager {
     return data;
   }
 
-  /**
-   * Set item in cache with LRU eviction
-   * @param {string} url - Cache key
-   * @param {string} html - HTML content to cache
-   * @param {Object|null} productObj - Product object to cache
-   */
   cacheSet(url, html, productObj) {
-    // Remove if exists (to update position)
     this.cache.delete(url);
 
-    // Evict oldest (first item) if at max capacity
-    if (this.cache.size >= QuickViewManager.CONFIG.maxCacheSize) {
+    if (this.cache.size >= CONFIG.maxCacheSize) {
       const oldestKey = this.cache.keys().next().value;
       this.cache.delete(oldestKey);
     }
@@ -107,31 +79,18 @@ class QuickViewManager {
     this.cache.set(url, { html, productObj });
   }
 
-  /**
-   * Check if URL is cached
-   * @param {string} url - Cache key
-   * @returns {boolean}
-   */
   cacheHas(url) {
     return this.cache.has(url);
   }
 
-  /**
-   * Clear the cache
-   */
   cacheClear() {
     this.cache.clear();
   }
 
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
   // URL Helpers
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Build fetch URL with theme parameter if present
-   * @param {string} productUrl - Base product URL
-   * @returns {string} URL with theme param appended
-   */
   buildFetchUrl(productUrl) {
     const urlParams = new URLSearchParams(window.location.search);
     const themeParam = urlParams.get("theme");
@@ -142,23 +101,13 @@ class QuickViewManager {
     return `${productUrl}${separator}theme=${encodeURIComponent(themeParam)}`;
   }
 
-  /**
-   * Extract product section HTML from full page
-   * @param {string} html - Full page HTML
-   * @returns {string|null} Product section HTML or null
-   */
   extractProductSection(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
-    const section = doc.getElementById(QuickViewManager.CONFIG.productSectionId);
+    const section = doc.getElementById(CONFIG.productSectionId);
     return section ? section.outerHTML : null;
   }
 
-  /**
-   * Extract productObj from page HTML
-   * @param {string} html - Full page HTML
-   * @returns {Object|null} Product object or null
-   */
   extractProductObj(html) {
     const match = html.match(/window\.productObj\s*=\s*(\{[\s\S]*?\});?\s*<\/script>/);
     if (match && match[1]) {
@@ -171,22 +120,12 @@ class QuickViewManager {
     return null;
   }
 
-  /**
-   * Extract SDK product.js URL from page HTML
-   * @param {string} html - Full page HTML
-   * @returns {string|null} Script URL or null
-   */
   extractSdkScriptUrl(html) {
     const match = html.match(/<script[^>]+src="([^"]*theme-statics\/product\.js[^"]*)"/);
     return match ? match[1] : null;
   }
 
-  /**
-   * Load SDK product.js script dynamically
-   * @returns {Promise<void>}
-   */
   loadSdkScript() {
-    // Already loaded or no URL
     if (this.sdkScriptLoaded || !this.sdkScriptUrl) {
       return Promise.resolve();
     }
@@ -203,20 +142,14 @@ class QuickViewManager {
     });
   }
 
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
   // Prefetch Methods
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Prefetch product page content
-   * @param {string} productUrl - URL to prefetch
-   */
   async prefetch(productUrl) {
     if (!productUrl || this.cacheHas(productUrl)) return;
 
-    // Cancel any existing prefetch
     this.cancelPrefetch();
-
     this.prefetchController = new AbortController();
 
     try {
@@ -232,7 +165,6 @@ class QuickViewManager {
       const sectionHtml = this.extractProductSection(html);
       const productObj = this.extractProductObj(html);
 
-      // Extract SDK script URL (only once)
       if (!this.sdkScriptUrl) {
         this.sdkScriptUrl = this.extractSdkScriptUrl(html);
       }
@@ -241,7 +173,6 @@ class QuickViewManager {
         this.cacheSet(productUrl, sectionHtml, productObj);
       }
     } catch (err) {
-      // Ignore abort errors, warn on others
       if (err.name !== "AbortError") {
         console.warn("[QuickView] Prefetch failed:", err);
       }
@@ -250,9 +181,6 @@ class QuickViewManager {
     }
   }
 
-  /**
-   * Cancel current prefetch operation
-   */
   cancelPrefetch() {
     if (this.hoverTimeout) {
       clearTimeout(this.hoverTimeout);
@@ -267,89 +195,58 @@ class QuickViewManager {
     this.currentPrefetchUrl = null;
   }
 
-  /**
-   * Setup hover-based prefetch listeners
-   * Uses mouseover/mouseout which bubble (unlike mouseenter/mouseleave)
-   */
   setupPrefetchListeners() {
     document.addEventListener("mouseover", this.handleMouseOver);
     document.addEventListener("mouseout", this.handleMouseOut);
   }
 
-  /**
-   * Handle mouse over on product card
-   * @param {MouseEvent} event
-   */
   handleMouseOver(event) {
-    // Ensure target is an Element (not text node, etc.)
     if (!(event.target instanceof Element)) return;
 
     const card = event.target.closest("[data-product-card]");
-
-    // Not over a product card
     if (!card) return;
-
-    // Still on the same card - ignore (prevents re-triggering on child elements)
     if (card === this.currentHoveredCard) return;
 
-    // New card - cancel any existing prefetch first
     this.cancelPrefetch();
     this.currentHoveredCard = card;
 
     const link = card.querySelector("a[href]");
     const productUrl = link?.getAttribute("href");
 
-    // No URL or already cached - skip
     if (!productUrl || this.cacheHas(productUrl)) return;
-
-    // Already prefetching this URL - skip
     if (productUrl === this.currentPrefetchUrl) return;
 
     this.currentPrefetchUrl = productUrl;
 
     this.hoverTimeout = setTimeout(() => {
       this.prefetch(productUrl);
-    }, QuickViewManager.CONFIG.hoverDelay);
+    }, CONFIG.hoverDelay);
   }
 
-  /**
-   * Handle mouse out from product card
-   * @param {MouseEvent} event
-   */
   handleMouseOut(event) {
-    // Ensure target is an Element
     if (!(event.target instanceof Element)) return;
 
     const card = event.target.closest("[data-product-card]");
-
-    // Not leaving from a product card
     if (!card) return;
 
-    // Check if we're moving to another element still within the same card
     const relatedTarget = event.relatedTarget;
     if (relatedTarget instanceof Element) {
       const toCard = relatedTarget.closest("[data-product-card]");
-      // Still within the same card - ignore
       if (toCard === card) return;
     }
 
-    // Actually leaving the card - cancel prefetch
     this.cancelPrefetch();
     this.currentHoveredCard = null;
   }
 
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
   // Modal Methods
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Get modal DOM elements
-   * @returns {Object|null} Element references or null if not found
-   */
   getElements() {
     const elements = {};
 
-    for (const [key, id] of Object.entries(QuickViewManager.ELEMENTS)) {
+    for (const [key, id] of Object.entries(ELEMENTS)) {
       elements[key] = document.getElementById(id);
       if (!elements[key]) {
         console.error(`[QuickView] Element not found: #${id}`);
@@ -360,11 +257,6 @@ class QuickViewManager {
     return elements;
   }
 
-  /**
-   * Get localized messages from modal data attributes
-   * @param {HTMLElement} modal - Modal element
-   * @returns {Object} Localized messages
-   */
   getMessages(modal) {
     return {
       errorMessage: modal?.dataset.errorMessage || "Failed to load product. Please try again.",
@@ -372,11 +264,6 @@ class QuickViewManager {
     };
   }
 
-  /**
-   * Set modal state (loading, content, error)
-   * @param {Object} elements - DOM elements
-   * @param {string} state - State: "loading" | "content" | "error"
-   */
   setModalState(elements, state) {
     const { skeleton, content, footer } = elements;
 
@@ -385,18 +272,9 @@ class QuickViewManager {
     footer.classList.toggle("hidden", state !== "content");
   }
 
-  /**
-   * Render error state in modal
-   * @param {HTMLElement} content - Content container
-   * @param {string} message - Error message
-   * @param {string} linkText - Link text
-   * @param {string} url - Product URL
-   */
   renderError(content, message, linkText, url) {
-    // Clear existing content
     content.innerHTML = "";
 
-    // Build error UI safely (no XSS)
     const container = document.createElement("div");
     container.className = "py-8 text-center";
 
@@ -413,31 +291,21 @@ class QuickViewManager {
     content.appendChild(container);
   }
 
-  /**
-   * Dispatch content loaded event for gallery initialization
-   */
   dispatchContentLoaded() {
-    window.dispatchEvent(new CustomEvent(QuickViewManager.EVENTS.contentLoaded));
+    window.dispatchEvent(new CustomEvent("content:loaded"));
   }
 
-  /**
-   * Open quick view modal for a product
-   * @param {string} productSlug - Product slug (used to build URL if productUrl not provided)
-   * @param {string} [productUrl] - Direct product URL
-   */
   async open(productSlug, productUrl) {
     const elements = this.getElements();
     if (!elements) return;
 
-    const { dialog, modal, skeleton, content, footer, productLink } = elements;
+    const { dialog, modal, content, productLink } = elements;
     const baseUrl = productUrl || `/p/${productSlug}`;
     const messages = this.getMessages(modal);
 
-    // Check cache first
     const cachedData = this.cacheGet(baseUrl);
 
     if (cachedData) {
-      // Set productObj BEFORE loading SDK script (SDK needs it on init)
       if (cachedData.productObj) window.productObj = cachedData.productObj;
       await this.loadSdkScript();
 
@@ -450,7 +318,6 @@ class QuickViewManager {
       return;
     }
 
-    // Not cached - show skeleton and fetch
     content.innerHTML = "";
     this.setModalState(elements, "loading");
     dialog.show();
@@ -471,21 +338,16 @@ class QuickViewManager {
         throw new Error("Product section not found");
       }
 
-      // Extract SDK script URL (only once)
       if (!this.sdkScriptUrl) {
         this.sdkScriptUrl = this.extractSdkScriptUrl(html);
       }
 
-      // Set productObj BEFORE loading SDK script (SDK needs it on init)
       if (productObj) window.productObj = productObj;
 
-      // Load SDK script
       await this.loadSdkScript();
 
-      // Cache for next time
       this.cacheSet(baseUrl, sectionHtml, productObj);
 
-      // Render content
       content.innerHTML = sectionHtml;
       productLink.href = baseUrl;
       this.setModalState(elements, "content");
@@ -498,65 +360,72 @@ class QuickViewManager {
     }
   }
 
-  /**
-   * Close the quick view modal
-   */
   close() {
-    const dialog = document.getElementById(QuickViewManager.ELEMENTS.dialog);
+    const dialog = document.getElementById(ELEMENTS.dialog);
     if (dialog?.hasAttribute("open")) {
       dialog.hide();
     }
   }
 
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
   // Event Handlers
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Setup cart update listener to close modal
-   */
   setupCartListener() {
-    window.addEventListener(QuickViewManager.EVENTS.cartUpdated, this.handleCartUpdated);
+    window.addEventListener("cart-updated", this.handleCartUpdated);
   }
 
-  /**
-   * Handle cart updated event
-   */
   handleCartUpdated() {
     this.close();
   }
 
-  // ============================================
-  // Cleanup
-  // ============================================
+  // ─────────────────────────────────────────────────────────────
+  // Lifecycle
+  // ─────────────────────────────────────────────────────────────
 
-  /**
-   * Destroy the manager and cleanup
-   */
+  init() {
+    this.setupPrefetchListeners();
+    this.setupCartListener();
+  }
+
   destroy() {
-    // Remove event listeners
     document.removeEventListener("mouseover", this.handleMouseOver);
     document.removeEventListener("mouseout", this.handleMouseOut);
-    window.removeEventListener(QuickViewManager.EVENTS.cartUpdated, this.handleCartUpdated);
+    window.removeEventListener("cart-updated", this.handleCartUpdated);
 
-    // Cancel any pending operations
     this.cancelPrefetch();
-
-    // Clear cache
     this.cacheClear();
-
-    // Reset state
     this.currentHoveredCard = null;
   }
 }
 
-// ============================================
-// Initialize Global Instance
-// ============================================
+// ─────────────────────────────────────────────────────────────
+// Global Instance & Legacy Support
+// ─────────────────────────────────────────────────────────────
 
-window.quickViewManager = new QuickViewManager();
+const quickViewManager = new QuickViewManager();
 
-// Legacy support - expose open function directly
+// Expose globally
+window.quickViewManager = quickViewManager;
+
+// Legacy support
 window.openQuickViewModal = function (productId, productSlug, productUrl) {
-  window.quickViewManager.open(productSlug, productUrl);
+  quickViewManager.open(productSlug, productUrl);
 };
+
+// ─────────────────────────────────────────────────────────────
+// Initialization
+// ─────────────────────────────────────────────────────────────
+
+export function init() {
+  quickViewManager.init();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+export { quickViewManager };
+export default QuickViewManager;
