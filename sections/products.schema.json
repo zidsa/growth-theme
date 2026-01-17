@@ -6,6 +6,38 @@
   },
   "settings": [
     {
+      "id": "layout",
+      "type": "select",
+      "label": {
+        "ar": "نوع العرض",
+        "en": "Layout"
+      },
+      "options": [
+        {
+          "value": "carousel",
+          "label": {
+            "ar": "كاروسيل",
+            "en": "Carousel"
+          }
+        },
+        {
+          "value": "grid",
+          "label": {
+            "ar": "شبكة",
+            "en": "Grid"
+          }
+        },
+        {
+          "value": "list",
+          "label": {
+            "ar": "قائمة",
+            "en": "List"
+          }
+        }
+      ],
+      "default": "carousel"
+    },
+    {
       "id": "title",
       "type": "text",
       "label": {

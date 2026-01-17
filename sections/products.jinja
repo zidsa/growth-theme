@@ -1,20 +1,68 @@
 {% if settings.products and settings.products.results %}
+  {% set layout = settings.layout | default('carousel') %}
   <section
     section-id="{{ sectionId }}"
     class="px-4 py-6 md:px-16 md:py-16"
   >
     <div class="theme-container">
-      {%
-        with
-        products=settings.products.results,
-        title=settings.title,
-        more_url=(settings.products.url or url_for('list_products')) if settings.display_more else none,
-        more_text=settings.more_text if settings.display_more else none,
-        carousel_id=sectionId,
-        is_priority_section=(settings.order <= 2)
-      %}
-        {% include 'components/products/products-carousel.jinja' %}
-      {% endwith %}
+      {% if layout == 'carousel' %}
+        {# Carousel Layout #}
+        {%
+          with
+          products=settings.products.results,
+          title=settings.title,
+          more_url=(settings.products.url or url_for('list_products')) if settings.display_more else none,
+          more_text=settings.more_text if settings.display_more else none,
+          carousel_id=sectionId,
+          is_priority_section=(settings.order <= 2)
+        %}
+          {% include 'components/products/products-carousel.jinja' %}
+        {% endwith %}
+      {% else %}
+        {# Grid or List Layout #}
+        <div class="flex flex-col gap-6">
+          {# Header #}
+          {% if settings.title %}
+            <div class="flex items-center justify-between">
+              <h2 class="text-foreground text-h4 md:text-h3">{{ settings.title }}</h2>
+              {% if settings.display_more and settings.more_text %}
+                <a
+                  href="{{ settings.products.url or url_for('list_products') }}"
+                  class="text-foreground text-body1 flex items-center gap-2 px-4 py-3"
+                >
+                  {{ settings.more_text }}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    class="rtl:rotate-180"
+                  >
+                    <path
+                      d="M16.8917 12.8019H4.70224C4.45758 12.8019 4.25449 12.7211 4.09299 12.5594C3.93133 12.3977 3.85049 12.1946 3.85049 11.9501C3.85049 11.7056 3.93133 11.5026 4.09299 11.3409C4.25449 11.1792 4.45758 11.0984 4.70224 11.0984H16.8917L13.3592 7.55989C13.1892 7.39389 13.1084 7.19597 13.1167 6.96614C13.1251 6.73631 13.2142 6.53639 13.3842 6.36639C13.5502 6.20056 13.7472 6.11864 13.975 6.12064C14.2028 6.12247 14.4017 6.20639 14.5717 6.37239L19.5527 11.3474C19.6441 11.4387 19.7104 11.5341 19.7517 11.6334C19.7929 11.7326 19.8135 11.8381 19.8135 11.9501C19.8135 12.0621 19.7929 12.1677 19.7517 12.2669C19.7104 12.3662 19.6441 12.4616 19.5527 12.5529L14.5967 17.5029C14.4267 17.6689 14.2278 17.7528 14 17.7546C13.7722 17.7566 13.5752 17.6727 13.4092 17.5029C13.2392 17.3369 13.1542 17.1348 13.1542 16.8966C13.1542 16.6585 13.2392 16.4544 13.4092 16.2844L16.8917 12.8019Z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {# Products Grid/List #}
+          <div
+            data-grid-root="true"
+            data-grid="{{ layout }}"
+            class="group/grid grid gap-x-4 gap-y-10 data-[grid=grid]:grid-cols-2 data-[grid=list]:grid-cols-1 data-[grid=grid]:lg:grid-cols-5"
+          >
+            {% for product in settings.products.results %}
+              {% with index=loop.index0, is_priority=(loop.first and settings.order <= 2) %}
+                {% include 'components/products/product-card.jinja' %}
+              {% endwith %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </section>
 {% endif %}

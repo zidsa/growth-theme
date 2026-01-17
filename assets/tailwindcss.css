@@ -2,6 +2,7 @@
 @import "./components.css";
 @import "nouislider/dist/nouislider.css";
 @import "photoswipe/dist/photoswipe.css";
+
 @plugin "@tailwindcss/typography";
 
 :root {
@@ -839,11 +840,13 @@ body {
 
 .prose.prose-theme {
   /* Lead paragraph (first paragraph) - semibold */
+
   > p:first-of-type {
     font-weight: var(--font-subtitle1--weight);
   }
 
   /* Headings - match Figma font sizes and spacing */
+
   h1,
   h2,
   h3 {
@@ -879,6 +882,7 @@ body {
   }
 
   /* Paragraphs */
+
   p {
     font-size: var(--font-body1--size);
     line-height: var(--font-body1--line-height);
@@ -887,6 +891,7 @@ body {
   }
 
   /* Blockquote - match Figma with 2px left border */
+
   blockquote {
     font-style: italic;
     font-weight: var(--font-body1--weight);
@@ -910,16 +915,19 @@ body {
   }
 
   /* Links */
+
   a {
     text-decoration: underline;
   }
 
   /* Images with rounded corners */
+
   img {
     border-radius: var(--radius-lg);
   }
 
   /* Code blocks */
+
   pre {
     border-radius: var(--radius-lg);
   }
@@ -929,6 +937,7 @@ body {
   }
 
   /* Table header background */
+
   th {
     background: var(--secondary);
   }
@@ -943,3 +952,39 @@ body {
 /* aspect-square aspect-[3/4] h-auto h-full object-cover */
 /* Category hero dynamic classes */
 /* min-h-[300px] md:min-h-[400px] md:py-16 md:py-8 */
+.announcement-marquee {
+  display: flex;
+  width: 100%;
+}
+
+.announcement-marquee__content {
+  display: flex;
+  align-items: center;
+  animation: marquee-scroll var(--marquee-speed, 30s) linear infinite;
+}
+
+[dir="rtl"] .announcement-marquee__content {
+  animation-name: marquee-scroll-rtl;
+}
+
+.announcement-marquee:hover .announcement-marquee__content {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-scroll-rtl {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+}

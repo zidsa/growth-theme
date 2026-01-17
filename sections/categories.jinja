@@ -32,9 +32,16 @@
       {% endif %}
     </div>
     {# Wrapper for carousel + controls so data-carousel can find all elements #}
-    <div class="embla-wrapper space-y-6" data-carousel data-carousel-align="start">
+    <div
+      class="embla-wrapper space-y-6"
+      data-carousel
+      data-carousel-align="start"
+    >
       <div class="embla">
-        <div class="embla__viewport overflow-hidden" data-carousel-viewport>
+        <div
+          class="embla__viewport overflow-hidden"
+          data-carousel-viewport
+        >
           <div class="embla__container">
             {% for categoryItem in safeget(settings, "categories", []) %}
               <div class="embla__slide">
@@ -64,74 +71,74 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-      <div class="embla__progress bg-secondary h-1 w-full rounded">
-        <div
-          class="embla__progress-bar bg-accent h-1 rounded-sm"
-          style="width: 0%"
-          data-carousel-progress
-        ></div>
-      </div>
-      <div class="hidden items-center gap-2 md:flex">
-        <button
-          class="embla__prev flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
-          aria-label="{{ _('Previous') }}"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            class="rtl:rotate-180"
-            fill="none"
+        <div class="embla__progress bg-secondary h-1 w-full rounded">
+          <div
+            class="embla__progress-bar bg-accent h-1 rounded-sm"
+            style="width: 0%"
+            data-carousel-progress
+          ></div>
+        </div>
+        <div class="hidden items-center gap-2 md:flex">
+          <button
+            class="embla__prev flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+            aria-label="{{ _('Previous') }}"
           >
-            <path
-              d="M10.2945 11.9752L14.6477 16.3284C14.8177 16.4984 14.8986 16.6974 14.8902 16.9252C14.8819 17.153 14.7927 17.3519 14.6227 17.5219C14.4527 17.6919 14.2496 17.7769 14.0135 17.7769C13.7773 17.7769 13.5742 17.6919 13.4042 17.5219L8.46022 12.5779C8.36889 12.4866 8.30255 12.3913 8.26122 12.2919C8.21989 12.1928 8.19922 12.0872 8.19922 11.9752C8.19922 11.8632 8.21989 11.7576 8.26122 11.6584C8.30255 11.5591 8.36889 11.4638 8.46022 11.3724L13.4292 6.40344C13.5992 6.23344 13.8023 6.14844 14.0385 6.14844C14.2746 6.14844 14.4777 6.23344 14.6477 6.40344C14.8177 6.57344 14.9027 6.77652 14.9027 7.01269C14.9027 7.24885 14.8177 7.45194 14.6477 7.62194L10.2945 11.9752Z"
-              fill="currentColor"
-            ></path>
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              class="rtl:rotate-180"
+              fill="none"
+            >
+              <path
+                d="M10.2945 11.9752L14.6477 16.3284C14.8177 16.4984 14.8986 16.6974 14.8902 16.9252C14.8819 17.153 14.7927 17.3519 14.6227 17.5219C14.4527 17.6919 14.2496 17.7769 14.0135 17.7769C13.7773 17.7769 13.5742 17.6919 13.4042 17.5219L8.46022 12.5779C8.36889 12.4866 8.30255 12.3913 8.26122 12.2919C8.21989 12.1928 8.19922 12.0872 8.19922 11.9752C8.19922 11.8632 8.21989 11.7576 8.26122 11.6584C8.30255 11.5591 8.36889 11.4638 8.46022 11.3724L13.4292 6.40344C13.5992 6.23344 13.8023 6.14844 14.0385 6.14844C14.2746 6.14844 14.4777 6.23344 14.6477 6.40344C14.8177 6.57344 14.9027 6.77652 14.9027 7.01269C14.9027 7.24885 14.8177 7.45194 14.6477 7.62194L10.2945 11.9752Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </button>
 
-        <button
-          class="embla__next flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
-          aria-label="{{ _('Next') }}"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            class="rtl:rotate-180"
-            fill="none"
+          <button
+            class="embla__next flex size-10 items-center justify-center rounded bg-white/10 p-2.5 backdrop-blur-sm disabled:opacity-30"
+            aria-label="{{ _('Next') }}"
           >
-            <path
-              d="M13.1081 11.9746L8.7548 7.62135C8.5848 7.45135 8.50397 7.25244 8.5123 7.0246C8.52064 6.79677 8.6098 6.59785 8.7798 6.42785C8.9498 6.25785 9.15289 6.17285 9.38905 6.17285C9.62522 6.17285 9.8283 6.25785 9.9983 6.42785L14.9423 11.3719C15.0336 11.4632 15.1 11.5585 15.1413 11.6579C15.1826 11.757 15.2033 11.8626 15.2033 11.9746C15.2033 12.0866 15.1826 12.1922 15.1413 12.2914C15.1 12.3907 15.0336 12.486 14.9423 12.5774L9.9733 17.5464C9.8033 17.7164 9.60439 17.7972 9.37655 17.7889C9.14872 17.7805 8.9498 17.6914 8.7798 17.5214C8.6098 17.3514 8.5248 17.1483 8.5248 16.9121C8.5248 16.6759 8.6098 16.4729 8.7798 16.3029L13.1081 11.9746Z"
-              fill="currentColor"
-            ></path>
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              class="rtl:rotate-180"
+              fill="none"
+            >
+              <path
+                d="M13.1081 11.9746L8.7548 7.62135C8.5848 7.45135 8.50397 7.25244 8.5123 7.0246C8.52064 6.79677 8.6098 6.59785 8.7798 6.42785C8.9498 6.25785 9.15289 6.17285 9.38905 6.17285C9.62522 6.17285 9.8283 6.25785 9.9983 6.42785L14.9423 11.3719C15.0336 11.4632 15.1 11.5585 15.1413 11.6579C15.1826 11.757 15.2033 11.8626 15.2033 11.9746C15.2033 12.0866 15.1826 12.1922 15.1413 12.2914C15.1 12.3907 15.0336 12.486 14.9423 12.5774L9.9733 17.5464C9.8033 17.7164 9.60439 17.7972 9.37655 17.7889C9.14872 17.7805 8.9498 17.6914 8.7798 17.5214C8.6098 17.3514 8.5248 17.1483 8.5248 16.9121C8.5248 16.6759 8.6098 16.4729 8.7798 16.3029L13.1081 11.9746Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        {% if settings.display_more %}
+          <a
+            href="{{ url_for('list_categories') }}"
+            class="btn btn-text btn-lg flex whitespace-nowrap md:hidden"
+          >
+            {{ settings.more_text }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="rtl:rotate-180"
+            >
+              <path
+                d="M16.8917 12.8019H4.70224C4.45758 12.8019 4.25449 12.7211 4.09299 12.5594C3.93133 12.3977 3.85049 12.1946 3.85049 11.9501C3.85049 11.7056 3.93133 11.5026 4.09299 11.3409C4.25449 11.1792 4.45758 11.0984 4.70224 11.0984H16.8917L13.3592 7.55989C13.1892 7.39389 13.1084 7.19597 13.1167 6.96614C13.1251 6.73631 13.2142 6.53639 13.3842 6.36639C13.5502 6.20056 13.7472 6.11864 13.975 6.12064C14.2028 6.12247 14.4017 6.20639 14.5717 6.37239L19.5527 11.3474C19.6441 11.4387 19.7104 11.5341 19.7517 11.6334C19.7929 11.7326 19.8135 11.8381 19.8135 11.9501C19.8135 12.0621 19.7929 12.1677 19.7517 12.2669C19.7104 12.3662 19.6441 12.4616 19.5527 12.5529L14.5967 17.5029C14.4267 17.6689 14.2278 17.7528 14 17.7546C13.7722 17.7566 13.5752 17.6727 13.4092 17.5029C13.2392 17.3369 13.1542 17.1348 13.1542 16.8966C13.1542 16.6585 13.2392 16.4544 13.4092 16.2844L16.8917 12.8019Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </a>
+        {% endif %}
       </div>
-      {% if settings.display_more %}
-        <a
-          href="{{ url_for('list_categories') }}"
-          class="btn btn-text btn-lg flex whitespace-nowrap md:hidden"
-        >
-          {{ settings.more_text }}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            class="rtl:rotate-180"
-          >
-            <path
-              d="M16.8917 12.8019H4.70224C4.45758 12.8019 4.25449 12.7211 4.09299 12.5594C3.93133 12.3977 3.85049 12.1946 3.85049 11.9501C3.85049 11.7056 3.93133 11.5026 4.09299 11.3409C4.25449 11.1792 4.45758 11.0984 4.70224 11.0984H16.8917L13.3592 7.55989C13.1892 7.39389 13.1084 7.19597 13.1167 6.96614C13.1251 6.73631 13.2142 6.53639 13.3842 6.36639C13.5502 6.20056 13.7472 6.11864 13.975 6.12064C14.2028 6.12247 14.4017 6.20639 14.5717 6.37239L19.5527 11.3474C19.6441 11.4387 19.7104 11.5341 19.7517 11.6334C19.7929 11.7326 19.8135 11.8381 19.8135 11.9501C19.8135 12.0621 19.7929 12.1677 19.7517 12.2669C19.7104 12.3662 19.6441 12.4616 19.5527 12.5529L14.5967 17.5029C14.4267 17.6689 14.2278 17.7528 14 17.7546C13.7722 17.7566 13.5752 17.6727 13.4092 17.5029C13.2392 17.3369 13.1542 17.1348 13.1542 16.8966C13.1542 16.6585 13.2392 16.4544 13.4092 16.2844L16.8917 12.8019Z"
-              fill="currentColor"
-            ></path>
-          </svg>
-        </a>
-      {% endif %}
-    </div>
     </div>
   </div>
 </section>
