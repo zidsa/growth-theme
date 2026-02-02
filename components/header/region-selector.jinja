@@ -27,8 +27,43 @@
         />
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </svg>
-      {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+      <span class="nav-country-text">
+        {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+      </span>
+
       {% if show_language %}{{ session.lang | upper }}{% endif %}
     </button>
   </li>
 {% endif %}
+
+<script>
+{% if store.settings.products.filter_by_nearest_inventory %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const storedData = localStorage.getItem('zid_kit_select_branch');
+    if (!storedData) return;
+
+    const lang = '{{ session.lang }}';
+    const data = JSON.parse(storedData);
+    const branchData = data.branchData;
+    const buttons = document.querySelectorAll('.nav-country-text');
+    
+    if (!buttons) return;
+
+    let displayText = '';
+    const deliveryToText = '{{ _("Delivery to:") }}';
+    const pickupFromText = '{{ _("Pickup from:") }}';
+
+    if (branchData.type === 'pickup' && branchData.pickup) {
+        displayText = `${pickupFromText} ${branchData.pickup.name}`;
+    } else if (branchData.type === 'delivery' && branchData.address) {
+        const addr = branchData.address;
+        const cityName = lang === 'ar' ? addr.city_name_ar : addr.city_name_en;
+        displayText = `${deliveryToText} ${cityName || ''}`;
+    }
+
+    if (displayText) {
+      buttons.forEach(btn => btn.textContent = `${displayText} | `);
+    }
+  });
+{% endif %}
+</script>
