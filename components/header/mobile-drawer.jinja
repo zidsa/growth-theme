@@ -186,7 +186,10 @@
                       d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
                     />
                   </svg>
-                  {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+                  <span id="country_text">
+                    {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+                  </span>
+                 
                   {% if show_language %}{{ session.lang | upper }}{% endif %}
                 </button>
               {% endif %}
@@ -197,3 +200,35 @@
     </div>
   </dialog>
 </el-dialog>
+
+
+<script>
+{% if store.settings.products.filter_by_nearest_inventory %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const storedData = localStorage.getItem('zid_kit_select_branch');
+    if (!storedData) return;
+
+    const lang = '{{ session.lang }}';
+    const data = JSON.parse(storedData);
+    const branchData = data.branchData;
+    const button = document.getElementById('country_text');
+    
+    if (!button) return;
+
+    let displayText = '';
+
+    if (branchData.type === 'pickup' && branchData.pickup) {
+        displayText = branchData.pickup.name;
+    } else if (branchData.type === 'delivery' && branchData.address) {
+        const addr = branchData.address;
+        const countryName = lang === 'ar' ? addr.country_name_ar : addr.country_name_en;
+        const cityName = lang === 'ar' ? addr.city_name_ar : addr.city_name_en;
+        displayText = [countryName, cityName].filter(Boolean).join(' - ');
+    }
+
+    if (displayText) {
+      button.textContent = `${displayText} | `;
+    }
+  });
+{% endif %}
+</script>
