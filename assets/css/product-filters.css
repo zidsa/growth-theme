@@ -1,0 +1,251 @@
+/**
+ * Headless Product Filters
+ *
+ * Base styles + sidebar layout for product-filters.jinja.
+ * See docs/headless/product-filters.md for additional layout examples
+ * (topbar, chips, minimal, grid) you can copy into your own CSS.
+ *
+ * Usage:
+ *   <div class="filters--sidebar">
+ *     {% include 'components/products/headless/filters/product-filters.jinja' %}
+ *   </div>
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE STYLES (shared across all layouts)
+   Visually matches: form-control, form-checkbox, disclosure.jinja
+   ═══════════════════════════════════════════════════════════════ */
+
+.product-filter {
+  position: relative;
+}
+
+/* Summary/trigger — matches disclosure.jinja label */
+.product-filter__summary {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.product-filter__summary::-webkit-details-marker {
+  display: none;
+}
+
+.product-filter__summary-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.product-filter__summary-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  color: var(--foreground);
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+details[open] > .product-filter__summary .product-filter__summary-icon {
+  transform: rotate(0deg);
+}
+
+/* Content container */
+.product-filter__content {
+  padding-top: 1rem;
+}
+
+/* Options list — matches space-y-3 */
+.product-filter__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Individual option — matches .form-control */
+.product-filter__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-body1--size, 1rem);
+  line-height: var(--font-body1--line-height, 1.5);
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+/* Checkbox — matches .form-checkbox */
+.product-filter__checkbox {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+  appearance: none;
+  border: 1px solid var(--primary);
+  background: var(--background);
+  transition: all 0.15s ease;
+}
+
+.product-filter__checkbox:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.product-filter__checkbox::before {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  display: block;
+  transform: rotate(45deg);
+  background: currentColor;
+  opacity: 0;
+  transition: all 0.3s;
+  clip-path: polygon(20% 100%, 20% 80%, 50% 80%, 50% 80%, 70% 80%, 70% 100%);
+}
+
+.product-filter__checkbox:checked::before {
+  color: var(--primary-foreground);
+  opacity: 1;
+  clip-path: polygon(20% 100%, 20% 80%, 50% 80%, 50% 0%, 70% 0%, 70% 100%);
+}
+
+.product-filter__checkbox:disabled {
+  border-color: color-mix(in srgb, var(--border) 50%, transparent);
+  background: var(--secondary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.product-filter__checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+.product-filter__text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Color swatch — matches theme: size-8 rounded, background-color via inline style */
+.product-filter__color {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  /* background-color set via inline style on the element */
+}
+
+/* Icon/image swatch — matches theme: size-8 rounded overflow-hidden */
+.product-filter__icon {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: 0.125rem;
+}
+
+.product-filter__icon-image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* Option text for color/icon types — matches theme text-sm */
+.product-filter__option--color .product-filter__text,
+.product-filter__option--icon .product-filter__text {
+  font-size: 0.875rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEW MORE/LESS TOGGLE (native <details> — zero JS)
+   ═══════════════════════════════════════════════════════════════ */
+
+.product-filter__more {
+  margin-top: 0.25rem;
+}
+
+.product-filter__more .product-filter__options--overflow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.product-filter__toggle {
+  margin-top: 0.5rem;
+  padding: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+  list-style: none;
+}
+
+.product-filter__toggle::-webkit-details-marker {
+  display: none;
+}
+
+.product-filter__toggle:hover {
+  color: var(--foreground);
+}
+
+.product-filter__toggle-less {
+  display: none;
+}
+
+.product-filter__more[open] .product-filter__toggle-more {
+  display: none;
+}
+
+.product-filter__more[open] .product-filter__toggle-less {
+  display: inline;
+}
+
+/* Summary badge (selected count) */
+.product-filter__summary-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  background: var(--secondary);
+  color: var(--foreground);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT: SIDEBAR (Vertical Accordions)
+   ═══════════════════════════════════════════════════════════════ */
+
+.filters--sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Matches: divide-y divide-border border-t border-border + py-4 per item */
+.filters--sidebar .product-filter {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.filters--sidebar .product-filter:last-child {
+  border-bottom: none;
+}
+
+.filters--sidebar .product-filter__content {
+  padding-bottom: 0;
+}

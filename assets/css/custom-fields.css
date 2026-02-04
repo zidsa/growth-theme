@@ -1,0 +1,224 @@
+/* ========== Custom Fields ========== */
+
+.custom-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.custom-field__label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--font-subtitle2--size);
+  font-weight: var(--font-subtitle2--weight);
+  line-height: var(--font-subtitle2--line-height);
+  color: var(--foreground);
+}
+
+.custom-field__required {
+  color: var(--destructive);
+}
+
+.custom-field__price {
+  color: var(--muted-foreground);
+  font-weight: var(--font-body2--weight);
+}
+
+.custom-field__hint {
+  font-size: var(--font-caption--size);
+  line-height: var(--font-caption--line-height);
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* Text Input */
+.custom-field__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: var(--font-body1--size);
+  line-height: var(--font-body1--line-height);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.custom-field__input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.custom-field__input:hover {
+  border-color: var(--foreground);
+}
+
+.custom-field__input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+/* Select (Dropdown) */
+.custom-field__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23545352' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+[dir="rtl"] .custom-field__select {
+  background-position: left 0.75rem center;
+  padding-right: 1rem;
+  padding-left: 2.5rem;
+}
+
+/* Textarea */
+.custom-field__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Checkbox Group */
+.custom-field__options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.custom-field__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: var(--font-body2--size);
+  line-height: var(--font-body2--line-height);
+  color: var(--foreground);
+}
+
+.custom-field__checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 0.5);
+  background: var(--background);
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.custom-field__checkbox:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.custom-field__option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.custom-field__option-price {
+  color: var(--muted-foreground);
+}
+
+/* ========== File Upload ========== */
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--secondary);
+  min-height: 3rem;
+}
+
+.file-upload__delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  background: var(--destructive);
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.file-upload__delete:hover {
+  opacity: 0.8;
+}
+
+.file-upload__delete-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.file-upload__preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: calc(var(--radius) * 0.5);
+  overflow: hidden;
+  background: var(--background);
+  flex-shrink: 0;
+}
+
+.file-upload__preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.file-upload__name {
+  flex: 1;
+  font-size: var(--font-body2--size);
+  line-height: var(--font-body2--line-height);
+  color: var(--muted-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-upload__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: var(--font-body2--size);
+  font-weight: var(--font-subtitle2--weight);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.file-upload__button:hover {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+
+/* ========== Custom Field Wrapper (for spacing between fields) ========== */
+
+.custom-field-wrapper {
+  margin-bottom: 1rem;
+}
+
+.custom-field-wrapper:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,168 @@
+/* ========================================
+   PhotoSwipe Lightbox Custom Styles
+   ======================================== */
+
+/* Background */
+.pswp {
+  --pswp-bg: #000;
+}
+
+/* Close button */
+.pswp__button--close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.pswp__button--close:hover {
+  opacity: 1;
+}
+
+/* Arrow buttons */
+.pswp__button--arrow {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius);
+  color: white;
+  opacity: 0.8;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+
+.pswp__button--arrow:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pswp__button--arrow--prev {
+  left: 16px;
+}
+
+.pswp__button--arrow--next {
+  right: 16px;
+}
+
+/* RTL support */
+[dir="rtl"] .pswp__button--arrow--prev {
+  left: auto;
+  right: 16px;
+}
+
+[dir="rtl"] .pswp__button--arrow--next {
+  right: auto;
+  left: 16px;
+}
+
+[dir="rtl"] .pswp__button--arrow svg {
+  transform: rotate(180deg);
+}
+
+/* Main image */
+.pswp__img {
+  border-radius: var(--radius-lg);
+  object-fit: contain;
+}
+
+/* Custom thumbnails strip */
+.pswp-custom-thumbs {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  z-index: 10;
+}
+
+.pswp-custom-thumb {
+  width: 100px;
+  height: 104px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.6;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
+  background: transparent;
+}
+
+.pswp-custom-thumb:hover {
+  opacity: 0.9;
+}
+
+.pswp-custom-thumb--active {
+  opacity: 1;
+  border-color: white;
+}
+
+.pswp-custom-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hide default counter */
+.pswp__counter {
+  display: none;
+}
+
+/* Zoom indicator */
+.pswp__zoom-wrap {
+  will-change: transform;
+}
+
+/* Loading indicator */
+.pswp__preloader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .pswp__button--arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .pswp__button--arrow--prev {
+    left: 8px;
+  }
+
+  .pswp__button--arrow--next {
+    right: 8px;
+  }
+
+  .pswp-custom-thumbs {
+    bottom: 8px;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .pswp-custom-thumb {
+    width: 60px;
+    height: 64px;
+  }
+}

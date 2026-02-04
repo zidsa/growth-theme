@@ -1,0 +1,58 @@
+/* ========== noUiSlider Price Range Styles ========== */
+.price-range-slider {
+  margin: 8px 2px 22px !important;
+}
+
+/* Track background */
+.noUi-target {
+  border: none !important;
+  box-shadow: none !important;
+  background: var(--secondary) !important;
+  border-radius: var(--radius) !important;
+  display: flex !important;
+  height: 4px !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  flex-shrink: 0 !important;
+}
+
+.noUi-base,
+.noUi-connects {
+  border-radius: inherit !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Filled / connect segment */
+.noUi-connect {
+  border-radius: calc(var(--radius) * 0.5) !important;
+  background: var(--accent) !important;
+}
+
+/* Handles */
+.noUi-horizontal .noUi-handle {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50px !important;
+  border: 2px solid var(--accent) !important;
+  background: var(--background) !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer !important;
+  top: -8px !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Remove default little bars */
+.noUi-handle::before,
+.noUi-handle::after {
+  display: none !important;
+}
+
+/* RTL Support */
+[dir="rtl"] .noUi-horizontal .noUi-handle {
+  transform: translateX(50%) !important;
+}
+
+[dir="rtl"] .noUi-horizontal {
+  direction: rtl !important;
+}
