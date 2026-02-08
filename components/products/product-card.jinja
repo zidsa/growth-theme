@@ -6,9 +6,9 @@
   class="group relative flex h-full flex-col gap-4 group-data-[grid=list]/grid:grid group-data-[grid=list]/grid:grid-cols-2 group-data-[grid=list]/grid:grid-rows-[1fr_auto] group-data-[grid=list]/grid:gap-4 md:group-data-[grid=list]/grid:grid-cols-[auto_1fr] md:group-data-[grid=list]/grid:grid-rows-[auto_auto]"
   data-product-card="{{ product.id }}"
 >
-  <a onclick="onProductClick(this)" data-product='{{ product | tojson | safe }}'
+  <a onclick="onProductClick(event, this)" data-product='{{ product | tojson | safe }}'
      data-list-name="{{ listName }}" data-list-id="{{ listId }}" data-index="{{ index }}"
-    href="#"
+    href="/p/{{ product.slug }}"
     class="{{ aspect_class }} relative block w-full overflow-hidden rounded group-data-[grid=list]/grid:col-span-1 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:aspect-square md:group-data-[grid=list]/grid:row-span-2 md:group-data-[grid=list]/grid:h-80"
   >
     <img
@@ -64,8 +64,8 @@
   >
     <div class="flex flex-col gap-2">
       <h3 class="text-foreground text-sm font-medium">
-        <a onclick="onProductClick(this)" data-product='{{ product | tojson | safe }}'
-           data-list-name="{{ listName }}" data-list-id="{{ listId }}" data-index="{{ index }}" href="#"> {{ product.name }} </a>
+        <a onclick="onProductClick(event, this)" data-product='{{ product | tojson | safe }}'
+           data-list-name="{{ listName }}" data-list-id="{{ listId }}" data-index="{{ index }}" href="/p/{{ product.slug }}"> {{ product.name }} </a>
       </h3>
       {% if store.settings.products.reviews_enabled %}
         {% if product.rating %}

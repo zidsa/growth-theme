@@ -172,7 +172,8 @@ window.selectMobileLanguage = function (languageCode) {
   navigateToLocale(config.currentCountry, languageCode);
 };
 
-window.onProductClick = function(el) {
+window.onProductClick = function(event, el) {
+  event.preventDefault();
   const product = JSON.parse(el.dataset.product);
   const listName = el.dataset.listName;
   const listId = el.dataset.listId;
