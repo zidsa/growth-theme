@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zidsa/default-theme-vitrin.git"
+    "url": "git+https://github.com/zidsa/growth-theme.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zidsa/default-theme-vitrin/issues"
+    "url": "https://github.com/zidsa/growth-theme/issues"
   },
-  "homepage": "https://github.com/zidsa/default-theme-vitrin#readme",
+  "homepage": "https://github.com/zidsa/growth-theme#readme",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "@tailwindcss/typography": "^0.5.19",
@@ -41,5 +41,6 @@
     "embla-carousel-fade": "^8.6.0",
     "nouislider": "^15.8.1",
     "photoswipe": "^5.4.4"
-  }
+  },
+  "main": "index.js"
 }
