@@ -13,8 +13,8 @@
         playsinline
         muted
         {% if settings.poster_image %}poster="{{ image_url(settings.poster_image, w=1280, q=70, f='auto') }}"{% endif %}
-        {% if settings.autoplay %}autoplay{% endif %}
-        {% if is_lazy %}preload="none"{% else %}preload="metadata"{% endif %}
+        {% if settings.autoplay %} autoplay {% endif %}
+        {% if is_lazy %} preload="none"{% else %} preload="metadata" {% endif %}
       >
         <source
           src="{{ settings.video }}"
