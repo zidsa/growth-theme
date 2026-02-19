@@ -9,23 +9,13 @@
     >
       {{ _("Store is closed") }}
     </button>
-  {% elif session.is_guest %}
-    <a
-      href="/auth/login?redirect_to=/checkout"
-      class="btn btn-filled btn-lg w-full"
-      data-action="login"
-      data-redirect="/checkout"
-      data-add-to-url="false"
-    >
-      {{ _("Checkout") }}
-    </a>
   {% else %}
     <a
       href="/checkout"
       class="btn btn-filled btn-lg w-full"
+      data-auth-user
     >
       {{ _("Checkout") }}
     </a>
   {% endif %}
-  {{ template_for_cart_apple_pay_button }}
 </div>
