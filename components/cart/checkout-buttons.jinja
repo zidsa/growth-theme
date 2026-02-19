@@ -9,11 +9,12 @@
     >
       {{ _("Store is closed") }}
     </button>
-  {% endif %}
+  {% else %}
     <a
       href="/checkout"
       class="btn btn-filled btn-lg w-full"
     >
       {{ _("Checkout") }}
     </a>
+  {% endif %}
 </div>
