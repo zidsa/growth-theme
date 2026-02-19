@@ -10,25 +10,11 @@
       {{ _("Store is closed") }}
     </button>
   {% else %}
-    {# Guest checkout - redirects to login first (shown via JS when guest) #}
-    <a
-      href="/auth/login?redirect_to=/checkout"
-      class="btn btn-filled btn-lg w-full"
-      data-action="login"
-      data-redirect="/checkout"
-      data-add-to-url="false"
-      data-auth-guest
-    >
-      {{ _("Checkout") }}
-    </a>
-    {# Authenticated checkout - direct to checkout (shown via JS when authenticated) #}
     <a
       href="/checkout"
-      class="btn btn-filled btn-lg hidden w-full"
-      data-auth-user
+      class="btn btn-filled btn-lg w-full"
     >
       {{ _("Checkout") }}
     </a>
   {% endif %}
-  {{ template_for_cart_apple_pay_button }}
 </div>
