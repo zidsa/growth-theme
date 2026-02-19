@@ -189,6 +189,47 @@ window.onProductClick = function(event, el) {
   window.location.href = "/p/" + product.slug;
 };
 // ─────────────────────────────────────────────────────────────
+// Auth-Based Visibility (Cache-Safe)
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Initialize auth-based element visibility
+ * Elements with [data-auth-guest] are shown only to guests
+ * Elements with [data-auth-user] are shown only to authenticated users
+ * This allows templates to be cached while still showing correct content
+ */
+function initAuthVisibility() {
+  const isGuest = !window.customerAuthState || window.customerAuthState.isGuest;
+  const isAuthenticated = window.customerAuthState && window.customerAuthState.isAuthenticated;
+
+  // Show/hide guest-only elements
+  document.querySelectorAll("[data-auth-guest]").forEach((el) => {
+    el.classList.toggle("hidden", !isGuest);
+  });
+
+  // Show/hide authenticated-only elements
+  document.querySelectorAll("[data-auth-user]").forEach((el) => {
+    el.classList.toggle("hidden", !isAuthenticated);
+  });
+
+  // Update any auth-dependent hrefs
+  document.querySelectorAll("[data-auth-href-guest]").forEach((el) => {
+    if (isGuest) {
+      el.href = el.dataset.authHrefGuest;
+    }
+  });
+
+  document.querySelectorAll("[data-auth-href-user]").forEach((el) => {
+    if (isAuthenticated) {
+      el.href = el.dataset.authHrefUser;
+    }
+  });
+}
+
+// Re-run visibility check after auth changes
+window.addEventListener("vitrin:auth:success", initAuthVisibility);
+
+// ─────────────────────────────────────────────────────────────
 // Initialization
 // ─────────────────────────────────────────────────────────────
 
@@ -198,6 +239,7 @@ export function init() {
   initLoginRedirectButtons();
   initCustomerGreeting();
   setupAuthSuccessListener();
+  initAuthVisibility();
 }
 
 if (document.readyState === "loading") {

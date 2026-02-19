@@ -31,3 +31,8 @@ assets/styles.css
 dist/
 
 
+# Translations
+*.mo
+*.pot
+
+/build

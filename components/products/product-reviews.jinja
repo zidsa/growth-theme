@@ -37,7 +37,7 @@
 
   <div class="mt-6 flex flex-col gap-4">
     {# Title #}
-    <h2 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight">{{ _("Customer reviews") }}</h2>
+    <h2 class="text-foreground text-xl font-semibold tracking-tight md:text-2xl">{{ _("Customer reviews") }}</h2>
 
     {# Rating Summary Section #}
     <div class="flex flex-col gap-6 md:flex-row">
@@ -45,7 +45,7 @@
       <div class="flex shrink-0 flex-col gap-4">
         {% if product.rating %}
           <div class="flex flex-col gap-1">
-            <p class="text-foreground text-xs uppercase tracking-wide">{{ _("Overall rating") }}</p>
+            <p class="text-foreground text-xs tracking-wide uppercase">{{ _("Overall rating") }}</p>
             <div class="flex h-8 items-center gap-1.5">
               <p class="text-foreground text-lg font-semibold">{{ product.rating.average|round(1) }}</p>
               <div class="flex gap-0.5 overflow-clip">
@@ -56,29 +56,29 @@
           </div>
         {% endif %}
 
-        {# Write Review Button #}
-        {% if session and session.is_guest %}
-          <button
-            type="button"
-            class="btn btn-outlined btn-lg"
-            data-login-redirect="{{ url_for('add_product_review', slug=product.id) }}"
-          >
-            {{ _("Write a review") }}
-          </button>
-        {% else %}
-          <a
-            href="{{ url_for('add_product_review', slug=product.slug) }}"
-            class="btn btn-outlined btn-lg"
-          >
-            {{ _("Write a review") }}
-          </a>
-        {% endif %}
+        {# Write Review Button - Guest version (shown via JS) #}
+        <button
+          type="button"
+          class="btn btn-outlined btn-lg"
+          data-login-redirect="{{ url_for('add_product_review', slug=product.id) }}"
+          data-auth-guest
+        >
+          {{ _("Write a review") }}
+        </button>
+        {# Write Review Button - Authenticated version (shown via JS) #}
+        <a
+          href="{{ url_for('add_product_review', slug=product.slug) }}"
+          class="btn btn-outlined btn-lg hidden"
+          data-auth-user
+        >
+          {{ _("Write a review") }}
+        </a>
       </div>
 
       {# Right: Rating Snapshot #}
       {% if product.rating %}
         <div class="flex min-w-0 flex-1 flex-col gap-2">
-          <p class="text-foreground text-xs uppercase tracking-wide">{{ _("Rating snapshot") }}</p>
+          <p class="text-foreground text-xs tracking-wide uppercase">{{ _("Rating snapshot") }}</p>
 
           {% set total_reviews = product.rating.total_count or 1 %}
 
@@ -88,7 +88,7 @@
             {% set count = rating_data.count if rating_data else 0 %}
             {% set percentage = (count / total_reviews * 100) if total_reviews > 0 else 0 %}
             <div class="flex w-full items-center gap-2">
-              <span class="text-foreground text-sm w-[42px] shrink-0">
+              <span class="text-foreground w-[42px] shrink-0 text-sm">
                 {{ i }} {{ _("star") if i == 1 else _("stars") }}
               </span>
               <div class="min-w-0 flex-1">
@@ -99,7 +99,7 @@
                   ></div>
                 </div>
               </div>
-              <span class="text-muted text-sm w-10 shrink-0 text-right">{{ count }}</span>
+              <span class="text-muted w-10 shrink-0 text-right text-sm">{{ count }}</span>
             </div>
           {% endfor %}
         </div>
@@ -110,7 +110,7 @@
     <div class="border-border border-y py-4">
       {# Review Count #}
       {% if product.reviews and product.reviews.results %}
-        <p class="text-foreground text-xs uppercase tracking-wide">
+        <p class="text-foreground text-xs tracking-wide uppercase">
           {{ product.reviews.results|length }} {{ _("out of") }}
           {{ product.reviews.count or product.reviews.results|length }}
           {{ _("reviews") }}

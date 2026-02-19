@@ -5,7 +5,7 @@
     class="flex flex-col gap-2 pb-4"
     data-loyalty-section
   >
-    <h3 class="text-foreground text-xs uppercase tracking-wide">{{ _("Loyalty program") }}</h3>
+    <h3 class="text-foreground text-xs tracking-wide uppercase">{{ _("Loyalty program") }}</h3>
     <div
       class="border-foreground flex items-center gap-2 rounded border p-4"
       data-loyalty-earn-card
@@ -22,8 +22,9 @@
           fill="currentColor"
         ></path>
       </svg>
-      <p class="text-foreground text-sm flex-1">
-        {% if session.is_guest %}
+      <p class="text-foreground flex-1 text-sm">
+        {# Guest message - shown via JS when not authenticated #}
+        <span data-auth-guest>
           <span data-loyalty-calculated-points>0</span>
           {{ _("point can be earned by purchasing this product.") }}
           <a
@@ -35,146 +36,150 @@
             >{{ _("Log in") }}</a
           >
           {{ _("to collect and redeem points") }}
-        {% else %}
+        </span>
+        {# Authenticated message - shown via JS when authenticated #}
+        <span
+          data-auth-user
+          class="hidden"
+        >
           <span data-loyalty-calculated-points>0</span>
           {{ _("point can be earned by purchasing this product.") }}
-        {% endif %}
+        </span>
       </p>
     </div>
 
-    {# Logged in: Redemption Section #}
-    {% if not session.is_guest %}
+    {# Logged in: Redemption Section - shown via JS when authenticated #}
+    <div
+      class="hidden flex-col gap-2"
+      data-loyalty-redemption-section
+      data-auth-user
+    >
+      <p
+        class="text-foreground text-xs"
+        data-loyalty-balance-text
+      >
+        {{ _("You have") }} <span data-loyalty-customer-points>0</span> {{ _("points to redeem") }}
+      </p>
       <div
-        class="flex flex-col gap-2"
-        data-loyalty-redemption-section
+        class="{{ 'hidden' if cart.loyalty_applied_redemption_method }} flex items-center gap-2"
+        data-loyalty-redemption-form
+      >
+        <el-select
+          id="loyalty-redemption-select"
+          class="flex-1"
+          data-loyalty-redemption-select
+        >
+          <button
+            type="button"
+            class="border-input text-foreground hover:ring-input focus:border-foreground flex min-h-12 w-full items-center justify-between gap-2 rounded border px-3 py-2 text-start text-sm transition-[border-color] hover:ring-1 focus:border-2 focus:outline-none"
+          >
+            <el-selectedcontent class="flex-1">
+              <span class="text-muted-foreground">{{ _("Select redemption") }}</span>
+            </el-selectedcontent>
+            <svg
+              class="text-foreground shrink-0 transition-transform duration-200 group-aria-expanded:rotate-180"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6 9L12 15L18 9"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <el-options
+            popover
+            anchor="bottom end"
+            class="bg-background border-border-light max-h-60 w-[var(--anchor-width)] origin-top overflow-y-auto rounded border py-2 shadow-lg transition transition-discrete [--anchor-gap:--spacing(1)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+            data-loyalty-options
+          >
+            {# Options will be populated by JS #}
+          </el-options>
+        </el-select>
+        <button
+          class="btn btn-filled btn-lg"
+          disabled
+          data-action="loyalty-apply"
+          data-loyalty-apply-btn
+        >
+          <span data-loyalty-apply-text>{{ _("Apply") }}</span>
+          <svg
+            class="hidden size-5 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            data-loyalty-apply-spinner
+          >
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="{{ 'hidden' if not cart.loyalty_applied_redemption_method }} flex flex-col gap-2"
+        data-loyalty-applied-section
       >
         <p
           class="text-foreground text-xs"
-          data-loyalty-balance-text
+          data-loyalty-applied-message
         >
-          {{ _("You have") }} <span data-loyalty-customer-points>0</span> {{ _("points to redeem") }}
+          {% if cart.loyalty_applied_redemption_method %}
+            {{ _("Loyalty points has been applied! You have now") }}
+            <span data-loyalty-remaining-points>0</span>
+            {{ _("points.") }}
+          {% endif %}
         </p>
         <div
-          class="{{ 'hidden' if cart.loyalty_applied_redemption_method }} flex items-center gap-2"
-          data-loyalty-redemption-form
+          class="border-border inline-flex w-fit items-center gap-1 rounded border px-2 py-1"
+          data-loyalty-applied-tag
         >
-          <el-select
-            id="loyalty-redemption-select"
-            class="flex-1"
-            data-loyalty-redemption-select
+          <span
+            class="text-foreground text-xs tracking-wide uppercase"
+            data-loyalty-applied-points
           >
-            <button
-              type="button"
-              class="border-input text-foreground text-sm hover:ring-input focus:border-foreground flex min-h-12 w-full items-center justify-between gap-2 rounded border px-3 py-2 text-start transition-[border-color] hover:ring-1 focus:border-2 focus:outline-none"
-            >
-              <el-selectedcontent class="flex-1">
-                <span class="text-muted-foreground">{{ _("Select redemption") }}</span>
-              </el-selectedcontent>
-              <svg
-                class="text-foreground shrink-0 transition-transform duration-200 group-aria-expanded:rotate-180"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M6 9L12 15L18 9"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-            </button>
-            <el-options
-              popover
-              anchor="bottom end"
-              class="bg-background border-border-light max-h-60 w-[var(--anchor-width)] origin-top overflow-y-auto rounded border py-2 shadow-lg transition transition-discrete [--anchor-gap:--spacing(1)] data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-              data-loyalty-options
-            >
-              {# Options will be populated by JS #}
-            </el-options>
-          </el-select>
+            {% if cart.loyalty_applied_redemption_method %}
+              {{ cart.loyalty_applied_redemption_method.points_to_redeem }}
+              {{ _("points") }}
+            {% endif %}
+          </span>
           <button
-            class="btn btn-filled btn-lg"
-            disabled
-            data-action="loyalty-apply"
-            data-loyalty-apply-btn
+            type="button"
+            class="text-foreground hover:text-destructive transition-colors"
+            data-action="loyalty-remove"
+            aria-label="{{ _('Remove') }}"
+            data-loyalty-remove-btn
           >
-            <span data-loyalty-apply-text>{{ _("Apply") }}</span>
             <svg
-              class="hidden size-5 animate-spin"
+              class="size-4"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              data-loyalty-apply-spinner
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              data-loyalty-remove-icon
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+            <svg
+              class="hidden size-4 animate-spin"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              data-loyalty-remove-spinner
             >
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>
           </button>
         </div>
-        <div
-          class="{{ 'hidden' if not cart.loyalty_applied_redemption_method }} flex flex-col gap-2"
-          data-loyalty-applied-section
-        >
-          <p
-            class="text-foreground text-xs"
-            data-loyalty-applied-message
-          >
-            {% if cart.loyalty_applied_redemption_method %}
-              {{ _("Loyalty points has been applied! You have now") }}
-              <span data-loyalty-remaining-points>0</span>
-              {{ _("points.") }}
-            {% endif %}
-          </p>
-          <div
-            class="border-border inline-flex w-fit items-center gap-1 rounded border px-2 py-1"
-            data-loyalty-applied-tag
-          >
-            <span
-              class="text-foreground text-xs uppercase tracking-wide uppercase"
-              data-loyalty-applied-points
-            >
-              {% if cart.loyalty_applied_redemption_method %}
-                {{ cart.loyalty_applied_redemption_method.points_to_redeem }}
-                {{ _("points") }}
-              {% endif %}
-            </span>
-            <button
-              type="button"
-              class="text-foreground hover:text-destructive transition-colors"
-              data-action="loyalty-remove"
-              aria-label="{{ _('Remove') }}"
-              data-loyalty-remove-btn
-            >
-              <svg
-                class="size-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                data-loyalty-remove-icon
-              >
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-              <svg
-                class="hidden size-4 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                data-loyalty-remove-spinner
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-            </button>
-          </div>
-        </div>
       </div>
-    {% endif %}
+    </div>
   </div>
 {% endif %}

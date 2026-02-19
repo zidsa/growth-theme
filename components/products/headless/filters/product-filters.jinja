@@ -1,0 +1,152 @@
+{#
+  Headless Product Attribute Filters
+
+  Pure HTML with zero inline JavaScript.
+  Uses <details>/<summary> for all output. Visual style is controlled
+  externally via CSS layout wrappers:
+    - .filters--topbar   → horizontal dropdown (absolute content panel)
+    - .filters--sidebar  → vertical accordions
+    - .filters--chips    → inline pills
+    - .filters--minimal  → clean, no borders
+    - .filters--grid     → 2-column cards
+
+  Required context:
+    - filters (object with attributes array)
+    - session (for query params pre-selection)
+
+  Options (via {% with %}):
+    - open: true | false - start open (default: false)
+    - max_visible: number - limit visible options per attribute (0 = show all, default: 0)
+
+  Data attributes exposed:
+    [data-filter-type="attribute"]  Filter type identifier
+    [data-attribute]                Attribute slug (e.g. "color", "size")
+    [data-attribute-name]           Human-readable attribute name
+    [data-total-options]            Total number of options
+    [data-visible-options]          Number of initially visible options (when truncated)
+    [data-selected-count]           Number of currently selected options
+    [data-option-type]              Option type: 'default', 'color', 'icon'
+    [data-option-value]             Option value string
+    [data-attribute-option]         Attribute slug on each checkbox (for querySelectorAll)
+    [data-color]                    Hex color value on color swatches
+
+  Usage:
+    <form method="get" data-product-filters>
+      <div class="filters--sidebar">
+        {% with open=true, max_visible=5 %}
+          {% include 'components/products/headless/filters/product-filters.jinja' %}
+        {% endwith %}
+      </div>
+      <button type="reset">{{ _("Clear") }}</button>
+      <button type="submit">{{ _("Apply") }}</button>
+    </form>
+#}
+
+{% set _open = open | default(false) %}
+{% set _max = max_visible | default(0) %}
+
+{% macro render_option(option, attr_slug, is_selected) %}
+  <label
+    class="product-filter__option product-filter__option--{{ option.type }}"
+    data-option-type="{{ option.type }}"
+    data-option-value="{{ option.value }}"
+  >
+    <input
+      type="checkbox"
+      name="attributes[{{ attr_slug }}][]"
+      value="{{ option.value }}"
+      {% if is_selected %}checked{% endif %}
+      class="product-filter__checkbox"
+      data-attribute-option="{{ attr_slug }}"
+    />
+    {% if option.type == 'color' %}
+      <span
+        class="product-filter__color"
+        style="background-color: {{ option.type_value }};"
+        data-color="{{ option.type_value }}"
+        title="{{ option.value }}"
+      ></span>
+    {% elif option.type == 'icon' and option.type_value.thumbnail %}
+      <span class="product-filter__icon">
+        <img
+          src="{{ image_url(option.type_value.thumbnail, w=64, q=85, f='auto') }}"
+          alt="{{ option.value }}"
+          class="product-filter__icon-image"
+          loading="lazy"
+        />
+      </span>
+    {% endif %}
+    <span class="product-filter__text">{{ option.value }}</span>
+  </label>
+{% endmacro %}
+
+{% if filters and filters.attributes %}
+  {% for attribute in filters.attributes %}
+    {% if attribute.is_enabled and attribute.data | length > 0 %}
+      {% set attr_key = 'attributes[' ~ attribute.slug ~ '][]' %}
+      {% set selected_values = session.query_params.getlist(attr_key) if session and session.query_params else [] %}
+      {% set has_overflow = _max > 0 and attribute.data | length > _max %}
+      {% set visible_options = attribute.data[:_max] if has_overflow else attribute.data %}
+      {% set hidden_options = attribute.data[_max:] if has_overflow else [] %}
+
+      <details
+        class="product-filter product-filter--attribute"
+        data-filter-type="attribute"
+        data-attribute="{{ attribute.slug }}"
+        data-attribute-name="{{ attribute.name }}"
+        data-total-options="{{ attribute.data | length }}"
+        {% if has_overflow %}data-visible-options="{{ visible_options | length }}"{% endif %}
+        data-selected-count="{{ selected_values | length }}"
+        {% if _open %}open{% endif %}
+      >
+        <summary class="product-filter__summary">
+          <span class="product-filter__summary-text">{{ attribute.name }}</span>
+          {% if selected_values | length > 0 %}
+            <span
+              class="product-filter__summary-badge"
+              aria-label="{{ selected_values | length }} {{ _('selected') }}"
+            >
+              {{ selected_values | length }}
+            </span>
+          {% endif %}
+          <svg
+            class="product-filter__summary-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </summary>
+
+        <div class="product-filter__content">
+          <div
+            class="product-filter__options"
+            role="group"
+            aria-label="{{ attribute.name }}"
+          >
+            {% for option in visible_options %}
+              {{ render_option(option, attribute.slug, option.value in selected_values) }}
+            {% endfor %}
+          </div>
+
+          {% if has_overflow %}
+            <details class="product-filter__more">
+              <summary class="product-filter__toggle">
+                <span class="product-filter__toggle-more"> {{ _("View more") }} ({{ hidden_options | length }}) </span>
+                <span class="product-filter__toggle-less"> {{ _("View less") }} </span>
+              </summary>
+              <div class="product-filter__options product-filter__options--overflow">
+                {% for option in hidden_options %}
+                  {{ render_option(option, attribute.slug, option.value in selected_values) }}
+                {% endfor %}
+              </div>
+            </details>
+          {% endif %}
+        </div>
+      </details>
+    {% endif %}
+  {% endfor %}
+{% endif %}

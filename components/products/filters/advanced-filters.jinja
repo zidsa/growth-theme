@@ -229,60 +229,11 @@
               </div>
 
               {# Attribute Filters #}
-              {% if filters and filters.attributes %}
-                {% for attribute in filters.attributes %}
-                  {% if attribute.is_enabled and attribute.data|length > 0 %}
-                    {% set attr_key = 'attributes[' ~ attribute.slug ~ '][]' %}
-                    {% set selected_attr_values = session.query_params.getlist(attr_key) %}
-
-                    {% set visible_options = attribute.data[:4] %}
-                    {% set hidden_options = attribute.data[4:] %}
-
-
-                    {% set attr_content %}
-                      <div class="space-y-3">
-                        {% for option in visible_options %}
-                          {{ render_attr_option(option, attribute.slug, loop.index, selected_attr_values) }}
-                        {% endfor %}
-                      </div>
-                      {% if hidden_options|length > 0 %}
-                        <el-disclosure
-                          id="{{ attribute.slug }}-more"
-                          hidden
-                          class="peer mt-3 space-y-3 transition duration-200 data-closed:opacity-0"
-                        >
-                          {% for option in hidden_options %}
-                            {{ render_attr_option(option, attribute.slug, loop.index + 4, selected_attr_values) }}
-                          {% endfor %}
-                        </el-disclosure>
-                        <button
-                          type="button"
-                          command="--toggle"
-                          commandfor="{{ attribute.slug }}-more"
-                          class="group text-muted-foreground text-sm mt-3 underline"
-                        >
-                          <span class="hidden group-aria-[expanded=false]:inline">{{ _("View more") }}</span>
-                          <span class="hidden group-aria-[expanded=true]:inline">{{ _("View less") }}</span>
-                        </button>
-                      {% endif %}
-                    {% endset %}
-
-                    <div class="py-4">
-                      {%
-                        with
-                        id=attribute.slug ~ '-disclosure',
-                        title=attribute.name,
-                        open=true,
-                        content=attr_content,
-                        content_class='px-0'
-                      %}
-                        {% include 'components/ui/disclosure.jinja' %}
-                      {% endwith %}
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-
+              <div class="filters--sidebar">
+                {% with max_visible=5, open=true %}
+                  {% include 'components/products/headless/filters/product-filters.jinja' %}
+                {% endwith %}
+              </div>
               {# Price Filter #}
               {% set price_content %}
                 {%
