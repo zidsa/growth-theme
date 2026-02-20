@@ -186,7 +186,7 @@ window.onProductClick = function(event, el) {
     index: index
   });
   // Navigate to product page
-  window.location.href = "/p/" + product.slug;
+  window.location.href = "/products/" + product.slug;
 };
 // ─────────────────────────────────────────────────────────────
 // Initialization
