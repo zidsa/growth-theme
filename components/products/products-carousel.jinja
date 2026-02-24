@@ -62,7 +62,7 @@
         <div class="products-embla__container">
           {% for item in products %}
             <div class="products-embla__slide">
-              {% with product=item, index=loop.index0, card_image_aspect_ratio=image_aspect_ratio, is_priority=(loop.first and is_priority_section | default(false)) %}
+              {% with product=item, index=loop.index0, card_image_aspect_ratio=image_aspect_ratio, is_priority=(loop.first and is_priority_section | default(false)), listId="products", listName="products" %}
                 {% include 'components/products/product-card.jinja' %}
               {% endwith %}
             </div>

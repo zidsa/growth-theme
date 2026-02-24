@@ -33,7 +33,9 @@
             class="group/grid grid gap-x-4 gap-y-10 data-[grid=four]:grid-cols-1 data-[grid=list]:grid-cols-1 data-[grid=one]:grid-cols-1 data-[grid=four]:md:grid-cols-2 data-[grid=four]:lg:grid-cols-4"
           >
             {% for product in products.results %}
-              {% include 'components/products/product-card.jinja' %}
+              {% with product=product, index=loop.index0, listId="products", listName="products" %}
+                {% include 'components/products/product-card.jinja' %}
+              {% endwith %}
             {% endfor %}
           </div>
         {% else %}
