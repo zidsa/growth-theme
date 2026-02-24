@@ -20,13 +20,15 @@
             class="block md:hidden"
             alt="{{ store.name }}"
           />
-        {% else %}
+        {% elif store.logo %}
           <img
             width="106"
             height="44"
             src="{{ image_url(store.logo, w=212, q=90, f='auto') }}"
             alt="{{ store.name }}"
           />
+        {% else %}
+          <h2 class="font-medium">{{ store.name }}</h2>
         {% endif %}
         <p class="text-foreground text-sm text-balance">{{ settings.about_us_about_us|safe }}</p>
         <h3 class="text-foreground text-sm font-medium">
