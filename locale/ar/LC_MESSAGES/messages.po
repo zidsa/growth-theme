@@ -1073,3 +1073,12 @@ msgstr "الباقة تتكون من"
 
 msgid "Included products"
 msgstr "المنتجات المضمنة"
+
+msgid "Blog"
+msgstr "المدونة"
+
+msgid "Total Posts"
+msgstr "مجموع التدوينات"
+
+msgid "No posts found, please visit this page later"
+msgstr "لا توجد تدوينات، يرجى زيارة هذه الصفحة لاحقاً"
