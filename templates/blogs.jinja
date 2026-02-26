@@ -1,9 +1,7 @@
 {% extends "layout.jinja" %}
 
-{% block header %} {% include 'header.jinja' %} {% endblock %}
-
 {% block content %}
-    <section class="blog mt-5 mb-5">
+    <section class="blog py-6">
         <div class="container mx-auto px-4">
 
             <div class="blog-title mt-5 mb-3">
@@ -22,7 +20,7 @@
                 <div class="flex justify-between items-center mb-3">
                     <div class="text-gray-500 flex items-center text-base">
                         <span>{{ _("Total Posts") }}</span>
-                        <span class="ml-2 inline-flex items-center justify-center bg-primary text-white text-xs font-medium rounded-full w-5 h-5" style="margin-right: 4px;">{{ blogs|length }}</span>
+                        <span class="ms-2 inline-flex items-center justify-center bg-primary text-white text-xs font-medium rounded-full w-5 h-5">{{ blogs|length }}</span>
                     </div>
                 </div>
 
@@ -46,15 +44,11 @@
                             <div class="flex items-center justify-between px-4 py-2 bg-gray-50">
                                 <a href="/blogs/{{ blog.slug }}" class="text-primary inline-flex items-center text-sm hover:underline">
                                     <span>{{ _("Read More") }}</span>
-                                    {% if session.lang == 'ar' %}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                                    {% else %}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2" style="margin-right: 10px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                    {% endif %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-2 rtl:rotate-180"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                 </a>
                                 <div class="relative" x-data="{ open: false }">
                                     <button @click="open = !open" class="text-gray-600 hover:text-gray-800 p-1" type="button" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <circle cx="18" cy="5" r="3"/>
                                             <circle cx="6" cy="12" r="3"/>
                                             <circle cx="18" cy="19" r="3"/>
@@ -65,7 +59,7 @@
                                     </button>
 
                                     <ul x-show="open" @click.away="open = false"
-                                        class="absolute {% if session.lang == 'ar' %}left-0{% else %}right-0{% endif %} mt-2 w-40 bg-white shadow-lg border rounded z-10">
+                                        class="absolute ltr:right-0 rtl:left-0 mt-2 w-40 bg-white shadow-lg border rounded z-10">
                                         <li>
                                             <a class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                                                target="_blank"
@@ -151,5 +145,3 @@
 {% block footer_scripts %}
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 {% endblock %}
-
-{% block footer %} {% include 'footer.jinja' %} {% endblock %}
