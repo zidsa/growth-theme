@@ -1077,6 +1077,9 @@ msgstr "المنتجات المضمنة"
 msgid "Blog"
 msgstr "المدونة"
 
+msgid "Read More"
+msgstr "أقرأ المزيد"
+
 msgid "Total Posts"
 msgstr "مجموع التدوينات"
 
