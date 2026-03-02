@@ -29,6 +29,10 @@
           "label": {
             "ar": "الصورة (سطح المكتب)",
             "en": "Image (Desktop)"
+          },
+          "info": {
+            "ar": "ارفع صورة بحجم 650 × 650 بكسل",
+            "en": "Upload image 650 × 650 pixels"
           }
         },
         {
@@ -39,8 +43,8 @@
             "en": "Image (Mobile)"
           },
           "info": {
-            "ar": "اختياري - يستخدم صورة سطح المكتب إذا لم يتم تحديده",
-            "en": "Optional - Falls back to desktop image"
+            "ar": "ارفع صورة بحجم 650 × 650 بكسل",
+            "en": "Upload image 650 × 650 pixels"
           }
         },
         {

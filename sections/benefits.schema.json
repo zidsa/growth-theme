@@ -34,8 +34,8 @@
             "en": "Image (Mobile)"
           },
           "info": {
-            "ar": "اختياري - يستخدم صورة سطح المكتب إذا لم يتم تحديده",
-            "en": "Optional - Falls back to desktop image"
+            "ar": "ارفع صورة بحجم 200 × 200 بكسل",
+            "en": "Upload image 200 × 200 pixels"
           }
         },
         {
