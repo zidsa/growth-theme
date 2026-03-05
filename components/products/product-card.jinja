@@ -12,7 +12,7 @@
   >
     <img
       {% if product.main_image and product.main_image.image %}
-        src="{{ image_url(product.main_image.image.full_size, w=300, q=75, f='auto') }}"
+        src="{{ product.main_image.image.medium }}"
       {% elif product.images and product.images|length > 0 %}
         src="{{ image_url(product.images[0].image.full_size, w=300, q=75, f='auto') }}"
       {% else %}
