@@ -47,12 +47,6 @@
         class="bundle-offer-badge hidden"
         data-bundle-offer-product-id="{{ product.id }}"
       ></span>
-      {# Keyword badges #}
-      {% if product.keywords and product.keywords|length > 0 %}
-        {% for keyword in product.keywords[:2] %}
-          <span class="badge badge-filled">{{ keyword|upper }}</span>
-        {% endfor %}
-      {% endif %}
     </div>
     {% with product_id=product.id, class='absolute bottom-4 ltr:right-4 rtl:left-4' %}
       {% include 'components/products/wishlist-button.jinja' %}
