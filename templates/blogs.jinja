@@ -29,8 +29,29 @@
                         <div class="bg-white shadow-sm rounded h-full transition-transform duration-200 hover:border hover:border-primary">
                             <div class="px-4 py-3 border-b">
                                 <h6 class="font-bold mb-0 text-gray-700 text-sm">
-                                    <a href="/blogs/{{ blog.slug }}" title="{{ blog.title }}" class="text-gray-600 hover:text-primary flex items-center">
-                                        <span class="hidden sm:inline-block mr-1 text-lg" aria-hidden="true">📄</span>
+                                    <a href="/blogs/{{ blog.slug }}" title="{{ blog.title }}" class="gap-1 text-gray-600 hover:text-primary flex items-center">
+                                        <span class="sm:inline-block mr-1 text-lg">
+                                             <svg
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                     fill="none"
+                                                     width="16" height="16"
+                                                     viewBox="0 0 24 24"
+                                                     stroke="currentColor"
+                                             >
+                                                <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"
+                                                />
+                                                <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M14 3v5h5"
+                                                />
+                                            </svg>
+                                        </span>
                                         <span>{{ blog.title }}</span>
                                     </a>
                                 </h6>

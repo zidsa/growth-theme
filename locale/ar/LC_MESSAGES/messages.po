@@ -24,6 +24,12 @@ msgstr ""
 msgid "Page Not Found"
 msgstr "الصفحة غير موجودة"
 
+msgid "Sorry about that! We'll redirect you to the homepage in a few seconds, or you can head there now."
+msgstr "عذرًا عن ذلك! سنقوم بتحويلك إلى الصفحة الرئيسية خلال بضع ثوانٍ، أو يمكنك الذهاب إليها الآن."
+
+msgid "HEADING TO THE HOMEPAGE ..."
+msgstr "الانتقال إلى الصفحة الرئيسية..."
+
 msgid "Back to Home"
 msgstr "العودة للرئيسية"
 
@@ -1076,6 +1082,9 @@ msgstr "المنتجات المضمنة"
 
 msgid "Blog"
 msgstr "المدونة"
+
+msgid "Read More"
+msgstr "أقرأ المزيد"
 
 msgid "Total Posts"
 msgstr "مجموع التدوينات"

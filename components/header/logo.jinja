@@ -2,25 +2,32 @@
 {# Displays responsive logo with separate desktop/mobile variants #}
 
 {% if settings.logo_desktop or settings.logo_mobile %}
+{% if settings.logo_desktop %}
   <img
     width="106"
     height="44"
     src="{{ image_url(settings.logo_desktop | default(settings.logo_mobile) | default(store.logo), w=212, q=90, f='auto') }}"
-    class="hidden md:block"
+    class="max-h-[44px] md:max-h-[66px] w-auto object-contain {% if settings.logo_mobile %} hidden md:block {% endif %}"
     alt="{{ store.name }}"
   />
+{% endif %}
+{% if settings.logo_mobile %}
   <img
     width="106"
     height="44"
     src="{{ image_url(settings.logo_mobile | default(settings.logo_desktop) | default(store.logo), w=212, q=90, f='auto') }}"
-    class="block md:hidden"
+    class="h-[44px] w-auto object-contain {% if settings.logo_desktop %} block md:hidden {% endif %}"
     alt="{{ store.name }}"
   />
-{% else %}
+{% endif %}
+{% elif store.logo %}
   <img
     width="106"
     height="44"
     src="{{ image_url(store.logo, w=212, q=90, f='auto') }}"
     alt="{{ store.name }}"
+    class="max-h-[44px] md:max-h-[66px] w-auto object-contain"
   />
+{% else %}
+  <h2 class="font-medium">{{ store.name }}</h2>
 {% endif %}

@@ -132,8 +132,8 @@
             "en": "Background Image (Desktop)"
           },
           "info": {
-            "ar": "ارفع صورة بحجم 1920 × 700 بكسل",
-            "en": "Upload image 1920 × 700 pixels"
+            "ar": "ارفع صورة بحجم 1500 × 700 بكسل",
+            "en": "Upload image 1500 × 700 pixels"
           }
         },
         {
@@ -144,8 +144,8 @@
             "en": "Background Image (Mobile)"
           },
           "info": {
-            "ar": "اختياري - إذا لم يتم تحديده، سيتم استخدام صورة سطح المكتب",
-            "en": "Optional - Falls back to desktop image if not set"
+            "ar": "ارفع صورة بحجم 414 × 700 بكسل",
+            "en": "Upload image 414 × 700 pixels"
           }
         },
         {
