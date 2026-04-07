@@ -25,6 +25,8 @@
             <div class="lg:col-span-8">
               <h1 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight">{{ _("Cart") }}</h1>
 
+              {% include 'vitrin:cart/progressive_discount.jinja' %}
+
               {% include 'components/cart/shipping-progress.jinja' %}
 
               <div class="border-border-light text-foreground text-xs uppercase tracking-wide mt-6 hidden border-b pb-4 lg:flex">
