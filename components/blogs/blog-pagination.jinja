@@ -1,0 +1,138 @@
+{#
+  Blog Pagination Component
+
+  Expects:
+  - posts: PaginatedBlogPosts (results, count, page, page_size)
+#}
+
+{% macro BlogPaginationLink(href='', page='', isActive=false) -%}
+  {% if isActive %}
+    <span
+      data-slot="pagination-link"
+      data-active="true"
+      aria-current="page"
+      class="text-foreground text-sm relative flex size-11 items-center justify-center"
+    >
+      {{ page }}
+      <span class="bg-accent pointer-events-none absolute bottom-0 left-1/2 z-10 h-1 w-12 -translate-x-1/2 rounded-full"></span>
+    </span>
+  {% else %}
+    <a
+      href="{{ href }}"
+      data-slot="pagination-link"
+      data-active="false"
+      class="text-foreground text-sm flex size-11 items-center justify-center"
+    >
+      {{ page }}
+    </a>
+  {% endif %}
+{%- endmacro %}
+
+{% macro BlogPaginationEllipsis() -%}
+  <span
+    aria-hidden="true"
+    data-slot="pagination-ellipsis"
+    class="text-muted text-sm flex size-11 items-center justify-center"
+  >
+    ...
+    <span class="sr-only">More pages</span>
+  </span>
+{%- endmacro %}
+
+{% macro BlogPaginationArrow(href='', disabled=false, ariaLabel='', direction='next') -%}
+  <a
+    href="{{ href }}"
+    aria-label="{{ ariaLabel }}"
+    aria-disabled="{{ 'true' if disabled else 'false' }}"
+    class="text-foreground {% if disabled %}pointer-events-none opacity-50{% endif %} flex size-11 items-center justify-center"
+  >
+    <span class="sr-only">{{ ariaLabel }}</span>
+    <span class="flex size-8 items-center justify-center rtl:scale-x-[-1]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        {% if direction == 'first' %}
+          <path d="m11 17-5-5 5-5" />
+          <path d="m18 17-5-5 5-5" />
+        {% elif direction == 'prev' %}
+          <path d="m15 18-6-6 6-6" />
+        {% elif direction == 'next' %}
+          <path d="m9 18 6-6-6-6" />
+        {% elif direction == 'last' %}
+          <path d="m6 17 5-5-5-5" />
+          <path d="m13 17 5-5-5-5" />
+        {% endif %}
+      </svg>
+    </span>
+  </a>
+{%- endmacro %}
+
+{% set page_size = (posts.page_size or session.query_params.get('page_size') or 24) | int %}
+{% set total_pages = ((posts.count / page_size) | round(0, 'ceil')) | int if posts.count else 0 %}
+{% set current_page = posts.page or 1 %}
+
+{% if total_pages > 1 %}
+  <nav
+    role="navigation"
+    aria-label="{{ _('Blog pagination') }}"
+    class="relative mt-4 flex items-center justify-center"
+  >
+    {# Window calculation #}
+    {% if current_page <= 2 %}
+      {% set start_page = 1 %}
+    {% else %}
+      {% set start_page = current_page - 2 %}
+    {% endif %}
+    {% if (current_page + 2) <= total_pages %}
+      {% set end_page = current_page + 2 %}
+    {% else %}
+      {% set end_page = total_pages %}
+    {% endif %}
+
+    {# Desktop #}
+    <ul class="relative hidden items-center justify-center gap-2.5 md:flex">
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=1), disabled=(current_page == 1), ariaLabel=_('First page'), direction='first') }}</li>
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=(current_page - 1)), disabled=(current_page == 1), ariaLabel=_('Previous page'), direction='prev') }}</li>
+
+      {% if current_page > 3 and total_pages > 5 %}
+        <li>{{ BlogPaginationLink(href=session.url.include_query_params(page=1), page='1') }}</li>
+        <li>{{ BlogPaginationEllipsis() }}</li>
+      {% endif %}
+
+      {% for n in range(start_page, end_page + 1) %}
+        <li>{{ BlogPaginationLink(href=session.url.include_query_params(page=n), page=n|string, isActive=(n == current_page)) }}</li>
+      {% endfor %}
+
+      {% if current_page < (total_pages - 3) and total_pages > 5 %}
+        <li>{{ BlogPaginationEllipsis() }}</li>
+      {% endif %}
+      {% if current_page < (total_pages - 2) and total_pages > 5 %}
+        <li>{{ BlogPaginationLink(href=session.url.include_query_params(page=total_pages), page=total_pages|string) }}</li>
+      {% endif %}
+
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=(current_page + 1)), disabled=(current_page == total_pages), ariaLabel=_('Next page'), direction='next') }}</li>
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=total_pages), disabled=(current_page == total_pages), ariaLabel=_('Last page'), direction='last') }}</li>
+    </ul>
+
+    {# Mobile #}
+    <ul class="relative flex items-center justify-center gap-2.5 md:hidden">
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=1), disabled=(current_page == 1), ariaLabel=_('First page'), direction='first') }}</li>
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=(current_page - 1)), disabled=(current_page == 1), ariaLabel=_('Previous page'), direction='prev') }}</li>
+      <li>{{ BlogPaginationLink(href='', page=current_page|string, isActive=true) }}</li>
+      {% if current_page < total_pages %}
+        <li>{{ BlogPaginationEllipsis() }}</li>
+        <li>{{ BlogPaginationLink(href=session.url.include_query_params(page=total_pages), page=total_pages|string) }}</li>
+      {% endif %}
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=(current_page + 1)), disabled=(current_page == total_pages), ariaLabel=_('Next page'), direction='next') }}</li>
+      <li>{{ BlogPaginationArrow(href=session.url.include_query_params(page=total_pages), disabled=(current_page == total_pages), ariaLabel=_('Last page'), direction='last') }}</li>
+    </ul>
+  </nav>
+{% endif %}

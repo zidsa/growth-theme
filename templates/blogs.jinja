@@ -1,40 +1,10 @@
 {% extends "layout.jinja" %}
 
-{# ============================================================
-   MOCK DATA — Remove this block once the backend provides
-   blogs/categories context variables
-   ============================================================ #}
-{% set mock_categories = [
-  {'id': 1, 'name': _('Category 1'), 'slug': 'category-1'},
-  {'id': 2, 'name': _('Category 2'), 'slug': 'category-2'},
-  {'id': 3, 'name': _('Category 3'), 'slug': 'category-3'},
-  {'id': 4, 'name': _('Category 4'), 'slug': 'category-4'},
-] %}
-
-{% set mock_image = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80' %}
-{% set mock_tags = ['TAG1', 'TAG2', 'TAG3', 'TAG4', 'TAG5', 'TAG6', 'TAG7', 'TAG8', 'TAG9', 'TAG10', 'TAG11', 'TAG12', 'TAG13'] %}
-{% set mock_blogs = [
-  {'id': 1, 'slug': 'blog-title-heading-1', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 2, 'slug': 'blog-title-heading-2', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 3, 'slug': 'blog-title-heading-3', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 4, 'slug': 'blog-title-heading-4', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'image': none, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 5, 'slug': 'blog-title-heading-5', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 6, 'slug': 'blog-title-heading-6', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-] %}
-
-{# Use real data when available, fall back to mock #}
-{% set blog_categories = categories | default(mock_categories) %}
-{% set blog_list = blogs | default(mock_blogs) %}
-{% set active_category = session.query_params.get('category', '') if session is defined else '' %}
-
-{# Pagination setup #}
-{% set page_size = (session.query_params.get('page_size') or '12') | int if session is defined else 12 %}
-{% set totalPages = 15 %}
-{% set currentPage = (session.query_params.get('page') or '1') | int if session is defined else 1 %}
-
 {% block title %}{{ store.name }} – {{ _('Blog') }}{% endblock %}
 
 {% block content %}
+{% set active_category = session.query_params.get('category', '') if session is defined else '' %}
+
   <style>
     /* Grid */
     .blog-grid {
@@ -189,28 +159,67 @@
           {{ _("Blog") }}
         </h1>
 
-        {# Category Filter Pills #}
-        <div class="flex flex-wrap items-center gap-3">
-          <a
-            href="/blogs"
-            class="{{ 'bg-foreground text-background' if not active_category else 'border-border text-foreground border' }} rounded-full px-5 py-2 text-sm font-medium transition-colors"
-          >
-            {{ _("All categories") }}
-          </a>
-          {% for category in blog_categories %}
-            <a
-              href="/blogs?category={{ category.slug }}"
-              class="{{ 'bg-foreground text-background' if active_category == category.slug else 'border-border text-foreground border' }} rounded-full px-5 py-2 text-sm font-medium transition-colors"
+        {# Header row: total count + category filter pills #}
+        <div class="flex flex-col gap-4">
+          {% if posts.count is defined and posts.count > 0 %}
+            <p class="text-muted text-sm">
+              {{ posts.count }} {{ _("posts") }}
+            </p>
+          {% endif %}
+
+          {# Category Filter Pills #}
+          {% if categories.results and categories.results | length > 0 %}
+            <div
+              class="flex flex-wrap items-center gap-3"
+              role="tablist"
+              aria-label="{{ _('Blog categories') }}"
             >
-              {{ category.name }}
-            </a>
-          {% endfor %}
+              <a
+                href="/blogs"
+                role="tab"
+                aria-selected="{{ 'true' if not active_category else 'false' }}"
+                class="{{ 'bg-foreground text-background' if not active_category else 'border-border text-foreground border' }} inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-colors"
+              >
+                {{ _("All categories") }}
+              </a>
+              {% for category in categories.results %}
+                {% set is_active = active_category == category.slug %}
+                <a
+                  href="/blogs?category={{ category.slug }}"
+                  role="tab"
+                  aria-selected="{{ 'true' if is_active else 'false' }}"
+                  title="{{ category.description or category.name }}"
+                  data-category-id="{{ category.id }}"
+                  class="{{ 'bg-foreground text-background' if is_active else 'border-border text-foreground border' }} inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-colors"
+                >
+                  {% if category.icon %}
+                    <img
+                      src="{{ category.icon }}"
+                      alt=""
+                      aria-hidden="true"
+                      class="size-4 object-contain"
+                    />
+                  {% endif %}
+                  {{ category.name }}
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
 
+        {# Active category description (if any) #}
+        {% if active_category and categories.results %}
+          {% for category in categories.results %}
+            {% if category.slug == active_category and category.description %}
+              <p class="text-muted text-sm max-w-3xl">{{ category.description }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
         {# Blog Cards Grid #}
-        {% if blog_list | length > 0 %}
+        {% if posts.results | length > 0 %}
           <div class="blog-grid">
-            {% for blog in blog_list %}
+            {% for blog in posts.results %}
               {% include 'components/blogs/blog-card.jinja' %}
             {% endfor %}
           </div>
