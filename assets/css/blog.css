@@ -1,0 +1,13 @@
+/* Blog-specific styles that can't be achieved with Tailwind utilities */
+
+@layer components {
+  /* Hide scrollbar for horizontal scroll containers */
+  .no-scrollbar {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

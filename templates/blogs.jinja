@@ -1,170 +1,18 @@
 {% extends "layout.jinja" %}
 
-{# ============================================================
-   MOCK DATA — Remove this block once the backend provides
-   blogs/categories context variables
-   ============================================================ #}
-{% set mock_categories = [
-  {'id': 1, 'name': _('Category 1'), 'slug': 'category-1'},
-  {'id': 2, 'name': _('Category 2'), 'slug': 'category-2'},
-  {'id': 3, 'name': _('Category 3'), 'slug': 'category-3'},
-  {'id': 4, 'name': _('Category 4'), 'slug': 'category-4'},
-] %}
-
-{% set mock_image = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80' %}
-{% set mock_tags = ['TAG1', 'TAG2', 'TAG3', 'TAG4', 'TAG5', 'TAG6', 'TAG7', 'TAG8', 'TAG9', 'TAG10', 'TAG11', 'TAG12', 'TAG13'] %}
-{% set mock_blogs = [
-  {'id': 1, 'slug': 'blog-title-heading-1', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 2, 'slug': 'blog-title-heading-2', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 3, 'slug': 'blog-title-heading-3', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 4, 'slug': 'blog-title-heading-4', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'image': none, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 5, 'slug': 'blog-title-heading-5', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-  {'id': 6, 'slug': 'blog-title-heading-6', 'title': 'Blog Title Heading Will Go Here', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.', 'image': mock_image, 'category': 'CATEGORY', 'tags': mock_tags, 'date': '11 Jan 2025'},
-] %}
-
-{# Use real data when available, fall back to mock #}
-{% set blog_categories = categories | default(mock_categories) %}
-{% set blog_list = blogs | default(mock_blogs) %}
+{# Data binding — backend provides posts (PaginatedBlogPosts) and categories (PaginatedBlogCategories) #}
+{% set blog_list = posts.results if posts is defined and posts.results else [] %}
+{% set blog_categories = categories.results if categories is defined and categories.results else [] %}
 {% set active_category = session.query_params.get('category', '') if session is defined else '' %}
 
-{# Pagination setup #}
-{% set page_size = (session.query_params.get('page_size') or '12') | int if session is defined else 12 %}
-{% set totalPages = 15 %}
-{% set currentPage = (session.query_params.get('page') or '1') | int if session is defined else 1 %}
+{# Pagination #}
+{% set page_size = posts.page_size | default(12) if posts is defined else 12 %}
+{% set totalPages = ((posts.count / page_size) | round(0, 'ceil')) | int if posts is defined and posts.count else 1 %}
+{% set currentPage = posts.page | default(1) if posts is defined else 1 %}
 
 {% block title %}{{ store.name }} – {{ _('Blog') }}{% endblock %}
 
 {% block content %}
-  <style>
-    /* Grid */
-    .blog-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2.5rem 1.5rem;
-    }
-    @media (min-width: 768px) {
-      .blog-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (min-width: 1024px) {
-      .blog-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    /* Card */
-    .blog-card {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* Image */
-    .blog-card-image {
-      position: relative;
-      display: block;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border-radius: var(--radius, 0.25rem) var(--radius, 0.25rem) 0 0;
-    }
-    .blog-card-image img,
-    .blog-card-image .blog-card-placeholder {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .blog-card-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #F6F5F4;
-    }
-
-    /* Content area */
-    .blog-card-content {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 20px 24px 24px;
-      background: #F6F5F4;
-      flex: 1;
-      border-radius: 0 0 var(--radius, 0.25rem) var(--radius, 0.25rem);
-    }
-
-    /* Title - 24px bold uppercase */
-    .blog-card-title {
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1.3;
-      text-transform: uppercase;
-      color: var(--foreground, #0B0A09);
-      margin: 0;
-    }
-    .blog-card-title a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* Description - Body 2, primary color */
-    .blog-card-description {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: var(--foreground, #0B0A09);
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Tags */
-    .blog-card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
-    .blog-tag {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--foreground, #0B0A09);
-      border-radius: 9999px;
-      padding: 4px 12px;
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--foreground, #0B0A09);
-    }
-    .blog-tag--category {
-      font-weight: 500;
-    }
-    .blog-tag--more {
-      border-color: var(--border, #B5B5B5);
-      color: var(--muted, #545352);
-    }
-
-    /* Footer */
-    .blog-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-      padding-top: 8px;
-    }
-    .blog-card-date {
-      font-size: 14px;
-      color: var(--foreground, #0B0A09);
-    }
-    .blog-card-readmore {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--foreground, #0B0A09);
-      text-decoration: none;
-      margin-inline-start: auto;
-    }
-  </style>
-
   {# Breadcrumb Section #}
   <section class="px-4 py-6 md:px-16">
     <div class="theme-container">
@@ -185,31 +33,33 @@
     <div class="theme-container">
       <div class="flex flex-col gap-8">
         {# Page Title #}
-        <h1 class="text-foreground text-2xl font-bold uppercase tracking-tight md:text-3xl">
+        <h1 class="text-foreground text-3xl font-bold uppercase md:text-4xl">
           {{ _("Blog") }}
         </h1>
 
         {# Category Filter Pills #}
-        <div class="flex flex-wrap items-center gap-3">
-          <a
-            href="/blogs"
-            class="{{ 'bg-foreground text-background' if not active_category else 'border-border text-foreground border' }} rounded-full px-5 py-2 text-sm font-medium transition-colors"
-          >
-            {{ _("All categories") }}
-          </a>
-          {% for category in blog_categories %}
+        {% if blog_categories | length > 0 %}
+          <div class="flex flex-nowrap items-center gap-3 overflow-x-auto pb-2">
             <a
-              href="/blogs?category={{ category.slug }}"
-              class="{{ 'bg-foreground text-background' if active_category == category.slug else 'border-border text-foreground border' }} rounded-full px-5 py-2 text-sm font-medium transition-colors"
+              href="/blogs"
+              class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if not active_category else 'border-foreground text-foreground' }}"
             >
-              {{ category.name }}
+              {{ _("All categories") }}
             </a>
-          {% endfor %}
-        </div>
+            {% for category in blog_categories %}
+              <a
+                href="/blogs?category={{ category.id }}"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if active_category == category.id | string else 'border-foreground text-foreground' }}"
+              >
+                {{ category.name }}
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
 
         {# Blog Cards Grid #}
         {% if blog_list | length > 0 %}
-          <div class="blog-grid">
+          <div class="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {% for blog in blog_list %}
               {% include 'components/blogs/blog-card.jinja' %}
             {% endfor %}
@@ -264,5 +114,19 @@
       </div>
     </div>
   </section>
-{% endblock %}
 
+  {# Date formatter #}
+  <script>
+    (function () {
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      document.querySelectorAll('[data-blog-date]').forEach(function (el) {
+        try {
+          var d = new Date(el.getAttribute('data-blog-date'));
+          if (!isNaN(d)) {
+            el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+          }
+        } catch (e) {}
+      });
+    })();
+  </script>
+{% endblock %}
