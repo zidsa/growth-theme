@@ -5,27 +5,40 @@
 {% block content %}
   <section class="bg-background flex min-h-[60vh] flex-col items-center justify-center px-4 py-16 md:px-16 md:py-18">
     <div class="flex flex-col items-center gap-8">
-      <div class="text-foreground size-12">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-        >
-          <circle
-            cx="11"
-            cy="11"
-            r="8"
-          />
-          <path d="m21 21-4.35-4.35" />
-          <path d="M8 8l6 6M14 8l-6 6" />
-        </svg>
-      </div>
+      <div class="text-foreground"> 404 </div>
       <div class="flex flex-col items-center gap-2 text-center">
         <h1 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight">{{ _("Page Not Found") }}</h1>
         <p class="text-muted text-sm font-medium max-w-md">
-          {{ _("The page you're looking for doesn't exist or has been moved. Please check the URL or go back to the homepage.") }}
+          {{ _("Sorry about that! We'll redirect you to the homepage in a few seconds, or you can head there now.") }}
         </p>
+        <svg width="100%" viewBox="0 0 680 50" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bar-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#A89C90" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#A89C90" stop-opacity="1"/>
+            </linearGradient>
+            <clipPath id="bar-clip">
+              <rect x="40" y="6" width="600" height="16" rx="8"/>
+            </clipPath>
+          </defs>
+
+          <!-- Track -->
+          <rect x="40" y="6" width="600" height="16" rx="8"
+                fill="none" stroke="#A89C90" stroke-opacity="0.33" stroke-width="1.5"/>
+
+          <!-- Fill -->
+          <g clip-path="url(#bar-clip)">
+            <rect x="40" y="6" width="390" height="16" rx="8" fill="url(#bar-grad)"/>
+          </g>
+
+          <!-- Label -->
+          <text x="340" y="40"
+                text-anchor="middle"
+                font-family="var(--font-sans)" font-size="12" font-weight="400"
+                fill="var(--color-text-secondary)">
+            {{ _("HEADING TO THE HOMEPAGE ...") }}
+          </text>
+        </svg>
       </div>
       <div class="flex items-center gap-4">
         <a
@@ -35,6 +48,29 @@
           {{ _("Back to Home") }}
         </a>
       </div>
+      <p id="redirectMessage">
+        <span>{{ _("You will be redirected to the home page in") }} </span>
+        <span id="redirectCountdown">3</span> {{ _("seconds") }}
+      </p>
     </div>
   </section>
+
+  <script>
+    function startRedirectCountdown(duration) {
+      var timer = duration, seconds;
+      var countdownElement = document.getElementById('redirectCountdown');
+      var countdownTimer = setInterval(function () {
+        seconds = parseInt(timer % 60, 10);
+
+        countdownElement.textContent = seconds;
+
+        if (--timer < 0) {
+          clearInterval(countdownTimer);
+          window.location.href = "{{ url_for('home') }}";
+        }
+      }, 1000);
+    }
+
+    startRedirectCountdown(3);
+  </script>
 {% endblock %}

@@ -24,6 +24,12 @@ msgstr ""
 msgid "Page Not Found"
 msgstr "الصفحة غير موجودة"
 
+msgid "Sorry about that! We'll redirect you to the homepage in a few seconds, or you can head there now."
+msgstr "عذرًا عن ذلك! سنقوم بتحويلك إلى الصفحة الرئيسية خلال بضع ثوانٍ، أو يمكنك الذهاب إليها الآن."
+
+msgid "HEADING TO THE HOMEPAGE ..."
+msgstr "الانتقال إلى الصفحة الرئيسية..."
+
 msgid "Back to Home"
 msgstr "العودة للرئيسية"
 
@@ -1080,8 +1086,32 @@ msgstr "المدونة"
 msgid "Read More"
 msgstr "أقرأ المزيد"
 
+msgid "Read more"
+msgstr "اقرأ المزيد"
+
 msgid "Total Posts"
 msgstr "مجموع التدوينات"
 
 msgid "No posts found, please visit this page later"
 msgstr "لا توجد تدوينات، يرجى زيارة هذه الصفحة لاحقاً"
+
+msgid "All categories"
+msgstr "جميع التصنيفات"
+
+msgid "Blog categories"
+msgstr "تصنيفات المدونة"
+
+msgid "posts"
+msgstr "تدوينة"
+
+msgid "Blog pagination"
+msgstr "ترقيم صفحات المدونة"
+
+msgid "Tags"
+msgstr "الوسوم"
+
+msgid "Featured products"
+msgstr "منتجات مميزة"
+
+msgid "Related posts"
+msgstr "تدوينات ذات صلة"
