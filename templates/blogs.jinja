@@ -115,18 +115,5 @@
     </div>
   </section>
 
-  {# Date formatter #}
-  <script>
-    (function () {
-      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      document.querySelectorAll('[data-blog-date]').forEach(function (el) {
-        try {
-          var d = new Date(el.getAttribute('data-blog-date'));
-          if (!isNaN(d)) {
-            el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-          }
-        } catch (e) {}
-      });
-    })();
-  </script>
+  {% include 'components/blogs/blog-scripts.jinja' %}
 {% endblock %}

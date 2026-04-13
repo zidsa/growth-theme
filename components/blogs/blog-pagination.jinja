@@ -11,7 +11,7 @@
   PaginationLast
 %}
 
-{% set page_size = (session.query_params.get('page_size') or '12') | int if session is defined else 12 %}
+{# page_size, totalPages, currentPage are set by the parent template (blogs.jinja) #}
 {% set total_posts = posts.count | default(0) if posts is defined else 0 %}
 
 {% if total_posts > 12 %}
