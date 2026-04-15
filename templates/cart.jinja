@@ -66,6 +66,10 @@
               </a>
             </div>
             <div class="lg:col-span-4">
+              <div class="mb-3">
+                {% include 'vitrin:cart/customer_wallet_progress.jinja' %}
+              </div>
+
               <div class="divide-border-light sticky top-4 flex flex-col divide-y">
                 {% include 'components/cart/loyalty-program.jinja' %}
                 {% include 'components/cart/coupon-code.jinja' %}
