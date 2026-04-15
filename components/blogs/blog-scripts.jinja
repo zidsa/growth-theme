@@ -1,0 +1,38 @@
+{# Blog shared scripts: date formatter + copy link handler #}
+<script>
+  (function () {
+    // Format ISO dates to "13 Apr 2026" format
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.querySelectorAll('[data-blog-date]').forEach(function (el) {
+      try {
+        var d = new Date(el.getAttribute('data-blog-date'));
+        if (!isNaN(d)) {
+          el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+      } catch (e) {}
+    });
+
+    // Copy link buttons with checkmark feedback
+    document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function () {
+            var icon = btn.querySelector('svg');
+            var original = icon.innerHTML;
+            icon.innerHTML = '<polyline points="20 6 9 17 4 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+            setTimeout(function () { icon.innerHTML = original; }, 2000);
+          });
+        } else {
+          var input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+        }
+      });
+    });
+  })();
+</script>
