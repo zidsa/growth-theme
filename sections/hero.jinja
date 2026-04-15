@@ -1,6 +1,6 @@
 {# Optimize hero images for better LCP #}
-{% set mobile_image = image_url(settings.background_image_mobile or settings.background_image, w=768, q=80, f='auto') %}
-{% set desktop_image = image_url(settings.background_image, w=1920, q=80, f='auto') %}
+{% set mobile_image = image_url(settings.background_image_mobile or settings.background_image, w=768, q=75, f='auto') %}
+{% set desktop_image = image_url(settings.background_image, w=1920, q=90, f='auto') %}
 {% set is_lazy = settings.order > 2 %}
 
 <section
