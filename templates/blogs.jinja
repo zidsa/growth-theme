@@ -3,7 +3,17 @@
 {# Data binding — backend provides posts (PaginatedBlogPosts) and categories (PaginatedBlogCategories) #}
 {% set blog_list = posts.results if posts is defined and posts.results else [] %}
 {% set blog_categories = categories.results if categories is defined and categories.results else [] %}
-{% set active_category = session.query_params.get('category', '') if session is defined else '' %}
+{% set active_category_slug = session.query_params.get('category', '') if session is defined else '' %}
+
+{# When no category param is set, the backend defaults to the first category #}
+{% set effective_category_slug = active_category_slug or (blog_categories[0].slug if blog_categories | length > 0 else '') %}
+{% set ns = namespace(active_category_obj=none) %}
+{% for category in blog_categories %}
+  {% if category.slug == effective_category_slug %}
+    {% set ns.active_category_obj = category %}
+  {% endif %}
+{% endfor %}
+{% set active_category_obj = ns.active_category_obj %}
 
 {# Pagination #}
 {% set page_size = posts.page_size | default(12) if posts is defined else 12 %}
@@ -16,13 +26,13 @@
   {# Breadcrumb Section #}
   <section class="px-4 py-6 md:px-16">
     <div class="theme-container">
-      {%
-        with
-        items=[
-          {'href': url_for('home'), 'label': _("Home")},
-          {'label': _("Blog")}
-        ]
-      %}
+      {% set breadcrumb_items = [{'href': url_for('home'), 'label': _("Home")}] %}
+      {% if active_category_obj %}
+        {% set breadcrumb_items = breadcrumb_items + [{'href': '/blogs', 'label': _("Blog")}, {'label': active_category_obj.name}] %}
+      {% else %}
+        {% set breadcrumb_items = breadcrumb_items + [{'label': _("Blog")}] %}
+      {% endif %}
+      {% with items=breadcrumb_items %}
         {% include 'components/ui/breadcrumb.jinja' %}
       {% endwith %}
     </div>
@@ -40,16 +50,10 @@
         {# Category Filter Pills #}
         {% if blog_categories | length > 0 %}
           <div class="flex flex-nowrap items-center gap-3 overflow-x-auto pb-2">
-            <a
-              href="/blogs"
-              class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if not active_category else 'border-foreground text-foreground' }}"
-            >
-              {{ _("All categories") }}
-            </a>
             {% for category in blog_categories %}
               <a
-                href="/blogs?category={{ category.id }}"
-                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if active_category == category.id | string else 'border-foreground text-foreground' }}"
+                href="/blogs?category={{ category.slug }}"
+                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if effective_category_slug == category.slug else 'border-foreground text-foreground' }}"
               >
                 {{ category.name }}
               </a>
