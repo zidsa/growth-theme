@@ -1113,5 +1113,17 @@ msgstr "الوسوم"
 msgid "Featured products"
 msgstr "منتجات مميزة"
 
+msgid "Featured Products"
+msgstr "منتجات مميزة"
+
 msgid "Related posts"
 msgstr "تدوينات ذات صلة"
+
+msgid "Posts on page"
+msgstr "التدوينات في الصفحة"
+
+msgid "No posts found"
+msgstr "لا توجد تدوينات"
+
+msgid "Share on X"
+msgstr "المشاركة على X"

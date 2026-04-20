@@ -1,15 +1,33 @@
 {# Blog shared scripts: date formatter + copy link handler #}
 <script>
   (function () {
-    // Format ISO dates to "13 Apr 2026" format
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    // Format ISO dates using the page's locale (e.g., "13 أبريل 2026" for Arabic, "13 Apr 2026" for English)
+    var locale = document.documentElement.lang || 'en';
+    var formatter;
+    try {
+      formatter = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch (e) {
+      formatter = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
     document.querySelectorAll('[data-blog-date]').forEach(function (el) {
       try {
         var d = new Date(el.getAttribute('data-blog-date'));
         if (!isNaN(d)) {
-          el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+          el.textContent = formatter.format(d);
         }
       } catch (e) {}
+    });
+
+    // Per-page selector — reload with new page_size in URL
+    document.querySelectorAll('[data-blog-per-page]').forEach(function (select) {
+      select.addEventListener('change', function (e) {
+        var value = e.target.value || select.value;
+        if (!value) return;
+        var url = new window.URL(window.location.href);
+        url.searchParams.set('page_size', value);
+        url.searchParams.set('page', '1');
+        window.location.assign(url.toString());
+      });
     });
 
     // Copy link buttons with checkmark feedback

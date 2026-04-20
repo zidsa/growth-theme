@@ -12,9 +12,8 @@
 %}
 
 {# page_size, totalPages, currentPage are set by the parent template (blogs.jinja) #}
-{% set total_posts = posts.count | default(0) if posts is defined else 0 %}
 
-{% if total_posts > 12 %}
+{% if posts is defined and posts.results and posts.results | length > 0 %}
 <div
   data-pagination-root
   class="flex flex-col-reverse items-center gap-4 md:flex-row"
@@ -25,7 +24,7 @@
     <el-select
       id="blog-per-page-select"
       value="{{ page_size }}"
-      onchange="(function(v){ var url = new URL(window.location); url.searchParams.set('page_size', v); url.searchParams.set('page', '1'); window.location = url; })(this.value)"
+      data-blog-per-page
     >
       <button
         type="button"
