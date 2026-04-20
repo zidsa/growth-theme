@@ -13,15 +13,15 @@
 
 {# Combine category + tags, show max 4 then +N #}
 {% set max_visible_badges = 4 %}
-{% set badge_list = [] %}
+{% set ns = namespace(badges=[]) %}
 {% if blog_category %}
-  {% set badge_list = [{'name': blog_category.name, 'is_category': true}] %}
+  {% set ns.badges = ns.badges + [{'name': blog_category.name, 'is_category': true}] %}
 {% endif %}
 {% for tag in all_tags %}
-  {% set badge_list = badge_list + [{'name': tag.name, 'is_category': false}] %}
+  {% set ns.badges = ns.badges + [{'name': tag.name, 'is_category': false}] %}
 {% endfor %}
-{% set visible_badges = badge_list[:max_visible_badges] %}
-{% set remaining_count = badge_list | length - max_visible_badges %}
+{% set visible_badges = ns.badges[:max_visible_badges] %}
+{% set remaining_count = ns.badges | length - max_visible_badges %}
 
 <article class="flex h-full flex-col overflow-hidden">
   {# Blog Image #}
@@ -75,7 +75,7 @@
     {% endif %}
 
     {# Badges: category + tags combined #}
-    {% if badge_list | length > 0 %}
+    {% if ns.badges | length > 0 %}
       <div class="flex flex-wrap items-center gap-2">
         {% for badge in visible_badges %}
           <span
