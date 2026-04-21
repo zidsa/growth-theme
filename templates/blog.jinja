@@ -68,6 +68,19 @@
           {{ blog.content | safe }}
         </div>
 
+        {# DEBUG: inspect raw content for missing media — remove before merging #}
+        <script>
+          (function () {
+            console.log('[Blog Post Debug] Raw content:', {{ blog.content | tojson if blog.content else '""' }});
+            console.log('[Blog Post Debug] Rendered HTML contains <img>?',
+              document.querySelector('.prose.prose-theme')?.querySelectorAll('img').length || 0,
+              'image(s)');
+            console.log('[Blog Post Debug] Rendered HTML contains <video>/<iframe>?',
+              document.querySelector('.prose.prose-theme')?.querySelectorAll('video, iframe').length || 0,
+              'video/iframe(s)');
+          })();
+        </script>
+
         {# Tags + Share Icons #}
         <div class="mt-6 flex items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-3">
@@ -98,8 +111,6 @@
           with
           products=featured_products,
           title=_("Featured Products"),
-          more_url=url_for('list_products'),
-          more_text=_("View all"),
           carousel_id='blog-featured-products',
           is_priority_section=false
         %}
@@ -117,8 +128,6 @@
           with
           posts=related_posts,
           title=_("You may also like"),
-          more_url='/blogs',
-          more_text=_("View all"),
           carousel_id='blog-related-posts'
         %}
           {% include 'components/blogs/blogs-carousel.jinja' %}
