@@ -54,7 +54,7 @@
       >
         <div class="blogs-embla__container">
           {% for item in posts %}
-            <div class="blogs-embla__slide h-auto">
+            <div class="blogs-embla__slide h-auto" data-carousel-slide>
               {% with blog=item %}
                 {% include 'components/blogs/blog-card.jinja' %}
               {% endwith %}
