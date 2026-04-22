@@ -138,12 +138,12 @@ body {
 }
 
 /* ONE + LIST */
-[data-grid="one"],
 [data-grid="list"] {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 /* FOUR */
+[data-grid="one"],
 [data-grid="four"] {
   grid-template-columns: repeat(var(--cols-mobile, 1), minmax(0, 1fr));
 }
