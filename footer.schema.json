@@ -120,61 +120,6 @@
       ]
     },
     {
-      "id": "newsletter",
-      "icon": "fa fa-envelope",
-      "name": {
-        "ar": "النشرة البريدية",
-        "en": "Newsletter"
-      },
-      "settings": [
-        {
-          "id": "newsletter_hide",
-          "type": "checkbox",
-          "label": {
-            "ar": "إخفاء قسم النشرة البريدية",
-            "en": "Hide newsletter section"
-          },
-          "default": false
-        },
-        {
-          "id": "newsletter_title",
-          "type": "text",
-          "label": {
-            "ar": "العنوان",
-            "en": "Title"
-          },
-          "default": "Subscribe"
-        },
-        {
-          "id": "newsletter_description",
-          "type": "text",
-          "label": {
-            "ar": "الوصف",
-            "en": "Description"
-          },
-          "default": "Join our newsletter to stay up to date on features and releases."
-        },
-        {
-          "id": "newsletter_placeholder",
-          "type": "text",
-          "label": {
-            "ar": "نص حقل الإدخال",
-            "en": "Input placeholder"
-          },
-          "default": "Enter your email"
-        },
-        {
-          "id": "newsletter_button_label",
-          "type": "text",
-          "label": {
-            "ar": "نص الزر",
-            "en": "Button label"
-          },
-          "default": "Subscribe"
-        }
-      ]
-    },
-    {
       "id": "contact_info",
       "icon": "fa fa-address-book",
       "name": {
