@@ -133,6 +133,39 @@ body {
   color: var(--foreground);
 }
 
+/* base */
+[data-grid-root] {
+  display: grid;
+}
+
+/* ONE + LIST */
+[data-grid="list"] {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+/* FOUR */
+[data-grid="one"],
+[data-grid="four"] {
+  grid-template-columns: repeat(var(--cols-mobile, 1), minmax(0, 1fr));
+}
+
+@media (min-width: 1024px) {
+  [data-grid="four"] {
+    grid-template-columns: repeat(var(--cols-desktop, 4), minmax(0, 1fr));
+  }
+}
+
+/* GRID (dynamic via JINJA variables) */
+[data-grid="grid"] {
+  /* fallback mobile */
+  grid-template-columns: repeat(var(--cols-mobile, 1), minmax(0, 1fr));
+}
+
+@media (min-width: 1024px) {
+  [data-grid="grid"] {
+    grid-template-columns: repeat(var(--cols-desktop, 5), minmax(0, 1fr));
+  }
+}
 .theme-container {
   max-width: 1440px;
   width: 100%;

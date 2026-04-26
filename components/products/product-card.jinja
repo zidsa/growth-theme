@@ -111,7 +111,7 @@
     {% if is_out_of_stock %}
       {# Notify Me Button - shown when out of stock #}
       <button
-        class="btn btn-outlined btn-lg w-full md:group-data-[grid=list]/grid:w-1/2"
+        class="btn btn-outlined btn-lg w-full md:group-data-[grid=list]/grid:w-1/2 text-wrap"
         data-notify-me-trigger="{{ product.id }}"
       >
         {{ _("Notify me when available") }}
