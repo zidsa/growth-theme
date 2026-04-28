@@ -133,7 +133,7 @@
               <button
                 id="mobile-login-btn"
                 type="button"
-                onclick="handleLoginAction()"
+                onclick="handleLoginAction(); document.getElementById('mobile-drawer-dialog')?.hide();"
                 class="text-foreground text-sm min-h-px w-full min-w-px px-6 py-3 text-start"
               >
                 {{ _("Login") }}
