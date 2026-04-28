@@ -1,0 +1,124 @@
+{# Blog Card Component #}
+{#
+  BlogPost fields: id, title, slug, snippet, content, published_at,
+  cover (BlogPostMedia), seo (SEO), category (BlogCategoryShort),
+  tags (list[BlogTag]), related_posts, recommended_product_ids
+#}
+
+{% set blog_description = blog.snippet | default(none) %}
+{% set blog_image = blog.cover.image.medium if blog.cover and blog.cover.image else none %}
+{% set blog_date = blog.published_at | default(none) %}
+{% set blog_category = blog.category if blog.category else none %}
+{% set all_tags = blog.tags | default([]) %}
+
+{# Combine category + tags, show max 4 then +N #}
+{% set max_visible_badges = 4 %}
+{% set ns = namespace(badges=[]) %}
+{% if blog_category %}
+  {% set ns.badges = ns.badges + [{'name': blog_category.name, 'is_category': true}] %}
+{% endif %}
+{% for tag in all_tags %}
+  {% set ns.badges = ns.badges + [{'name': tag.name, 'is_category': false}] %}
+{% endfor %}
+{% set visible_badges = ns.badges[:max_visible_badges] %}
+{% set remaining_count = ns.badges | length - max_visible_badges %}
+
+<article class="flex h-full flex-col overflow-hidden">
+  {# Blog Image #}
+  <a
+    href="/blogs/{{ blog.slug }}"
+    class="relative block w-full aspect-[4/3] overflow-hidden rounded-t-sm"
+  >
+    {% if blog_image %}
+      <img
+        src="{{ blog_image }}"
+        alt="{{ blog.title }}"
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    {% else %}
+      <div class="bg-secondary flex w-full h-full items-center justify-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-muted"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+      </div>
+    {% endif %}
+  </a>
+
+  {# Blog Content #}
+  <div class="bg-secondary flex flex-1 flex-col gap-3 rounded-b-sm px-6 py-5">
+    {# Title #}
+    <h3 class="text-foreground text-base font-bold uppercase leading-snug line-clamp-2 md:text-lg">
+      <a href="/blogs/{{ blog.slug }}" class="text-foreground no-underline">
+        {{ blog.title }}
+      </a>
+    </h3>
+
+    {# Description #}
+    {% if blog_description %}
+      <p class="text-foreground text-sm line-clamp-2">
+        {{ blog_description | striptags | truncate(160) }}
+      </p>
+    {% endif %}
+
+    {# Badges: category + tags combined #}
+    {% if ns.badges | length > 0 %}
+      <div class="flex flex-wrap items-center gap-2">
+        {% for badge in visible_badges %}
+          <span
+            class="border-foreground text-foreground inline-flex items-center rounded-md border px-3 py-1 text-xs {{ 'font-medium' if badge.is_category }}"
+          >
+            {{ badge.name }}
+          </span>
+        {% endfor %}
+        {% if remaining_count > 0 %}
+          <span class="border-border text-muted inline-flex items-center rounded-md border px-3 py-1 text-xs">
+            +{{ remaining_count }}
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# Footer: Date + Read More #}
+    <div class="mt-auto flex items-center justify-between pt-2">
+      {% if blog_date %}
+        <span class="text-foreground text-sm" data-blog-date="{{ blog_date }}">
+          {{ blog_date }}
+        </span>
+      {% endif %}
+      <a
+        href="/blogs/{{ blog.slug }}"
+        class="text-foreground ms-auto inline-flex items-center gap-1 text-sm font-medium no-underline"
+      >
+        {{ _("Read more") }}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="rtl:rotate-180"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
