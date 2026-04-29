@@ -163,9 +163,16 @@ function setupNavigation(container, embla) {
   const updateButtonStates = () => {
     const canScrollPrev = embla.canScrollPrev();
     const canScrollNext = embla.canScrollNext();
+    const scrollable = canScrollPrev || canScrollNext;
 
-    buttons.forEach((btn) => (btn.disabled = !canScrollPrev));
-    nextButtons.forEach((btn) => (btn.disabled = !canScrollNext));
+    buttons.forEach((btn) => {
+      btn.disabled = !canScrollPrev;
+      btn.classList.toggle("invisible", !scrollable);
+    });
+    nextButtons.forEach((btn) => {
+      btn.disabled = !canScrollNext;
+      btn.classList.toggle("invisible", !scrollable);
+    });
   };
 
   embla.on("init", updateButtonStates);
@@ -222,14 +229,29 @@ function setupProgress(container, embla) {
 
   if (!progressBar) return;
 
+  const progressTrack = progressBar.parentElement;
+
   const updateProgress = () => {
     const progress = Math.max(0, Math.min(1, embla.scrollProgress()));
     progressBar.style.width = `${progress * 100}%`;
   };
 
-  embla.on("init", updateProgress);
+  const updateTrackVisibility = () => {
+    if (!progressTrack) return;
+    const scrollable = embla.canScrollPrev() || embla.canScrollNext();
+    progressTrack.classList.toggle("invisible", !scrollable);
+  };
+
+  embla.on("init", () => {
+    updateProgress();
+    updateTrackVisibility();
+  });
   embla.on("scroll", updateProgress);
-  embla.on("reInit", updateProgress);
+  embla.on("select", updateTrackVisibility);
+  embla.on("reInit", () => {
+    updateProgress();
+    updateTrackVisibility();
+  });
 }
 
 /**
