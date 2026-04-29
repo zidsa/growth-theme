@@ -23,12 +23,15 @@
 {% set visible_badges = ns.badges[:max_visible_badges] %}
 {% set remaining_count = ns.badges | length - max_visible_badges %}
 
-<article class="flex h-full flex-col overflow-hidden">
-  {# Blog Image #}
+<article class="group relative flex h-full flex-col overflow-hidden transition-[outline] hover:outline hover:outline-1 hover:outline-foreground">
   <a
     href="/blogs/{{ blog.slug }}"
-    class="relative block w-full aspect-[4/3] overflow-hidden rounded-t-sm"
-  >
+    class="absolute inset-0 z-[1]"
+    aria-label="{{ blog.title }}"
+  ></a>
+
+  {# Blog Image #}
+  <div class="relative block w-full aspect-[4/3] overflow-hidden rounded-t-sm">
     {% if blog_image %}
       <img
         src="{{ blog_image }}"
@@ -56,15 +59,13 @@
         </svg>
       </div>
     {% endif %}
-  </a>
+  </div>
 
   {# Blog Content #}
   <div class="bg-secondary flex flex-1 flex-col gap-3 rounded-b-sm px-6 py-5">
     {# Title #}
     <h3 class="text-foreground text-base font-bold uppercase leading-snug line-clamp-2 md:text-lg">
-      <a href="/blogs/{{ blog.slug }}" class="text-foreground no-underline">
-        {{ blog.title }}
-      </a>
+      {{ blog.title }}
     </h3>
 
     {# Description #}
@@ -99,10 +100,7 @@
           {{ blog_date }}
         </span>
       {% endif %}
-      <a
-        href="/blogs/{{ blog.slug }}"
-        class="text-foreground ms-auto inline-flex items-center gap-1 text-sm font-medium no-underline"
-      >
+      <span class="text-foreground ms-auto inline-flex items-center gap-1 text-sm font-medium">
         {{ _("Read more") }}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +116,7 @@
         >
           <path d="m9 18 6-6-6-6" />
         </svg>
-      </a>
+      </span>
     </div>
   </div>
 </article>

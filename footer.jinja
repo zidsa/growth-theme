@@ -379,7 +379,7 @@
               {{ _("VAT number:") }} {{ store.settings.general.tax_settings.tax_number }}
             </span>
           {% endif %}
-          {% if store.settings.general.commercial_registration_number %}
+          {% if store.settings.general.commercial_registration_number and store.settings.general.tax_settings.is_certificate_visible %}
             <span class="text-muted text-sm">
               {{ _("The commercial register number:") }} {{ store.settings.general.commercial_registration_number }}
             </span>
