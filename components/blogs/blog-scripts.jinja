@@ -18,6 +18,21 @@
       } catch (e) {}
     });
 
+    // Sync --header-h to the actual sticky-header height so position-sticky offsets
+    // (e.g., the blog category pills) sit flush below the header on any viewport.
+    var headerEl = document.querySelector('header');
+    var stickyHeader = headerEl ? headerEl.parentElement : null;
+    if (stickyHeader) {
+      var sync = function () {
+        document.documentElement.style.setProperty('--header-h', stickyHeader.offsetHeight + 'px');
+      };
+      sync();
+      window.addEventListener('resize', sync);
+      if (window.ResizeObserver) {
+        new ResizeObserver(sync).observe(stickyHeader);
+      }
+    }
+
     // Per-page selector — reload with new page_size in URL
     document.querySelectorAll('[data-blog-per-page]').forEach(function (select) {
       select.addEventListener('change', function (e) {

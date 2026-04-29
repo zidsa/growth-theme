@@ -49,7 +49,7 @@
 
         {# Category Filter Pills #}
         {% if blog_categories | length > 0 %}
-          <div class="flex flex-nowrap items-center gap-3 overflow-x-auto px-1 pb-2">
+          <div class="bg-background sticky top-[var(--header-h)] z-30 -mx-4 flex flex-nowrap items-center gap-3 overflow-x-auto px-4 py-2 md:static md:mx-0 md:bg-transparent md:px-1 md:py-0 md:pb-2">
             {% for category in blog_categories %}
               <a
                 href="/blogs?category={{ category.slug }}"
