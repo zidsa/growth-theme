@@ -82,8 +82,8 @@
         </script>
 
         {# Tags + Share Icons #}
-        <div class="mt-6 flex items-center justify-between gap-4">
-          <div class="flex flex-wrap items-center gap-3">
+        <div class="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex flex-wrap items-center gap-2">
             {% if blog_category %}
               <span class="bg-secondary text-foreground inline-flex items-center rounded px-3 py-1 text-xs font-medium">
                 {{ blog_category.name }}
