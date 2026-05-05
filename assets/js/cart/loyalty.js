@@ -204,32 +204,17 @@ export function applyLoyaltyRedemption(onSuccess) {
   if (text) text.classList.add("hidden");
   if (spinner) spinner.classList.remove("hidden");
 
-  // Pass object with id property as per SDK documentation
   window.zid.cart
-    .addRedemptionMethod({ id })
-    .then(async (response) => {
+    .addRedemptionMethod({ id}, { showErrorNotification:true })
+    .then((response) => {
       if (response.ok) {
-        // Success - refresh the cart page
         if (onSuccess) onSuccess();
       } else {
-        // Error response - parse and show error
-        const data = await response.json();
-        if (data && data.message) {
-          // Show error using toastr if available
-          if (window.toastr) {
-            window.toastr.error(data.message.description || data.message.name, data.message.name);
-          } else {
-            console.error("Redemption error:", data.message.description || data.message.name);
-          }
-        }
         resetButton();
       }
     })
     .catch((err) => {
       console.error("Error applying redemption:", err);
-      if (window.toastr) {
-        window.toastr.error(err.message || "Failed to apply redemption");
-      }
       resetButton();
     });
 }
@@ -256,29 +241,16 @@ export function removeLoyaltyRedemption(onSuccess) {
   if (spinner) spinner.classList.remove("hidden");
 
   window.zid.cart
-    .removeRedemptionMethod()
-    .then(async (response) => {
+    .removeRedemptionMethod({ showErrorNotification: true })
+    .then((response) => {
       if (response.ok) {
-        // Success - refresh the cart page
         if (onSuccess) onSuccess();
       } else {
-        // Error response - parse and show error
-        const data = await response.json();
-        if (data && data.message) {
-          if (window.toastr) {
-            window.toastr.error(data.message.description || data.message.name, data.message.name);
-          } else {
-            console.error("Remove redemption error:", data.message.description || data.message.name);
-          }
-        }
         resetButton();
       }
     })
     .catch((err) => {
       console.error("Error removing redemption:", err);
-      if (window.toastr) {
-        window.toastr.error(err.message || "Failed to remove redemption");
-      }
       resetButton();
     });
 }

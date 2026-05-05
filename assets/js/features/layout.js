@@ -198,7 +198,7 @@ window.onProductClick = function(event, el) {
  * Elements with [data-auth-user] are shown only to authenticated users
  * This allows templates to be cached while still showing correct content
  */
-function initAuthVisibility() {
+export function initAuthVisibility() {
   const isGuest = !window.customerAuthState || window.customerAuthState.isGuest;
   const isAuthenticated = window.customerAuthState && window.customerAuthState.isAuthenticated;
 
