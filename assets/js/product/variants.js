@@ -217,7 +217,7 @@ export function updateProductImages(selectedProduct) {
     galleryContainer.innerHTML = media
       .map((item, index) => {
         const isVideo = item.provider && item.link;
-        const imgSrc = item.image?.medium || item.image?.full_size || "";
+        const imgSrc = item.image?.large || item.image?.full_size || "";
 
         console.log("item", item);
         console.log("isVideo", isVideo);
