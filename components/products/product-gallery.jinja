@@ -45,7 +45,7 @@
       <div class="product-gallery__container flex gap-2">
         {% if gallery_media and gallery_media|length > 0 %}
           {% for item in gallery_media %}
-            {% set img_src = item.image.medium if item.image else item %}
+            {% set img_src = item.image.large if item.image else item %}
 
             <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
               {# Image (thumbnail for videos) #}
