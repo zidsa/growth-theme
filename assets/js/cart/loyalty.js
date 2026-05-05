@@ -42,7 +42,6 @@ export function initLoyaltyProgram(config) {
   if (!state.initialized) {
     state.initialized = true;
     window.addEventListener("cart-updated", () => initLoyaltyProgram());
-    window.addEventListener("vitrin:auth:success", () => initLoyaltyProgram());
   }
 }
 
