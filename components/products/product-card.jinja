@@ -14,7 +14,7 @@
       {% if product.main_image and product.main_image.image %}
         src="{{ product.main_image.image.medium }}"
       {% elif product.images and product.images|length > 0 %}
-        src="{{ image_url(product.images[0].image.full_size, w=300, q=75, f='auto') }}"
+        src="{{ image_url(product.images[0].image.full_size, w=400, q=85, f='auto') }}"
       {% else %}
         src="{{ image_url(('images/product-img.svg' | asset_url), w=300, q=100, f='auto') }}"
       {% endif %}
