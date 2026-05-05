@@ -7,6 +7,7 @@
 
 import { updatePaymentWidgets, updateLoyaltyDisplay } from "./totals.js";
 import { setupCouponInput } from "./coupon.js";
+import { initAuthVisibility } from "../features/layout.js";
 
 // Module state
 let isRefreshing = false;
@@ -112,6 +113,9 @@ export async function refreshCartPage() {
 
     // Swap loyalty section
     swapElement(SELECTORS.loyaltySection, doc);
+
+    // Re-apply auth visibility — swapped HTML has cache-safe `hidden` on auth-only nodes
+    initAuthVisibility();
 
     // Swap shipping progress
     swapElement(SELECTORS.shippingProgress, doc);
