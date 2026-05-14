@@ -129,9 +129,13 @@
               </span>
 
               {# Remaining Stock Badge #}
+              {% if store.settings.products.low_stock_label_enabled %}
+                {% set selected_product = selected_product if selected_product is defined else product.selected_product %}
+                {% set show_low_stock = not selected_product.is_infinite
+                  and selected_product.quantity < store.settings.products.low_stock_quantity_threshold %}
               <span
                 data-low-stock-badge
-                class="badge badge-outlined border-foreground {{ '!hidden' if not product.low_stock_quantity }}"
+                class="badge badge-outlined border-foreground {{ '!hidden' if not show_low_stock }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -145,10 +149,9 @@
                     fill="currentColor"
                   ></path>
                 </svg>
-                <span data-low-stock-text
-                  >{{ _("Remaining %s only") | format(product.low_stock_quantity) if product.low_stock_quantity }}</span
-                >
+                <span data-low-stock-text>{{ _("Remaining %s only") | format(selected_product.quantity) }}</span>
               </span>
+              {% endif %}
             </div>
             {# Price Section #}
             <div class="flex flex-wrap items-center justify-between gap-y-1">
