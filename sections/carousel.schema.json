@@ -191,7 +191,7 @@
           "max": 100,
           "step": 5,
           "unit": "%",
-          "default": 20
+          "default": 0
         },
         {
           "id": "text_alignment",

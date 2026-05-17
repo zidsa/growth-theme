@@ -52,9 +52,9 @@
                   <div class="overflow-hidden rounded">
                     <img
                       {% if categoryItem.category.image %}
-                        src="{{ image_url(categoryItem.category.image_full_size, w=400, q=100, f='auto') }}"
+                        src="{{ image_url(categoryItem.category.image_full_size, w=768, q=90, f='auto') }}"
                       {% else %}
-                        src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=100, f='auto') }}"
+                        src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=90, f='auto') }}"
                       {% endif %}
                       alt="{{ categoryItem.category.name }}"
                       class="aspect-[4/5] w-full object-cover transition-transform duration-300 group-hover:scale-105"

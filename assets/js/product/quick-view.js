@@ -48,10 +48,15 @@ class QuickViewManager {
     this.sdkScriptLoaded = false;
     this.sdkScriptUrl = null;
 
+    // Snapshot of window.productObj before quick-view mutates it
+    this.originalProductObj = undefined;
+    this.hasOriginalProductObj = false;
+
     // Bound methods for event listeners
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.handleMouseOut = this.handleMouseOut.bind(this);
     this.handleCartUpdated = this.handleCartUpdated.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -132,6 +137,7 @@ class QuickViewManager {
 
     return new Promise((resolve, reject) => {
       const script = document.createElement("script");
+      script.type = "module";
       script.src = this.sdkScriptUrl;
       script.onload = () => {
         this.sdkScriptLoaded = true;
@@ -303,6 +309,11 @@ class QuickViewManager {
     const baseUrl = productUrl || `/p/${productSlug}`;
     const messages = this.getMessages(modal);
 
+    if (!this.hasOriginalProductObj) {
+      this.originalProductObj = window.productObj;
+      this.hasOriginalProductObj = true;
+    }
+
     const cachedData = this.cacheGet(baseUrl);
 
     if (cachedData) {
@@ -367,12 +378,29 @@ class QuickViewManager {
     }
   }
 
+  handleDialogClose() {
+    const content = document.getElementById(ELEMENTS.content);
+    if (content) content.innerHTML = "";
+
+    if (this.hasOriginalProductObj) {
+      window.productObj = this.originalProductObj;
+    }
+
+    const elements = this.getElements();
+    if (elements) this.setModalState(elements, "loading");
+  }
+
   // ─────────────────────────────────────────────────────────────
   // Event Handlers
   // ─────────────────────────────────────────────────────────────
 
   setupCartListener() {
     window.addEventListener("cart-updated", this.handleCartUpdated);
+  }
+
+  setupDialogCloseListener() {
+    const modal = document.getElementById(ELEMENTS.modal);
+    if (modal) modal.addEventListener("close", this.handleDialogClose);
   }
 
   handleCartUpdated() {
@@ -386,12 +414,16 @@ class QuickViewManager {
   init() {
     this.setupPrefetchListeners();
     this.setupCartListener();
+    this.setupDialogCloseListener();
   }
 
   destroy() {
     document.removeEventListener("mouseover", this.handleMouseOver);
     document.removeEventListener("mouseout", this.handleMouseOut);
     window.removeEventListener("cart-updated", this.handleCartUpdated);
+
+    const modal = document.getElementById(ELEMENTS.modal);
+    if (modal) modal.removeEventListener("close", this.handleDialogClose);
 
     this.cancelPrefetch();
     this.cacheClear();

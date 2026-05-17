@@ -4,12 +4,15 @@
  * Handles loyalty points calculations, redemption methods, and applying/removing redemptions.
  */
 
+import { initAuthVisibility } from "../features/layout.js";
+
 // Module state
 const state = {
   loyaltyPoints: 0,
   redemptionMethods: [],
   config: null,
-  initialized: false
+  initialized: false,
+  customerLoaded: false
 };
 
 /**
@@ -31,18 +34,30 @@ export function initLoyaltyProgram(config) {
   // Calculate points for this purchase
   calculateLoyaltyPoints(cfg.cartTotalValue);
 
-  // If logged in, get customer points and redemption methods
-  if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
+  // Authenticated branch — fetch customer points and redemption methods
+  if (state.customerLoaded || (window.customerAuthState && window.customerAuthState.isAuthenticated)) {
     getCustomerLoyaltyPoints(() => {
       getRedemptionMethods(cfg.storeCurrencyCode, cfg.cartCurrencyCode, cfg.translations);
     });
   }
 
-  // Listen for cart-updated event only once
   if (!state.initialized) {
     state.initialized = true;
     window.addEventListener("cart-updated", () => initLoyaltyProgram());
-    window.addEventListener("vitrin:auth:success", () => initLoyaltyProgram());
+
+    // SDK fires this when an authenticated customer is loaded — use as auth signal
+    // since window.customerAuthState may not be seeded by the template.
+    document.addEventListener("zid-customer-fetched", (event) => {
+      const customer = event?.detail?.customer;
+      if (customer?.id) {
+        state.customerLoaded = true;
+        window.customerAuthState = window.customerAuthState || {};
+        window.customerAuthState.isAuthenticated = true;
+        window.customerAuthState.isGuest = false;
+        initAuthVisibility();
+        initLoyaltyProgram();
+      }
+    });
   }
 }
 
