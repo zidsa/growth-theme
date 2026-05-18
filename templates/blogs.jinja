@@ -1,19 +1,32 @@
 {% extends "layout.jinja" %}
 
-{# Data binding — backend provides posts (PaginatedBlogPosts) and categories (PaginatedBlogCategories) #}
+{# Data binding — backend supports filtering by category and tag (independently or combined) #}
 {% set blog_list = posts.results if posts is defined and posts.results else [] %}
 {% set blog_categories = categories.results if categories is defined and categories.results else [] %}
 {% set active_category_slug = session.query_params.get('category', '') if session is defined else '' %}
+{% set active_tag_slug = session.query_params.get('tags', '') if session is defined else '' %}
 
-{# When no category param is set, the backend defaults to the first category #}
-{% set effective_category_slug = active_category_slug or (blog_categories[0].slug if blog_categories | length > 0 else '') %}
-{% set ns = namespace(active_category_obj=none) %}
+{% set ns = namespace(active_category_obj=none, active_tag_name=active_tag_slug) %}
 {% for category in blog_categories %}
-  {% if category.slug == effective_category_slug %}
+  {% if category.slug == active_category_slug %}
     {% set ns.active_category_obj = category %}
   {% endif %}
 {% endfor %}
+{% if active_tag_slug %}
+  {% for post in blog_list %}
+    {% for tag in post.tags | default([]) %}
+      {% if tag.slug == active_tag_slug and tag.name %}
+        {% set ns.active_tag_name = tag.name %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
 {% set active_category_obj = ns.active_category_obj %}
+{% set active_tag_name = ns.active_tag_name %}
+
+{# Query strings preserving the "other" filter when toggling one #}
+{% set tag_qs = ('tags=' ~ active_tag_slug) if active_tag_slug else '' %}
+{% set category_qs = ('category=' ~ active_category_slug) if active_category_slug else '' %}
 
 {# Pagination #}
 {% set page_size = posts.page_size | default(12) if posts is defined else 12 %}
@@ -47,17 +60,46 @@
           {{ _("Blog") }}
         </h1>
 
-        {# Category Filter Pills #}
-        {% if blog_categories | length > 0 %}
-          <div class="bg-background sticky top-[var(--header-h)] z-30 -mx-4 flex flex-nowrap items-center gap-3 overflow-x-auto px-4 py-2 md:static md:mx-0 md:bg-transparent md:px-1 md:py-0 md:pb-2">
-            {% for category in blog_categories %}
-              <a
-                href="/blogs?category={{ category.slug }}"
-                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if effective_category_slug == category.slug else 'border-foreground text-foreground' }}"
-              >
-                {{ category.name }}
-              </a>
-            {% endfor %}
+        {# Filters: category pills + active tag indicator share a tight inner gap #}
+        {% if blog_categories | length > 0 or active_tag_slug %}
+          <div class="flex flex-col gap-2">
+            {% if blog_categories | length > 0 %}
+              <div class="bg-background sticky top-[var(--header-h)] z-30 -mx-4 flex flex-nowrap items-center gap-3 overflow-x-auto px-4 py-2 md:static md:mx-0 md:bg-transparent md:px-1 md:py-0 md:pb-2">
+                <a
+                  href="/blogs{{ ('?' ~ tag_qs) if tag_qs else '' }}"
+                  class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if not active_category_slug else 'border-foreground text-foreground' }}"
+                >
+                  {{ _("All categories") }}
+                </a>
+                {% for category in blog_categories %}
+                  <a
+                    href="/blogs?category={{ category.slug }}{{ ('&' ~ tag_qs) if tag_qs else '' }}"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors {{ 'bg-foreground text-background border-foreground' if active_category_slug == category.slug else 'border-foreground text-foreground' }}"
+                  >
+                    {{ category.name }}
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if active_tag_slug %}
+              <div class="flex flex-wrap items-center gap-2 text-sm">
+                <span class="text-muted-foreground">{{ _("Results for:") }}</span>
+                <span class="border-foreground text-foreground inline-flex items-center gap-2 rounded-lg border px-2 py-1 font-medium uppercase">
+                  {{ active_tag_name }}
+                  <a
+                    href="/blogs{{ ('?' ~ category_qs) if category_qs else '' }}"
+                    aria-label="{{ _('Remove tag filter') }}"
+                    class="text-foreground inline-flex h-4 w-4 items-center justify-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </a>
+                </span>
+              </div>
+            {% endif %}
           </div>
         {% endif %}
 
