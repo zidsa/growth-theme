@@ -1110,6 +1110,12 @@ msgstr "ترقيم صفحات المدونة"
 msgid "Tags"
 msgstr "الوسوم"
 
+msgid "Results for:"
+msgstr "النتائج لـ:"
+
+msgid "Remove tag filter"
+msgstr "إزالة فلتر الوسم"
+
 msgid "Featured products"
 msgstr "منتجات مميزة"
 
