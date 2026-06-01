@@ -4,6 +4,7 @@
     "ar": "الشعار والتواصل الاجتماعي",
     "en": "Logo & Social Media"
   },
+  "icon": "share-line",
   "settings": [
     {
       "id": "min_height_mobile",

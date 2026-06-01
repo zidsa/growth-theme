@@ -4,6 +4,7 @@
     "ar": "فيديو",
     "en": "Video"
   },
+  "icon": "movie-line",
   "settings": [
     {
       "id": "title",

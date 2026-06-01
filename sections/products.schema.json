@@ -4,6 +4,7 @@
     "ar": "قائمة المنتجات",
     "en": "Products"
   },
+  "icon": "shopping-bag-line",
   "settings": [
     {
       "id": "layout",
