@@ -4,6 +4,7 @@
     "ar": "خصائص المتجر",
     "en": "Store Benefits"
   },
+  "icon": "award-line",
   "settings": [
     {
       "id": "store_features",
