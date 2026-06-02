@@ -4,6 +4,7 @@
     "ar": "العد التنازلي",
     "en": "Countdown Timer"
   },
+  "icon": "timer-line",
   "settings": [
     {
       "id": "badge_text",
