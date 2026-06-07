@@ -449,7 +449,7 @@
               command="--toggle"
               commandfor="features-details"
               class="bg-secondary group flex w-full items-center justify-between gap-3 rounded px-4 py-2"
-              aria-expanded="false"
+              aria-expanded="true"
             >
               <span class="text-foreground text-sm font-medium">{{ _("Features & details") }}</span>
               <span
@@ -473,7 +473,6 @@
             </button>
             <el-disclosure
               id="features-details"
-              hidden
               class="transition duration-200 data-closed:opacity-0"
             >
               <div class="mt-4 flex flex-col gap-4 px-4 pb-4">
