@@ -549,6 +549,17 @@
     @apply w-full;
   }
 
+  /* Cart page: below lg the quantity input shares a horizontal row with the
+     wishlist and delete buttons. qty-input-full (w-full) would consume the row
+     and push the delete button off-screen (off the start edge in RTL), so cap
+     the box width on mobile. The desktop layout stacks (lg:flex-col), where full
+     width is intended. */
+  @media (width < 1024px) {
+    .cart-product-item .qty-input-full {
+      max-width: 200px;
+    }
+  }
+
   /* Icon button */
   .qty-input-btn {
     @apply text-foreground flex size-8 shrink-0 cursor-pointer items-center justify-center rounded bg-white/10 backdrop-blur-sm transition-all;
