@@ -69,7 +69,7 @@ async function initLightbox() {
     arrowNext: true,
 
     // Padding around image
-    paddingFn: () => ({ top: 20, bottom: 20, left: 20, right: 20 }),
+    paddingFn: () => ({ top: 20, bottom: 20, left: 16, right: 16 }),
 
     // Custom SVGs
     arrowPrevSVG:
