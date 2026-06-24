@@ -97,7 +97,7 @@
 {# PaginationPrevious - previous page button #}
 {% macro PaginationPrevious(href='', disabled=false, ariaLabel='Previous page', class='') -%}
   <a
-    href="{{ href }}"
+    {% if not disabled %} href="{{ href }}" {% endif %}
     data-slot="pagination-previous"
     aria-label="{{ ariaLabel }}"
     aria-disabled="{{ 'true' if disabled else 'false' }}"
