@@ -166,13 +166,11 @@
 
     {% vitrin_body %}
 
-    {# Loyalty Rewards - loaded AFTER vitrin_body so popup is in DOM #}
+    {# Loyalty Rewards floating button - opens the platform loyalty_rewards_dialog kit #}
     {% if session.template not in ['product_details', 'cart_page', 'page_details'] and store.settings.checkout.is_loyalty_enabled %}
       <script>
         var loyalty_button_direction = "{{ session.locale.language.direction }}";
         var text_loyalty_rewards = '{{ _("Rewards") }}';
-        var text_loyalty_options = '{{ _("For {points} get a discount {percentage}") }}';
-        var store_currency_code = "{{ session.currency }}";
       </script>
       <script src="{{ 'js/layout-loyalty.js' | asset_url }}"></script>
     {% endif %}
