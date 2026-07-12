@@ -129,9 +129,13 @@
               </span>
 
               {# Remaining Stock Badge #}
+              {% if store.settings.products.low_stock_label_enabled %}
+                {% set selected_product = selected_product if selected_product is defined else product.selected_product %}
+                {% set show_low_stock = not selected_product.is_infinite
+                  and selected_product.quantity < store.settings.products.low_stock_quantity_threshold %}
               <span
                 data-low-stock-badge
-                class="badge badge-outlined border-foreground {{ '!hidden' if not product.low_stock_quantity }}"
+                class="badge badge-outlined border-foreground {{ '!hidden' if not show_low_stock }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -145,10 +149,9 @@
                     fill="currentColor"
                   ></path>
                 </svg>
-                <span data-low-stock-text
-                  >{{ _("Remaining %s only") | format(product.low_stock_quantity) if product.low_stock_quantity }}</span
-                >
+                <span data-low-stock-text>{{ _("Remaining %s only") | format(selected_product.quantity) }}</span>
               </span>
+              {% endif %}
             </div>
             {# Price Section #}
             <div class="flex flex-wrap items-center justify-between gap-y-1">
@@ -190,7 +193,7 @@
 
           {# Short Description #}
           {% if product.short_description %}
-            <div class="prose prose-sm max-w-none">{{ product.short_description|safe }}</div>
+            <div class="prose prose-theme prose-sm max-w-none">{{ product.short_description|safe }}</div>
           {% endif %}
 
           <form
@@ -277,6 +280,7 @@
                   </svg>
                   {{ _("Add to cart") }}
                 </button>
+                <span id="product-view-add-to-cart"></span>
                 {# Wishlist Button #}
                 {% with product_id=product.id, class="btn-lg border-input border" %}
                   {% include 'components/products/wishlist-button.jinja' %}
@@ -446,7 +450,7 @@
               command="--toggle"
               commandfor="features-details"
               class="bg-secondary group flex w-full items-center justify-between gap-3 rounded px-4 py-2"
-              aria-expanded="false"
+              aria-expanded="true"
             >
               <span class="text-foreground text-sm font-medium">{{ _("Features & details") }}</span>
               <span
@@ -470,7 +474,6 @@
             </button>
             <el-disclosure
               id="features-details"
-              hidden
               class="transition duration-200 data-closed:opacity-0"
             >
               <div class="mt-4 flex flex-col gap-4 px-4 pb-4">

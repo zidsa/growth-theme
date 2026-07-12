@@ -55,6 +55,49 @@
   color: var(--primary-foreground);
 }
 
+/* Color swatch & icon thumbnail choices */
+.product-options__item--color,
+.product-options__item--icon {
+  padding: 0.25rem;
+}
+
+.product-options__swatch {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.product-options__thumb {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+.product-options__item--color.active,
+.product-options__item--icon.active {
+  background: var(--background);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* Hidden text label; the choice is also exposed via title/aria/alt. */
+.product-options__item-text--sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Dropdown Style (select) */
 .product-options__select {
   width: 100%;
