@@ -56,16 +56,20 @@
 }
 
 /* Color swatch & icon thumbnail choices */
-.product-options__item--color,
 .product-options__item--icon {
-  padding: 0.25rem;
+  padding: 3px;
+  border: none;
+}
+
+.product-options__item--color {
+  padding: 1px;
+  border-radius: 50%;
 }
 
 .product-options__swatch {
   display: block;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 1px solid var(--border);
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   box-sizing: border-box;
 }
