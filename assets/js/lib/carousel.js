@@ -137,6 +137,7 @@ export function createCarousel(container, options = {}) {
 function setupNavigation(container, embla) {
   // Also search parent in case controls are siblings (e.g. conditional carousel layout)
   const searchScope = container.parentElement || container;
+  // console.log(123);
 
   const prevBtn =
     container.querySelector("[data-carousel-prev]") ||
