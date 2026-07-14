@@ -3,6 +3,20 @@
 {% block title %}{{ product.name }} – {{ store.name }}{% endblock %}
 
 {% block content %}
+
+  {% if product %}
+    {% set selected_product = selected_product if selected_product is defined else product.selected_product %}
+    {% set has_preorder = product.effective_preorder_campaign is not none %}
+    {% set can_preorder = product.can_be_preordered %}
+    {% set preorder_stock_behavior = product.preorder_stock_behavior %}
+    {% set can_buy = (selected_product and (selected_product.in_stock or can_preorder)) %}
+  {% else %}
+    {% set has_preorder = false %}
+    {% set can_preorder = false %}
+    {% set preorder_stock_behavior = '' %}
+    {% set can_buy = false %}
+  {% endif %}
+
   {# Breadcrumb Section #}
   <section class="px-4 py-6 md:px-16">
     <div class="theme-container">
@@ -33,7 +47,9 @@
   </section>
 
   {# Product Main Section #}
-  <section class="px-4 pb-6 md:px-16 md:pb-16">
+  <section class="px-4 pb-6 md:px-16 md:pb-16" data-has-preorder="{{ 'true' if has_preorder else 'false' }}"
+           data-can-preorder="{{ 'true' if can_preorder else 'false' }}"
+           data-stock-behavior="{{ preorder_stock_behavior or '' }}">>
     <div class="theme-container">
       {# 2-Column Layout: Gallery + Details #}
       <div
@@ -84,6 +100,9 @@
                 {% endwith %}
               {% endif %}
 
+              {% if product.preorder_campaign %}
+                {% include 'vitrin:products/preorder_badge.jinja' %}
+              {% endif %}
               {# Bundle Offer Badge #}
               {% if product.bundle_offer %}
                 <span class="badge badge-outlined text-destructive border-destructive">
@@ -220,15 +239,14 @@
 
             {# Quantity Input #}
             <div
-              class="{{ 'hidden' if not product.in_stock }} grid w-full items-center gap-2"
+              class="grid w-full items-center gap-2 {{ "hidden" if not product.in_stock }}"
               data-quantity-wrapper
             >
               <label
                 for="product-quantity"
                 class="form-label"
-                >{{ _('Quantity') }}</label
-              >
-              {% with id='product-quantity', quantity=1, min=1, max=product.quantity if not product.is_infinite else none, sync_target='sticky-qty' %}
+                >{{ _('Quantity') }}</label>
+              {% with id='product-quantity', quantity=1, min=1, max=product.quantity if not product.is_infinite and product.quantity > 0 else (1 if can_preorder else none), sync_target='sticky-qty' %}
                 {% include 'components/ui/quantity-input.jinja' %}
               {% endwith %}
             </div>
@@ -245,7 +263,7 @@
             >
               {# In Stock State #}
               <div
-                class="{{ 'hidden' if not product.in_stock }} flex items-center gap-2"
+                class="{{ 'hidden' if not can_buy }} flex items-center gap-2"
                 data-in-stock
               >
                 {# Add to Cart Button #}
@@ -278,7 +296,7 @@
                     ></circle>
                     <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
                   </svg>
-                  {{ _("Add to cart") }}
+                  {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
                 </button>
                 <span id="product-view-add-to-cart"></span>
                 {# Wishlist Button #}
@@ -289,7 +307,7 @@
 
               {# Out of Stock State #}
               <div
-                class="{{ 'hidden' if product.in_stock }} flex flex-col gap-3"
+                class="flex flex-col gap-3 {{ "hidden" if can_buy }}"
                 data-out-of-stock
               >
                 {# Disabled Add to Cart Button #}
@@ -298,7 +316,7 @@
                   disabled
                   class="btn btn-lg bg-secondary text-muted-foreground w-full cursor-not-allowed border border-transparent"
                 >
-                  {{ _("Add to cart") }}
+                  {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
                 </button>
 
                 {# Notify Me & Wishlist Buttons #}
@@ -336,6 +354,7 @@
 
             {% include 'vitrin:products/loyalty_points_widget.jinja' %}
             {% include 'vitrin:products/payment_widgets.jinja' %}
+            {% include 'vitrin:products/preorder_countdown.jinja' %}
             {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
 
             {# Social Share Links #}

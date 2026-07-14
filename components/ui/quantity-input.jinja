@@ -34,7 +34,6 @@
       {% include 'components/ui/quantity-input.jinja' %}
     {% endwith %}
 #}
-
 {% set input_id = id | default('qty-' ~ range(1000, 9999) | random) %}
 {% set input_name = name | default('quantity') %}
 {% set qty = quantity | default(1) %}

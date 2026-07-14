@@ -229,3 +229,21 @@ body {
   font-size: inherit !important;
   color: var(--foreground) !important;
 }
+
+.preorder-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-weight: 300;
+  line-height: 1.4;
+  background-color: var(--primary);
+  color: var(--primary-foreground, #ffffff);
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.preorder-badge.preorder-badge--product-card {
+  border-radius: 10px;
+  margin-bottom: 0;
+}

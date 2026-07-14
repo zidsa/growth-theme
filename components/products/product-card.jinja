@@ -2,6 +2,16 @@
 {% set aspect_ratio = card_image_aspect_ratio | default('adapt') %}
 {% set aspect_class = '' if aspect_ratio == 'adapt' else ('aspect-square' if aspect_ratio == 'square' else 'aspect-[3/4]') %}
 
+{% set preorder_badge_variant = 'default' %}
+
+{% set selected_product = product.selected_product %}
+{% set has_preorder = product.effective_preorder_campaign is not none %}
+{% set can_preorder = product.can_be_preordered %}
+
+{% set can_buy = (selected_product.in_stock or can_preorder) %}
+{% set is_in_stock_or_preorderable = product.is_infinite or product.quantity > 0 or can_preorder %}
+{% set is_out_of_stock = (product.is_infinite == false and product.quantity <= 0) and not can_preorder  %}
+
 <div
   class="group relative flex h-full flex-col gap-4 group-data-[grid=list]/grid:grid group-data-[grid=list]/grid:grid-cols-2 group-data-[grid=list]/grid:grid-rows-[1fr_auto] group-data-[grid=list]/grid:gap-4 md:group-data-[grid=list]/grid:grid-cols-[auto_1fr] md:group-data-[grid=list]/grid:grid-rows-[auto_auto]"
   data-product-card="{{ product.id }}"
@@ -106,8 +116,12 @@
   <div
     class="mt-auto group-data-[grid=list]/grid:col-span-2 group-data-[grid=list]/grid:row-span-1 group-data-[grid=list]/grid:mt-0 md:group-data-[grid=list]/grid:col-span-1 md:group-data-[grid=list]/grid:col-start-2 md:group-data-[grid=list]/grid:self-start"
   >
-    {% set is_out_of_stock = product.in_stock == false or (product.is_infinite == false and product.quantity is not none and product.quantity <= 0) %}
-
+    {% if has_preorder %}
+      <div style="margin-bottom: 8px; text-align: start;">
+        {% set preorder_badge_variant = 'product_card' %}
+        {% include 'vitrin:products/preorder_badge.jinja' %}
+      </div>
+    {% endif %}
     {% if is_out_of_stock %}
       {# Notify Me Button - shown when out of stock #}
       <button
@@ -127,7 +141,13 @@
           data-add-to-cart="{{ product.id }}"
         {% endif %}
       >
-        {{ _("Select options") if has_options else _("Add to cart") }}
+        {% if has_preorder %}
+            {{ _("Preorder now") }}
+          {% elif has_options %}
+           {{ _("Select options") }}
+          {% else %}
+            {{ _("Add to cart") }}
+          {% endif %}
       </button>
 
       {# Quantity Input (hidden, shown after adding to cart) #}
