@@ -1,0 +1,40 @@
+{% set background_image = image_url(settings.background_image, w=2220, q=90, f='auto') %}
+{% set is_lazy = settings.order > 2 %}
+
+<section
+  section-id="{{ sectionId }}"
+  class="section-call-to-action relative flex items-center overflow-hidden px-4 py-16 md:px-16 md:py-24"
+  {% if settings.background_color %}style="background-color: {{ settings.background_color }}"{% endif %}
+>
+  {% if settings.background_image %}
+    <div class="absolute inset-0 -z-10">
+      <img
+        src="{{ background_image }}"
+        alt="{{ settings.heading | default('') }}"
+        class="h-full w-full object-cover object-center"
+        {% if is_lazy %}loading="lazy"{% endif %}
+      />
+    </div>
+  {% endif %}
+
+  <div class="theme-container flex max-w-[768px] flex-col items-center gap-6 text-center">
+    <div class="flex flex-col gap-4" style="color: {{ settings.text_color | default('#000000') }}">
+      {% if settings.heading and settings.heading | trim %}
+        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">{{ settings.heading }}</h2>
+      {% endif %}
+      {% if settings.description and settings.description | trim %}
+        <p class="text-lg">{{ settings.description }}</p>
+      {% endif %}
+    </div>
+    {% if settings.button_text and settings.button_text | trim %}
+      <div class="flex gap-4">
+        <a
+          href="{{ settings.button_url | default('#') }}"
+          class="btn btn-filled btn-lg"
+        >
+          {{ settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
