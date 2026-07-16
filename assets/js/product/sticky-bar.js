@@ -22,6 +22,7 @@ let btnDefault = null;
 let btnLoading = null;
 let btnSuccess = null;
 let inStockSection = null;
+let quantitySection = null;
 let outOfStockSection = null;
 let footer = null;
 let isVisible = false;
@@ -107,6 +108,7 @@ function handleCartError() {
 }
 
 function handleVariantChange(event) {
+  var canPreorder = document.querySelector("[data-can-preorder]")?.getAttribute("data-can-preorder") === "true";
   const selectedProduct = event.detail?.selectedProduct;
 
   if (!selectedProduct) {
@@ -114,7 +116,18 @@ function handleVariantChange(event) {
     return;
   }
 
-  updateStockState(selectedProduct.in_stock);
+  updateStockState(selectedProduct.in_stock && selectedProduct.quantity > 0 ? true : canPreorder);
+
+  if (selectedProduct.in_stock && selectedProduct.quantity > 0) {
+    quantitySection?.classList.remove("hidden");
+    quantitySection?.classList.add("sm:block");
+  } else if (canPreorder) {
+    quantitySection?.classList.add("hidden");
+    quantitySection?.classList.remove("sm:block");
+  } else {
+    quantitySection?.classList.add("hidden");
+    quantitySection?.classList.remove("sm:block");
+  }
 
   if (stickyPriceEl) {
     stickyPriceEl.textContent = selectedProduct.formatted_sale_price || selectedProduct.formatted_price;
@@ -160,6 +173,7 @@ export function init() {
   btnLoading = document.querySelector("[data-sticky-cta-btn-loading]");
   btnSuccess = document.querySelector("[data-sticky-cta-btn-success]");
   inStockSection = document.querySelector("[data-sticky-cta-in-stock]");
+  quantitySection = document.querySelector("[data-sticky-quantity-wrapper]");
   outOfStockSection = document.querySelector("[data-sticky-cta-out-of-stock]");
 
   // Intersection Observer for show/hide
