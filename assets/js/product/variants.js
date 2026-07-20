@@ -410,6 +410,9 @@ export function init() {
 }
 
 if (document.readyState === "loading") {
+  if (window.checkout_dialog) {
+    document.getElementsByClassName('btn-buy-now')[0].classList.remove('hidden');
+  }
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
