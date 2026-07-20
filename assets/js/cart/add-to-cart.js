@@ -93,7 +93,7 @@ async function addToCartFromForm(btn) {
  * Buy now - adds to cart and triggers checkout
  * Supports bundle products via window.bundleCartPayload
  */
-async function buyNowFromForm(btn) {
+window.buyNowFromForm = async (btn) => {
   const formId = btn.dataset.buyNowForm;
   if (!formId || btn.disabled) return;
 
@@ -106,6 +106,7 @@ async function buyNowFromForm(btn) {
 
     await window.zid.cart.buyNow(buyNowOptions, { showErrorNotification: true });
     // buyNow handles redirect
+    hideSpinner(btn);
   } catch (err) {
     console.error("[Cart] Buy now failed:", err);
     hideSpinner(btn);

@@ -238,7 +238,6 @@
               {% include 'vitrin:products/bundle-products.jinja' %}
             {% endif %}
 
-            {% include 'vitrin:checkout/checkout_dialog.jinja' %}
 
             {# Action Buttons #}
             <div
@@ -368,6 +367,7 @@
               </div>
             </div>
 
+            {% include 'vitrin:checkout/checkout_dialog.jinja' %}
             {% include 'vitrin:products/loyalty_points_widget.jinja' %}
             {% include 'vitrin:products/payment_widgets.jinja' %}
             {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}

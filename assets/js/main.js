@@ -88,6 +88,9 @@ function init() {
 // Initialize when DOM is ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
+  if (window.checkout_dialog) {
+    document.getElementsByClassName('btn-buy-now')[0].classList.remove('hidden');
+  }
 } else {
   init();
 }
