@@ -125,15 +125,15 @@ function handleVariantChange(event) {
   if (selectedProduct.in_stock && selectedProduct.quantity > 0) {
     quantitySection?.classList.remove("hidden");
     quantitySection?.classList.add("sm:block");
-    outOfStockSection?.classList.add("hidden");
+    // outOfStockSection?.classList.add("hidden");
   } else if (canPreorder) {
     quantitySection?.classList.add("hidden");
     quantitySection?.classList.remove("sm:block");
-    outOfStockSection?.classList.add("hidden");
+    // outOfStockSection?.classList.add("hidden");
   } else {
     quantitySection?.classList.add("hidden");
     quantitySection?.classList.remove("sm:block");
-    outOfStockSection?.classList.remove("hidden");
+    // outOfStockSection?.classList.remove("hidden");
   }
 
   if (stickyPriceEl) {
