@@ -11,7 +11,8 @@
     "build:css": "npx @tailwindcss/cli -i assets/tailwindcss.css -o assets/styles.css --minify",
     "build:js": "NODE_ENV=production ENTRY=main vite build && NODE_ENV=production ENTRY=cart vite build",
     "build:dev": "ENTRY=main vite build && ENTRY=cart vite build",
-    "format": "prettier --write \"**/*.{css,js,json,jinja,html}\""
+    "format": "prettier --write \"**/*.{css,js,json,jinja,html}\"",
+    "validate-manifest": "node scripts/validate-manifest.js"
   },
   "repository": {
     "type": "git",
