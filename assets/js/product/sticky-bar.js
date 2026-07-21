@@ -116,7 +116,7 @@ function handleVariantChange(event) {
     return;
   }
 
-  updateStockState(selectedProduct.in_stock && selectedProduct.quantity > 0 ? true : canPreorder);
+  updateStockState(selectedProduct.in_stock ? true : canPreorder);
 
   if (selectedProduct.in_stock && selectedProduct.quantity > 0) {
     quantitySection?.classList.remove("hidden");
