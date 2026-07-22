@@ -135,13 +135,19 @@ export function createCarousel(container, options = {}) {
  * Setup navigation buttons
  */
 function setupNavigation(container, embla) {
+  // Also search parent in case controls are siblings (e.g. conditional carousel layout)
+  const searchScope = container.parentElement || container;
+  // console.log(123);
+
   const prevBtn =
     container.querySelector("[data-carousel-prev]") ||
+    searchScope.querySelector("[data-carousel-prev]") ||
     container.querySelector(".embla__prev") ||
     container.querySelector(".product-gallery__prev");
 
   const nextBtn =
     container.querySelector("[data-carousel-next]") ||
+    searchScope.querySelector("[data-carousel-next]") ||
     container.querySelector(".embla__next") ||
     container.querySelector(".product-gallery__next");
 

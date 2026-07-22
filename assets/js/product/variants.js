@@ -136,6 +136,7 @@ export function updateProductInfo(selectedProduct) {
 // ─────────────────────────────────────────────────────────────
 
 export function updateStockStatus(selectedProduct) {
+  var canPreorder = document.querySelector("[data-can-preorder]")?.getAttribute("data-can-preorder") === "true";
   if (!selectedProduct) return;
 
   // Update hidden product ID
@@ -156,6 +157,10 @@ export function updateStockStatus(selectedProduct) {
     // Update quantity selector
     updateQuantitySelector(selectedProduct);
     if (quantityWrapper) show("[data-quantity-wrapper]");
+  } else if (canPreorder) {
+    if (outOfStockSection) hide("[data-out-of-stock]");
+    if (quantityWrapper) hide("[data-quantity-wrapper]");
+
   } else {
     // Show out-of-stock elements
     if (inStockSection) hide("[data-in-stock]");
@@ -356,6 +361,10 @@ window.updateProductImages = updateProductImages;
  * @param {Object} selectedProduct - The selected variant data from API
  */
 window.productOptionsChanged = function (selectedProduct) {
+  var hasPreorder = document.querySelector("[data-has-preorder]")?.getAttribute("data-has-preorder") === "true";;
+  var canPreorder = document.querySelector("[data-can-preorder]")?.getAttribute("data-can-preorder") === "true";
+  var stockBehavior = document.querySelector("[data-stock-behavior]")?.getAttribute("data-stock-behavior") || '';
+
   if (!selectedProduct) {
     // Variant doesn't exist - show out of stock
     hide("[data-in-stock]");
