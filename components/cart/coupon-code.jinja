@@ -1,4 +1,4 @@
-{% set coupon_form_enabled = store.settings.checkout.is_coupon_form_enabled not in [false, 0, '0'] %}
+{% set coupon_form_enabled = store.settings.checkout.is_coupon_form_enabled != false %}
 
 {% if coupon_form_enabled %}
   <div
