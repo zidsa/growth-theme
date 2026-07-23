@@ -557,6 +557,9 @@ msgstr "متوفر"
 msgid "Out of stock"
 msgstr "غير متوفر"
 
+msgid "Hide out of stock products"
+msgstr "إخفاء المنتجات غير المتوفرة"
+
 msgid "Price"
 msgstr "السعر"
 

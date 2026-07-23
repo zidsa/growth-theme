@@ -62,9 +62,6 @@
   ]
 %}
 
-{# Availability options #}
-{% set availability_options = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
-
 <button
   type="button"
   command="show-modal"
@@ -199,19 +196,17 @@
 
               {% set availability_content %}
                 <div class="space-y-3">
-                  {% for value, label in availability_options.items() %}
-                    <label class="form-control">
-                      <input
-                        type="checkbox"
-                        id="availability-{{ value }}-drawer"
-                        name="availability"
-                        value="{{ value }}"
-                        {% if value in availability_values %}checked{% endif %}
-                        class="form-checkbox"
-                      />
-                      {{ label }}
-                    </label>
-                  {% endfor %}
+                  <label class="form-control">
+                    <input
+                      type="checkbox"
+                      id="availability-in_stock-drawer"
+                      name="availability"
+                      value="in_stock"
+                      {% if 'in_stock' in availability_values %}checked{% endif %}
+                      class="form-checkbox"
+                    />
+                    {{ _('Hide out of stock products') }}
+                  </label>
                 </div>
               {% endset %}
 
