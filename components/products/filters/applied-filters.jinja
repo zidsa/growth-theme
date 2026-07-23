@@ -23,17 +23,16 @@
 {% endif %}
 
 {# Availability filter #}
-{% set availability_labels = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
 {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
-{% for av_value in availability_values %}
+{% if 'in_stock' in availability_values %}
   {%
     set __ = active_filters.append({
       'type': 'availability',
-      'label': _('Availability') ~ ': ' ~ availability_labels.get(av_value, av_value),
-      'value': av_value
+      'label': _('Hide out of stock products'),
+      'value': 'in_stock'
     })
   %}
-{% endfor %}
+{% endif %}
 
 {# Attribute filters #}
 {% if filters and filters.attributes %}
