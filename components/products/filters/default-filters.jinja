@@ -1,5 +1,4 @@
 {# Default Filters - For stores without custom filter attributes #}
-{% set availability_options = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
 
 <div class="flex flex-wrap items-center gap-3">
   <span class="text-muted-foreground text-sm"> {{ _("Filters") }} </span>
@@ -32,20 +31,18 @@
   >
     <div class="space-y-1">
       {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
-      {% for value, label in availability_options.items() %}
-        <label class="form-control py-2">
-          <input
-            type="checkbox"
-            id="availability-{{ value }}"
-            name="availability"
-            value="{{ value }}"
-            {% if value in availability_values %}checked{% endif %}
-            onchange="window.productFilter.handleAvailability()"
-            class="form-checkbox"
-          />
-          {{ label }}
-        </label>
-      {% endfor %}
+      <label class="form-control py-2">
+        <input
+          type="checkbox"
+          id="availability-in_stock"
+          name="availability"
+          value="in_stock"
+          {% if 'in_stock' in availability_values %}checked{% endif %}
+          onchange="window.productFilter.handleAvailability()"
+          class="form-checkbox"
+        />
+        {{ _('Hide out of stock products') }}
+      </label>
     </div>
   </el-popover>
 
