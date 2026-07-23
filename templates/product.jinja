@@ -256,6 +256,7 @@
               {% include 'vitrin:products/bundle-products.jinja' %}
             {% endif %}
 
+
             {# Action Buttons #}
             <div
               class="flex flex-col gap-3 pt-2"
@@ -299,6 +300,38 @@
                   {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
                 </button>
                 <span id="product-view-add-to-cart"></span>
+                {% if not safeget(store, 'settings.general.availability.closed_now') and not product.preorder_campaign and product.selected_product.in_stock %}
+                  <button
+                          type="button"
+                          data-buy-now-form="product-form"
+                          class="btn btn-filled btn-lg flex-1 btn-buy-now"
+                  >
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                      <circle
+                              cx="8"
+                              cy="21"
+                              r="1"
+                      ></circle>
+                      <circle
+                              cx="19"
+                              cy="21"
+                              r="1"
+                      ></circle>
+                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                    {{ _("Buy now") }}
+                  </button>
+                {% endif %}
                 {# Wishlist Button #}
                 {% with product_id=product.id, class="btn-lg border-input border" %}
                   {% include 'components/products/wishlist-button.jinja' %}
@@ -352,6 +385,7 @@
               </div>
             </div>
 
+            {% include 'vitrin:checkout/checkout_dialog.jinja' %}
             {% include 'vitrin:products/loyalty_points_widget.jinja' %}
             {% include 'vitrin:products/payment_widgets.jinja' %}
             {% include 'vitrin:products/preorder_countdown.jinja' %}

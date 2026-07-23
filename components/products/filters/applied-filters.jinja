@@ -23,7 +23,7 @@
 {% endif %}
 
 {# Availability filter #}
-{% set availability_labels = { 'in_stock': _('In stock'), 'out_of_stock': _('Out of stock') } %}
+{% set availability_labels = { 'in_stock': _('Hide out of stock') } %}
 {% set availability_values = session.query_params.getlist('availability') if session and session.query_params else [] %}
 {% for av_value in availability_values %}
   {%

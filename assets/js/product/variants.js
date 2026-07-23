@@ -157,7 +157,7 @@ export function updateStockStatus(selectedProduct) {
     // Update quantity selector
     updateQuantitySelector(selectedProduct);
     if (quantityWrapper) show("[data-quantity-wrapper]");
-  } else if (canPreorder) {
+  } else if (canPreorder || selectedProduct.can_be_preordered) {
     if (outOfStockSection) hide("[data-out-of-stock]");
     if (quantityWrapper) hide("[data-quantity-wrapper]");
 
@@ -410,6 +410,9 @@ export function init() {
 }
 
 if (document.readyState === "loading") {
+  if (window.checkout_dialog) {
+    document.getElementsByClassName('btn-buy-now')[0].classList.remove('hidden');
+  }
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
