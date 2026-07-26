@@ -50,13 +50,13 @@
             <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
               {# Image (thumbnail for videos) #}
               <img
-                src="{{ image_url(img_src, w=750, q=85, f='auto') }}"
+                src="{{ image_url(img_src, w=750, q=90, f='auto') }}"
                 srcset="
-                  {{ image_url(img_src, w=400, q=85, f='auto') }}  400w,
-                  {{ image_url(img_src, w=640, q=85, f='auto') }}  640w,
-                  {{ image_url(img_src, w=750, q=85, f='auto') }}  750w,
-                  {{ image_url(img_src, w=960, q=85, f='auto') }}  960w,
-                  {{ image_url(img_src, w=1200, q=85, f='auto') }} 1200w
+                  {{ image_url(img_src, w=400, q=90, f='auto') }}  400w,
+                  {{ image_url(img_src, w=640, q=90, f='auto') }}  640w,
+                  {{ image_url(img_src, w=750, q=90, f='auto') }}  750w,
+                  {{ image_url(img_src, w=960, q=90, f='auto') }}  960w,
+                  {{ image_url(img_src, w=1200, q=90, f='auto') }} 1200w
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
                 alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index) }}"
