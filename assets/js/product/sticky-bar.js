@@ -115,6 +115,7 @@ function handleVariantChange(event) {
     updateStockState(false);
     return;
   }
+  console.log(selectedProduct.in_stock);
 
   updateStockState(selectedProduct.in_stock ? true : canPreorder);
 
