@@ -115,16 +115,12 @@ function handleVariantChange(event) {
     updateStockState(false);
     return;
   }
-  console.log({
-    selectedProductInStock: selectedProduct.in_stock,
-    canPreorder,
-    passedValue: selectedProduct.in_stock ? true : canPreorder,
-  });
+
   updateStockState(selectedProduct.in_stock ? true : canPreorder);
 
   if (selectedProduct.in_stock && selectedProduct.quantity > 0) {
-    quantitySection?.classList.remove("hidden");
-    quantitySection?.classList.add("sm:block");
+    quantitySection?.classList.add("hidden");
+    quantitySection?.classList.remove("sm:block");
   } else if (canPreorder) {
     quantitySection?.classList.add("hidden");
     quantitySection?.classList.remove("sm:block");
