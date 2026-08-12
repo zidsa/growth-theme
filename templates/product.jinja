@@ -387,6 +387,9 @@
 
             {% include 'vitrin:checkout/checkout_dialog.jinja' %}
             {% include 'vitrin:products/loyalty_points_widget.jinja' %}
+            {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' and (settings.gifting_product_page | default(true)) %}
+              {% include 'components/products/gift-order-link.jinja' %}
+            {% endif %}
             {% include 'vitrin:products/payment_widgets.jinja' %}
             {% include 'vitrin:products/preorder_countdown.jinja' %}
             {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
