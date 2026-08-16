@@ -40,10 +40,6 @@
                 data-cart-products-list
               >
                 {% include 'vitrin:v2/cart/products_list.jinja' %}
-
-                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' %}
-                  <div class="mt-4">{% include 'components/cart/gift-card-display.jinja' %}</div>
-                {% endif %}
               </div>
 
               <a
