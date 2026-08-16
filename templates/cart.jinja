@@ -40,10 +40,6 @@
                 data-cart-products-list
               >
                 {% include 'vitrin:v2/cart/products_list.jinja' %}
-
-                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' %}
-                  <div class="mt-4">{% include 'components/cart/gift-card-display.jinja' %}</div>
-                {% endif %}
               </div>
 
               <a
@@ -75,7 +71,9 @@
               <div class="divide-border-light sticky top-4 flex flex-col divide-y">
                 {% include 'components/cart/loyalty-program.jinja' %}
                 {% include 'components/cart/coupon-code.jinja' %}
-                {% include 'components/cart/gift-order.jinja' %}
+                {% if settings.gifting_cart_page | default(true) %}
+                  {% include 'components/cart/gift-order.jinja' %}
+                {% endif %}
                 <div class="flex flex-col gap-4 pt-4">
                   {% include 'components/cart/order-summary.jinja' %}
                   {% include 'components/cart/checkout-buttons.jinja' %}
