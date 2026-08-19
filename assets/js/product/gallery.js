@@ -148,16 +148,6 @@ export function initProductGallery(galleryId) {
   // Check for slides
   const slides = galleryNode.querySelectorAll(".product-gallery__slide");
 
-  // TEMP DEBUG
-  console.log("[GALLERY-DEBUG] initProductGallery:", {
-    galleryId,
-    slideCount: slides.length,
-    firstSlideClass: slides[0]?.className,
-    firstSlideWidth: slides[0]?.getBoundingClientRect().width,
-    thumbsFound: !!thumbsNode,
-    thumbsClass: thumbsNode?.className
-  });
-
   // For single slide, just initialize video controls and return
   if (slides.length <= 1) {
     initVideoControls(galleryNode, null);

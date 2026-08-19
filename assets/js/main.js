@@ -9,37 +9,6 @@
  *                    All modules will re-init their elements
  */
 
-// TEMP DEBUG: identifies which theme.js build the store is actually serving
-console.log("[GALLERY-DEBUG] theme.js build: v1.0.1 mobile-thumbnails (2026-08-19)");
-
-// TEMP DEBUG: after full load, report the gallery's real state and whether the
-// slide-width CSS class exists in the loaded stylesheet
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const slide = document.querySelector(".product-gallery__slide");
-    const img = slide?.querySelector("img");
-
-    // Probe: does the currently loaded CSS define our flex-basis class?
-    const probe = document.createElement("div");
-    probe.className = "flex-[0_0_calc(100%-8px)]";
-    document.body.appendChild(probe);
-    const probeBasis = getComputedStyle(probe).flexBasis;
-    probe.className = "flex-[0_0_75%]";
-    const probeOldBasis = getComputedStyle(probe).flexBasis;
-    probe.remove();
-
-    console.log("[GALLERY-DEBUG] state after page load:", {
-      slideClass: slide?.className,
-      slideWidth: slide?.getBoundingClientRect().width,
-      imgSrc: img?.getAttribute("src")?.slice(0, 100),
-      imgVisibleHeight: img?.getBoundingClientRect().height,
-      cssHasNewClass: probeBasis !== "auto" ? probeBasis : "MISSING",
-      cssHasOldClass: probeOldBasis !== "auto" ? probeOldBasis : "MISSING",
-      themeJsUrl: document.querySelector('script[src*="theme.js"]')?.src
-    });
-  }, 1000);
-});
-
 import { createCarousel, createConditionalCarousel } from "./lib/carousel.js";
 import { initAllProductGalleries } from "./product/gallery.js";
 import { initCart, initButtons as initCartButtons } from "./cart/add-to-cart.js";

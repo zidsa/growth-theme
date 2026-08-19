@@ -201,13 +201,6 @@ export function updateProductImages(selectedProduct) {
   if (!selectedProduct) return;
 
   const media = selectedProduct.media || [];
-
-  // TEMP DEBUG
-  console.log("[GALLERY-DEBUG] updateProductImages: rebuilding gallery DOM", {
-    mediaCount: media.length,
-    slideClassUsed: "flex-[0_0_calc(100%-8px)]"
-  });
-
   const galleryContainer = document.querySelector(
     `.product-gallery[data-gallery-id="${GALLERY_ID}"] .product-gallery__container`
   );
