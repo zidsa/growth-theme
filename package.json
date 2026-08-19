@@ -1,6 +1,6 @@
 {
   "name": "default-theme-vitrin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "New default theme for Vitrin",
   "type": "module",
   "scripts": {
