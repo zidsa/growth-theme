@@ -228,7 +228,7 @@ export function updateProductImages(selectedProduct) {
         console.log("isVideo", isVideo);
         if (isVideo) {
           return `
-          <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
+          <div class="product-gallery__slide relative min-w-0 flex-[0_0_calc(100%-8px)]">
             <img
               src="${imgSrc}"
               alt="${selectedProduct.name || ""} - Image ${index + 1}"
@@ -266,7 +266,7 @@ export function updateProductImages(selectedProduct) {
         }
 
         return `
-        <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
+        <div class="product-gallery__slide relative min-w-0 flex-[0_0_calc(100%-8px)]">
           <img
             src="${imgSrc}"
             alt="${selectedProduct.name || ""} - Image ${index + 1}"
