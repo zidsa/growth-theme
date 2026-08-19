@@ -4,6 +4,8 @@
   "description": "New default theme for Vitrin",
   "type": "module",
   "scripts": {
+    "pretest": "npm run build:js",
+    "test": "playwright test",
     "dev": "npm-run-all --parallel dev:*",
     "dev:css": "npx @tailwindcss/cli -i assets/tailwindcss.css -o assets/styles.css --watch",
     "dev:js": "vite build --watch",
@@ -25,6 +27,7 @@
   },
   "homepage": "https://github.com/zidsa/growth-theme#readme",
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/cli": "^4.1.13",
     "@tailwindcss/typography": "^0.5.19",
     "npm-run-all2": "^8.0.4",

@@ -28,12 +28,12 @@ import {
 import { updateCartTotals, updateFreeShippingProgress } from "./totals.js";
 import { setupQuantityInputHandlers, updateQuantity } from "./quantity.js";
 import { refreshCartPage, setCartLoadingState, setupZidCartEventListeners } from "./refresh.js";
+import { handleLoginAction } from "../features/layout.js";
 
 // ===== State =====
 const state = {
   cart: null,
-  isInitialized: false,
-  pendingRedirect: null // Store redirect URL for post-login navigation
+  isInitialized: false
 };
 
 // ===== Configuration (set from template) =====
@@ -99,9 +99,6 @@ function init(options) {
 
   // Setup gift card event listener
   setupGiftEventListener();
-
-  // Setup auth success listener for post-login redirect
-  setupAuthSuccessListener();
 
   // Initialize loyalty program if enabled
   if (config.loyaltyEnabled) {
@@ -211,55 +208,6 @@ async function handleQuantityAction(btn) {
   setCartLoadingState(true, cartProductId);
   await updateQuantity(cartProductId, productId, delta, refreshCartPage);
   setCartLoadingState(false);
-}
-
-// ===== Auth Helper =====
-
-/**
- * Setup listener for auth success event
- * Handles redirect after successful OTP verification
- */
-function setupAuthSuccessListener() {
-  window.addEventListener("vitrin:auth:success", function () {
-    // Update auth state
-    if (window.customerAuthState) {
-      window.customerAuthState.isAuthenticated = true;
-      window.customerAuthState.isGuest = false;
-    }
-
-    // Handle pending redirect
-    if (state.pendingRedirect) {
-      const redirectUrl = state.pendingRedirect;
-      state.pendingRedirect = null;
-      window.location.href = redirectUrl;
-    }
-  });
-}
-
-function handleLoginAction(redirectTo = "", addToUrl = true) {
-  if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
-    return;
-  }
-
-  // Calculate final redirect URL and store for post-login navigation
-  const finalRedirect = addToUrl ? window.location.pathname + redirectTo : redirectTo;
-  if (finalRedirect) {
-    state.pendingRedirect = finalRedirect;
-  }
-
-  // Use auth_dialog if available (preferred per Zid docs)
-  if (window.auth_dialog?.open && typeof window.auth_dialog.open === "function") {
-    window.auth_dialog.open();
-  } else if (typeof zid !== "undefined" && zid.customer && zid.customer.login) {
-    // Fallback to Zid SDK login
-    zid.customer.login.open({
-      redirectTo: finalRedirect
-    });
-  } else {
-    // Final fallback to page redirect
-    const redirectUrl = finalRedirect ? "/auth/login?redirect_to=" + encodeURIComponent(finalRedirect) : "/auth/login";
-    window.location.href = redirectUrl;
-  }
 }
 
 // ===== Bundle Items =====
@@ -389,7 +337,6 @@ window.CartPage = CartController;
 // Platform callback aliases (backward compatibility)
 window.toggleBundleItems = toggleBundleItems;
 window.updateCartQuantity = CartController.updateQuantity;
-window.handleLoginAction = handleLoginAction;
 window.applyLoyaltyRedemption = CartController.applyLoyaltyRedemption;
 window.removeLoyaltyRedemption = CartController.removeLoyaltyRedemption;
 window.sendCoupon = CartController.applyCoupon;
