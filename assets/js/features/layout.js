@@ -32,7 +32,9 @@ function initAnnouncementBar() {
 const layoutStateKey = Symbol.for("growth-theme.layout-state");
 const layoutState = window[layoutStateKey] || {
   initialized: false,
-  pendingAuthRedirect: null
+  pendingAuthRedirect: null,
+  authEndpointsComplete: false,
+  authEndpointsPromise: null
 };
 window[layoutStateKey] = layoutState;
 
@@ -128,7 +130,6 @@ function initCustomerGreeting() {
     const customer = event.detail?.customer;
     if (customer?.id) {
       markCustomerAuthenticated();
-      initAuthVisibility();
     }
 
     if (customer && customer.name) {
@@ -148,6 +149,10 @@ function initCustomerGreeting() {
         mobileLoggedInLinks.classList.add("flex");
       }
     }
+
+    // Mark auth endpoints as complete after customer fetch
+    layoutState.authEndpointsComplete = true;
+    initAuthVisibility();
   });
 }
 
@@ -219,7 +224,6 @@ window.selectMobileLanguage = function (languageCode) {
 export function initAuthVisibility() {
   const isGuest = !window.customerAuthState || window.customerAuthState.isGuest;
   const isAuthenticated = window.customerAuthState && window.customerAuthState.isAuthenticated;
-
   // Show/hide guest-only elements
   document.querySelectorAll("[data-auth-guest]").forEach((el) => {
     el.classList.toggle("hidden", !isGuest);
@@ -257,7 +261,9 @@ export function init() {
   initLoginRedirectButtons();
   initCustomerGreeting();
   setupAuthSuccessListener();
-  initAuthVisibility();
+  
+  // Don't call initAuthVisibility() here - wait for zid-customer-fetched event
+  // which will call it after auth endpoints complete
 }
 
 if (document.readyState === "loading") {
