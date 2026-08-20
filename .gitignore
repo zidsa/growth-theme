@@ -36,3 +36,8 @@ dist/
 *.pot
 
 /build
+
+# browser tests
+/test-results/
+/playwright-report/
+/blob-report/
