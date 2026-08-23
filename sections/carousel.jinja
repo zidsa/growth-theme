@@ -59,6 +59,8 @@
               <img
                 src="{{ mobile_image }}"
                 alt="{{ slide.heading | default('') }}"
+                width="768"
+                height="{{ settings.min_height_mobile | default(700) }}"
                 class="h-full w-full object-cover"
                 style="object-position: {{ slide.background_position | default('center') }}"
                 {% if is_lazy_section or not is_first_slide %}loading="lazy"{% else %}fetchpriority="high"{% endif %}

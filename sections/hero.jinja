@@ -1,5 +1,5 @@
 {# Optimize hero images for better LCP #}
-{% set mobile_image = image_url(settings.background_image_mobile or settings.background_image, w=960, q=85, f='auto') %}
+{% set mobile_image = image_url(settings.background_image_mobile or settings.background_image, w=828, q=85, f='auto') %}
 {% set desktop_image = image_url(settings.background_image, w=2220, q=90, f='auto') %}
 {% set is_lazy = settings.order > 2 %}
 
@@ -27,6 +27,8 @@
       <img
         src="{{ mobile_image }}"
         alt="{{ settings.heading | default('') }}"
+        width="828"
+        height="{{ settings.min_height_mobile | default(700) }}"
         class="h-full w-full object-cover"
         style="object-position: {{ settings.background_position | default('center') }}"
         {% if is_lazy %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
