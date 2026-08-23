@@ -163,7 +163,7 @@ function setupEventDelegation() {
 
       case "gift-delete":
         e.preventDefault();
-        deleteGiftCard();
+        deleteGiftCard(e);
         break;
 
       case "gift-open":
