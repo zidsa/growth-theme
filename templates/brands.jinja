@@ -27,9 +27,9 @@
         <h2 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight">{{ _("Brands") }}</h2>
 
         {# Categories Grid - 3 columns #}
-        {% if brands and brands|length > 0 %}
+        {% if brands and brands.results|length > 0 %}
           <div class="grid grid-cols-2 gap-4 md:grid-cols-5">
-            {% for brand in brands %}
+            {% for brand in brands.results %}
               {% with brand=brand, index=loop.index0 %}
                 {% include 'components/brands/brand-card.jinja' %}
               {% endwith %}
