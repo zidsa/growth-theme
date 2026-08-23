@@ -5,6 +5,39 @@
   class="section-carousel relative overflow-hidden"
   data-variant="{{ settings.style_variant | default('default') }}"
 >
+  {# Section-scoped styles first so min-height/layout apply before the markup below is laid out #}
+  <style>
+      [section-id="{{ sectionId }}"] .embla__slide {
+          min-height: {{ settings.min_height_mobile | default(700) }}px;
+      }
+
+      @media (min-width: 768px) {
+          [section-id="{{ sectionId }}"] .embla__slide {
+              min-height: {{ settings.min_height_desktop | default(700) }}px;
+          }
+      }
+
+      {% if settings.transition_effect == 'fade' %}
+          /* Fade effect: use grid layout */
+          [section-id="{{ sectionId }}"] .embla__container {
+              display: grid;
+              grid-auto-flow: column;
+              grid-auto-columns: 100%;
+              height: 100%;
+          }
+      {% else %}
+          /* Slide effect: use flex layout */
+          [section-id="{{ sectionId }}"] .embla__container {
+              display: flex;
+              touch-action: pan-y pinch-zoom;
+          }
+
+          [section-id="{{ sectionId }}"] .embla__slide {
+              flex: 0 0 100%;
+              min-width: 0;
+          }
+      {% endif %}
+  </style>
   <!-- Carousel with data attributes for JS initialization -->
   <div
     class="embla w-full overflow-hidden"
@@ -94,38 +127,6 @@
   </div>
 
   <!-- prettier-ignore-start -->
-    <style>
-        [section-id="{{ sectionId }}"] .embla__slide {
-            min-height: {{ settings.min_height_mobile | default(700) }}px;
-        }
-
-        @media (min-width: 768px) {
-            [section-id="{{ sectionId }}"] .embla__slide {
-                min-height: {{ settings.min_height_desktop | default(700) }}px;
-            }
-        }
-
-        {% if settings.transition_effect == 'fade' %}
-            /* Fade effect: use grid layout */
-            [section-id="{{ sectionId }}"] .embla__container {
-                display: grid;
-                grid-auto-flow: column;
-                grid-auto-columns: 100%;
-                height: 100%;
-            }
-        {% else %}
-            /* Slide effect: use flex layout */
-            [section-id="{{ sectionId }}"] .embla__container {
-                display: flex;
-                touch-action: pan-y pinch-zoom;
-            }
-
-            [section-id="{{ sectionId }}"] .embla__slide {
-                flex: 0 0 100%;
-                min-width: 0;
-            }
-        {% endif %}
-    </style>
   <!-- prettier-ignore-end -->
 </section>
 

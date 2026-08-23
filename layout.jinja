@@ -172,7 +172,10 @@
         var loyalty_button_direction = "{{ session.locale.language.direction }}";
         var text_loyalty_rewards = '{{ _("Rewards") }}';
       </script>
-      <script src="{{ 'js/layout-loyalty.js' | asset_url }}"></script>
+      <script
+        defer
+        src="{{ 'js/layout-loyalty.js' | asset_url }}"
+      ></script>
     {% endif %}
     {% block footer_scripts %}
     {% endblock %}
