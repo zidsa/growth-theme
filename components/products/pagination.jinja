@@ -68,7 +68,7 @@
 {# PaginationFirst - first page button #}
 {% macro PaginationFirst(href='', disabled=false, ariaLabel='First page', class='') -%}
   <a
-    {% if not disabled %} href="{{ href }}" {% endif %}
+    href="{{ href }}"
     data-slot="pagination-first"
     aria-label="{{ ariaLabel }}"
     aria-disabled="{{ 'true' if disabled else 'false' }}"
@@ -126,7 +126,7 @@
 {# PaginationNext - next page button #}
 {% macro PaginationNext(href='', disabled=false, ariaLabel='Next page', class='') -%}
   <a
-    {% if not disabled %} href="{{ href }}" {% endif %}
+    href="{{ href }}"
     data-slot="pagination-next"
     aria-label="{{ ariaLabel }}"
     aria-disabled="{{ 'true' if disabled else 'false' }}"
@@ -155,7 +155,7 @@
 {# PaginationLast - last page button #}
 {% macro PaginationLast(href='', disabled=false, ariaLabel='Last page', class='') -%}
   <a
-    {% if not disabled %} href="{{ href }}" {% endif %}
+    href="{{ href }}"
     data-slot="pagination-last"
     aria-label="{{ ariaLabel }}"
     aria-disabled="{{ 'true' if disabled else 'false' }}"

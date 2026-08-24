@@ -61,7 +61,7 @@
             </svg>
           </a>
         </li>
-        <li class="relative">
+        <li>
           <a
             href="{{ url_for('cart_page') }}"
             class="relative flex size-10 items-center justify-center"
@@ -89,55 +89,6 @@
               0
             </span>
           </a>
-          {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' and settings.gifting_add_to_cart_popup | default(true) %}
-            <div
-              hidden
-              data-gift-cart-popup
-              class="bg-background border-border-light absolute end-0 top-full z-50 mt-2 flex items-center gap-3 rounded border px-4 py-3 shadow-md"
-            >
-              <a
-                href="{{ url_for('cart_page') }}"
-                class="text-sm flex items-center gap-2 whitespace-nowrap"
-              >
-                <span class="text-foreground font-medium">{{ _("Want to send a gift order?") }}</span>
-                <span class="text-muted">{{ _("Check the cart") }}</span>
-              </a>
-              <svg
-                class="text-accent size-10 shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-              <button
-                type="button"
-                data-gift-popup-close
-                class="text-foreground flex size-6 shrink-0 items-center justify-center"
-                aria-label="{{ _('Close') }}"
-              >
-                <svg
-                  class="size-4"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4L4 12M4 4l8 8"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          {% endif %}
         </li>
       </ul>
     </nav>

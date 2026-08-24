@@ -105,8 +105,6 @@ window.buyNowFromForm = async (btn) => {
     const buyNowOptions = bundlePayload ? { ...bundlePayload, form_id: formId } : { form_id: formId };
 
     await window.zid.cart.buyNow(buyNowOptions, { showErrorNotification: true });
-    // Close quick-view dialog if open
-    if (window.quickViewManager) window.quickViewManager.close();
     // buyNow handles redirect
     hideSpinner(btn);
   } catch (err) {

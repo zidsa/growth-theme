@@ -98,7 +98,7 @@ function init(options) {
   setupZidCartEventListeners();
 
   // Setup gift card event listener
-  setupGiftEventListener(refreshCartPage);
+  setupGiftEventListener();
 
   // Setup auth success listener for post-login redirect
   setupAuthSuccessListener();
@@ -166,7 +166,7 @@ function setupEventDelegation() {
 
       case "gift-delete":
         e.preventDefault();
-        deleteGiftCard(refreshCartPage);
+        deleteGiftCard();
         break;
 
       case "gift-open":

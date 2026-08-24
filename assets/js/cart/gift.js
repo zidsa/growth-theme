@@ -52,7 +52,7 @@ export function editGiftCard() {
 /**
  * Delete gift card from cart
  */
-export function deleteGiftCard(onDeleted) {
+export function deleteGiftCard() {
   const btn = document.querySelector("[data-gift-delete-btn]");
   const icon = document.querySelector("[data-gift-delete-icon]");
   const spinner = document.querySelector("[data-gift-delete-spinner]");
@@ -79,9 +79,6 @@ export function deleteGiftCard(onDeleted) {
       // Reset loading state
       if (icon) icon.classList.remove("hidden");
       if (spinner) spinner.classList.add("hidden");
-
-      // Checkout also drops the gifting line; re-render from the server
-      if (onDeleted) onDeleted();
     })
     .catch((err) => {
       console.error("Failed to remove gift card:", err);
@@ -167,12 +164,11 @@ export function updateGiftCardDisplay(giftData) {
  * Setup gift card event listener
  * Listens for vitrin:gift:submitted event from platform
  */
-export function setupGiftEventListener(onGiftUpdated) {
+export function setupGiftEventListener() {
   window.addEventListener("vitrin:gift:submitted", (event) => {
     const giftData = event?.detail?.data?.gift_card_details;
     if (giftData) {
       updateGiftCardDisplay(giftData);
     }
-    if (onGiftUpdated) onGiftUpdated();
   });
 }

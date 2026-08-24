@@ -306,43 +306,6 @@
           "default": 4
         }
       ]
-    },
-    {
-      "id": "gifting",
-      "icon": "fa fa-gift",
-      "name": {
-        "ar": "الإهداء",
-        "en": "Gifting"
-      },
-      "settings": [
-        {
-          "id": "cart_page",
-          "type": "checkbox",
-          "label": {
-            "ar": "إظهار زر الإهداء في صفحة السلة",
-            "en": "Show the gift widget on the cart page"
-          },
-          "default": true
-        },
-        {
-          "id": "product_page",
-          "type": "checkbox",
-          "label": {
-            "ar": "إظهار زر الإهداء في صفحة المنتج",
-            "en": "Show the gift widget on the product page"
-          },
-          "default": true
-        },
-        {
-          "id": "add_to_cart_popup",
-          "type": "checkbox",
-          "label": {
-            "ar": "إظهار تنبيه الإهداء بعد الإضافة إلى السلة",
-            "en": "Show a gifting hint after adding to cart"
-          },
-          "default": true
-        }
-      ]
     }
   ]
 }
