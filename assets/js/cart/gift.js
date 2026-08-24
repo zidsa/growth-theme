@@ -84,8 +84,6 @@ export function deleteGiftCard(e) {
 
       const target = e.target;
 
-      console.log(target,'<----')
-
       if (!(target instanceof Element)) return;
 
       const deleteButton = target.closest('[data-gift-delete-btn]');
