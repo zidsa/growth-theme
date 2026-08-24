@@ -9,7 +9,7 @@
   data-variant="{{ settings.style_variant | default('default') }}"
 >
   {# Background image using native img for better LCP #}
-  <div class="absolute inset-0 -z-10">
+  <div class="absolute inset-0 z-10">
     <picture>
       <source media="(min-width: 768px)" srcset="{{ desktop_image }}" />
       <img
@@ -26,7 +26,7 @@
     ></div>
   </div>
 
-  <div class="theme-container flex max-w-[960px] flex-col gap-20">
+  <div class="theme-container flex max-w-[960px] flex-col gap-20 z-10">
     <div class="flex max-w-[768px] flex-col gap-6">
       <div class="flex flex-col gap-4">
         {% if settings.badge_text and settings.badge_text | trim %}

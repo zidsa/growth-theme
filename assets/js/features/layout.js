@@ -27,8 +27,36 @@ function initAnnouncementBar() {
 // Login/Account Management
 // ─────────────────────────────────────────────────────────────
 
-// Store pending redirect for post-login navigation
-let pendingAuthRedirect = null;
+// Both theme and cart bundles include this module. Share state so layout
+// listeners initialize once and either bundle can complete an auth redirect.
+const layoutStateKey = Symbol.for("growth-theme.layout-state");
+const layoutState = window[layoutStateKey] || {
+  initialized: false,
+  pendingAuthRedirect: null,
+  authEndpointsComplete: false,
+  authEndpointsPromise: null
+};
+window[layoutStateKey] = layoutState;
+
+function normalizeAuthRedirect(redirectTo) {
+  try {
+    const redirectUrl = new URL(redirectTo, window.location.origin);
+    if (redirectUrl.origin !== window.location.origin) return "";
+    return redirectUrl.pathname + redirectUrl.search + redirectUrl.hash;
+  } catch {
+    return "";
+  }
+}
+
+function getProfileRedirect() {
+  return normalizeAuthRedirect(window.layoutConfig?.profileUrl || "/account-profile") || "/account-profile";
+}
+
+function markCustomerAuthenticated() {
+  window.customerAuthState = window.customerAuthState || {};
+  window.customerAuthState.isAuthenticated = true;
+  window.customerAuthState.isGuest = false;
+}
 
 /**
  * Setup listener for auth success event
@@ -36,16 +64,13 @@ let pendingAuthRedirect = null;
  */
 function setupAuthSuccessListener() {
   window.addEventListener("vitrin:auth:success", function () {
-    // Update auth state
-    if (window.customerAuthState) {
-      window.customerAuthState.isAuthenticated = true;
-      window.customerAuthState.isGuest = false;
-    }
+    markCustomerAuthenticated();
+    initAuthVisibility();
 
     // Handle pending redirect
-    if (pendingAuthRedirect) {
-      const redirectUrl = pendingAuthRedirect;
-      pendingAuthRedirect = null;
+    if (layoutState.pendingAuthRedirect) {
+      const redirectUrl = layoutState.pendingAuthRedirect;
+      layoutState.pendingAuthRedirect = null;
       window.location.href = redirectUrl;
     }
   });
@@ -54,20 +79,24 @@ function setupAuthSuccessListener() {
 /**
  * Login action handler - opens login dialog with optional redirect
  */
-window.handleLoginAction = function (redirectTo, addToUrl) {
+export function handleLoginAction(redirectTo, addToUrl) {
   if (redirectTo === undefined) redirectTo = "";
   if (addToUrl === undefined) addToUrl = true;
 
+  // Calculate and normalize the redirect before checking auth so an explicit
+  // action target is preserved for shoppers who are already signed in.
+  const finalRedirect = addToUrl ? window.location.pathname + redirectTo : redirectTo;
+  const normalizedRedirect = finalRedirect ? normalizeAuthRedirect(finalRedirect) : "";
+  const profileRedirect = getProfileRedirect();
+  const authRedirect = normalizedRedirect || profileRedirect;
+
   if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
-    window.location.href = window.layoutConfig?.profileUrl || "/account-profile";
+    window.location.href = redirectTo && normalizedRedirect ? normalizedRedirect : profileRedirect;
     return;
   }
 
-  // Calculate final redirect URL and store for post-login navigation
-  const finalRedirect = addToUrl ? window.location.pathname + redirectTo : redirectTo;
-  if (finalRedirect) {
-    pendingAuthRedirect = finalRedirect;
-  }
+  // Store redirect for post-login navigation
+  layoutState.pendingAuthRedirect = authRedirect;
 
   // Use auth_dialog if available (preferred per Zid docs)
   if (window.auth_dialog?.open && typeof window.auth_dialog.open === "function") {
@@ -75,13 +104,15 @@ window.handleLoginAction = function (redirectTo, addToUrl) {
   } else if (typeof zid !== "undefined" && zid.customer && zid.customer.login) {
     // Fallback to Zid SDK login
     zid.customer.login.open({
-      redirectTo: finalRedirect
+      redirectTo: authRedirect
     });
   } else {
     // Final fallback to page redirect
-    window.location.href = window.layoutConfig?.profileUrl || "/account-profile";
+    window.location.href = "/auth/login?redirect_to=" + encodeURIComponent(authRedirect);
   }
-};
+}
+
+window.handleLoginAction = handleLoginAction;
 
 function initLoginRedirectButtons() {
   document.addEventListener("click", function (e) {
@@ -96,7 +127,11 @@ function initLoginRedirectButtons() {
 
 function initCustomerGreeting() {
   document.addEventListener("zid-customer-fetched", function (event) {
-    const customer = event.detail.customer;
+    const customer = event.detail?.customer;
+    if (customer?.id) {
+      markCustomerAuthenticated();
+    }
+
     if (customer && customer.name) {
       const headerLoginBtn = document.getElementById("header-login-btn");
       const headerProfileBtn = document.getElementById("header-profile-btn");
@@ -114,6 +149,10 @@ function initCustomerGreeting() {
         mobileLoggedInLinks.classList.add("flex");
       }
     }
+
+    // Mark auth endpoints as complete after customer fetch
+    layoutState.authEndpointsComplete = true;
+    initAuthVisibility();
   });
 }
 
@@ -201,7 +240,6 @@ window.onProductClick = function(event, el) {
 export function initAuthVisibility() {
   const isGuest = !window.customerAuthState || window.customerAuthState.isGuest;
   const isAuthenticated = window.customerAuthState && window.customerAuthState.isAuthenticated;
-
   // Show/hide guest-only elements
   document.querySelectorAll("[data-auth-guest]").forEach((el) => {
     el.classList.toggle("hidden", !isGuest);
@@ -226,20 +264,22 @@ export function initAuthVisibility() {
   });
 }
 
-// Re-run visibility check after auth changes
-window.addEventListener("vitrin:auth:success", initAuthVisibility);
-
 // ─────────────────────────────────────────────────────────────
 // Initialization
 // ─────────────────────────────────────────────────────────────
 
 export function init() {
+  if (layoutState.initialized) return;
+  layoutState.initialized = true;
+
   initAnnouncementBar();
   initLocaleForms();
   initLoginRedirectButtons();
   initCustomerGreeting();
   setupAuthSuccessListener();
-  initAuthVisibility();
+  
+  // Don't call initAuthVisibility() here - wait for zid-customer-fetched event
+  // which will call it after auth endpoints complete
 }
 
 if (document.readyState === "loading") {

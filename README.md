@@ -32,6 +32,8 @@ The default storefront theme for [Zid's Vitrin platform](https://zid.sa). Built 
 
 ```bash
 npm install
+npx playwright install chromium  # One-time browser setup for tests
+npm test                       # Build JS bundles and run browser regressions
 npm run dev                    # Watch mode (CSS + JS)
 vitrin push -s <store-email> -a   # Push and activate theme
 ```
@@ -42,6 +44,7 @@ vitrin push -s <store-email> -a   # Push and activate theme
 
 | Command          | Description                                                                  |
 | ---------------- | ---------------------------------------------------------------------------- |
+| `npm test`       | Build both JavaScript bundles and run Playwright browser regression tests   |
 | `npm run dev`    | Parallel CSS watch + JS watch (via `npm-run-all`)                            |
 | `npm run build`  | Production build: minified CSS + both JS bundles (sequential)                |
 | `npm run format` | Prettier with Jinja + Tailwind plugins                                       |
@@ -437,7 +440,7 @@ The theme uses custom DOM events for communication between modules. This is crit
 
 | Event | Source | Handled By | Purpose |
 |-------|--------|------------|---------|
-| `vitrin:auth:success` | Platform auth dialog | Layout module, cart controller | User completed login (OTP verified) |
+| `vitrin:auth:success` | Platform auth dialog | Layout module | User completed login (OTP verified) |
 | `vitrin:gift:submitted` | Platform gift dialog | Gift card module | Gift card form submitted |
 | `vitrin:bundle-selections:updated` | Platform bundle UI | Add-to-cart module | Bundle product selections changed |
 | `zidcart:loading` | Platform cart SDK | Cart refresh module | Cart operation started |
@@ -504,9 +507,10 @@ CartPage.init(config)
   ├── setupZidCartEventListeners()  # zidcart:* platform events
   ├── setupCouponInput()         # Coupon code apply
   ├── setupGiftEventListener()   # Gift card events
-  ├── initLoyaltyProgram()       # Loyalty points
-  └── setupAuthSuccessListener() # Post-login redirect
+  └── initLoyaltyProgram()       # Loyalty points
 ```
+
+Login actions and post-login redirects use the shared handler in the layout module.
 
 **Event delegation**: All cart actions use `data-action` attributes:
 
