@@ -1142,3 +1142,21 @@ msgstr "الطلب المسبق"
 
 msgid "Preorder now"
 msgstr "اطلب مسبقاً"
+
+msgid "All Brands"
+msgstr "جميع الماركات"
+
+msgid "Brands"
+msgstr "الماركات"
+
+msgid "No brands found"
+msgstr "لا توجد ماركات"
+
+msgid "1 product"
+msgstr "1 منتج"
+
+msgid "No products found in this brand"
+msgstr "لا توجد منتجات في هذا الماركات"
+
+msgid "%(count)s products"
+msgstr "%(count)s منتج"

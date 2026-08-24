@@ -1,24 +1,13 @@
 {% set filters=products.filters %}
+{% set filter_keys = ["sort_by", "order", "price_min", "price_max", "availability"] %}
+{% set is_filtered = session.query_params and filter_keys | select("in", session.query_params) | list | length > 0 %}
 
-{% set ns = namespace(has_custom_filters=false) %}
-{% if filters and filters.attributes %}
-  {% for attribute in filters.attributes %}
-    {% if attribute.is_enabled and attribute.data|length > 0 %}
-      {% set ns.has_custom_filters = true %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
 
 <div class="flex flex-col gap-4">
   <div class="flex flex-wrap items-center justify-between">
     {# Filters Drawer - Show based on conditions #}
-    {% if ns.has_custom_filters %}
-      {# Store WITH custom filters: Always show drawer #}
-      {% include 'components/products/filters/advanced-filters.jinja' %}
-    {% else %}
       {# Store WITHOUT custom filters: Show drawer only on mobile #}
-      <div class="md:hidden">{% include 'components/products/filters/advanced-filters.jinja' %}</div>
-    {% endif %}
+   <div class="md:hidden">{% include 'components/products/filters/advanced-filters.jinja' %}</div>
 
     {# Simple Filters (Availability & Price popovers) - Only for stores WITHOUT custom filters on desktop #}
     {% if not ns.has_custom_filters %}
