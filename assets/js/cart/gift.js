@@ -54,8 +54,7 @@ export function editGiftCard() {
 /**
  * Delete gift card from cart
  */
-export function deleteGiftCard(e) {
-  const btn = document.querySelector("[data-gift-delete-btn]");
+export function deleteGiftCard() {
   const icon = document.querySelector("[data-gift-delete-icon]");
   const spinner = document.querySelector("[data-gift-delete-spinner]");
 
@@ -66,32 +65,8 @@ export function deleteGiftCard(e) {
   window.zid.cart
     .removeGiftCard({ showErrorNotification: true })
     .then(() => {
-      // Hide gift card display in products list
-      const giftCardDisplays = document.querySelectorAll("[data-gift-card-display]");
-      giftCardDisplays.forEach((el) => {
-        el.classList.add("hidden");
-      });
-
-      // Toggle Add/Edit details links on gift button
-      const addLink = document.querySelector("[data-gift-add-link]");
-      const editLink = document.querySelector("[data-gift-edit-link]");
-      if (addLink) addLink.classList.remove("hidden");
-      if (editLink) editLink.classList.add("hidden");
-
-      // Reset loading state
-      if (icon) icon.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
-
-      const target = e.target;
-
-      if (!(target instanceof Element)) return;
-
-      const deleteButton = target.closest('[data-gift-delete-btn]');
-      if (!deleteButton) return;
-
-      const productCard = deleteButton.closest('.cart-product-item');
-
-      productCard?.remove();
+      // Reload so cart reflects the removed gift product
+      window.location.reload();
     })
     .catch((err) => {
       console.error("Failed to remove gift card:", err);
