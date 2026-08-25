@@ -8,6 +8,18 @@
   class="section-hero relative flex items-center overflow-hidden px-4 md:px-16"
   data-variant="{{ settings.style_variant | default('default') }}"
 >
+  {# Section-scoped styles first so min-height/layout apply before the markup below is laid out #}
+  <style>
+    [section-id="{{ sectionId }}"] {
+      min-height: {{ settings.min_height_mobile | default(700) }}px;
+    }
+
+    @media (min-width: 768px) {
+      [section-id="{{ sectionId }}"] {
+        min-height: {{ settings.min_height_desktop | default(700) }}px;
+      }
+    }
+  </style>
   {# Background image using native img for better LCP #}
   <div class="absolute inset-0 z-10">
     <picture>
@@ -15,6 +27,8 @@
       <img
         src="{{ mobile_image }}"
         alt="{{ settings.heading | default('') }}"
+        width="828"
+        height="{{ settings.min_height_mobile | default(700) }}"
         class="h-full w-full object-cover"
         style="object-position: {{ settings.background_position | default('center') }}"
         {% if is_lazy %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
@@ -57,16 +71,5 @@
   </div>
 
   {# prettier-ignore-start #}
-  <style>
-    [section-id="{{ sectionId }}"] {
-      min-height: {{ settings.min_height_mobile | default(700) }}px;
-    }
-
-    @media (min-width: 768px) {
-      [section-id="{{ sectionId }}"] {
-        min-height: {{ settings.min_height_desktop | default(700) }}px;
-      }
-    }
-  </style>
   {# prettier-ignore-end #}
 </section>

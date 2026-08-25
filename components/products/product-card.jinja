@@ -23,13 +23,14 @@
   >
     <img
       {% if product.main_image and product.main_image.image %}
-        src="{{ product.main_image.image.medium }}"
+        src="{{ image_url(product.main_image.image.large, w=600, q=80, f='auto') }}"
       {% elif product.images and product.images|length > 0 %}
         src="{{ image_url(product.images[0].image.full_size, w=400, q=85, f='auto') }}"
       {% else %}
         src="{{ image_url(('images/product-img.svg' | asset_url), w=300, q=100, f='auto') }}"
       {% endif %}
       alt="{{ product.name }}"
+      loading="lazy"
       class="{{ 'h-auto' if aspect_ratio == 'adapt' else 'h-full object-cover' }} w-full object-center"
       {% set img_index = index if index is defined else (loop.index0 if loop is defined else 0) %}
       {% if img_index > 3 %}loading="lazy"{% elif img_index == 0 and is_priority | default(false) %}fetchpriority="high"{% endif %}
