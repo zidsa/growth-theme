@@ -823,7 +823,13 @@ msgid "Make it a gift"
 msgstr "اجعلها هدية"
 
 msgid "Send it as a gift order"
-msgstr "أرسلها كطلب هدية"
+msgstr "إهداء الطلب"
+
+msgid "Want to send a gift order?"
+msgstr "أترغب بإرسال الطلب كهدية؟"
+
+msgid "Check the cart"
+msgstr "تفقد السلة"
 
 msgid "Add details"
 msgstr "أضف التفاصيل"
@@ -832,7 +838,7 @@ msgid "Edit details"
 msgstr "تعديل التفاصيل"
 
 msgid "Edit gift details"
-msgstr "تعديل تفاصيل الهدية"
+msgstr "تعديل تفاصيل الإهداء"
 
 msgid "Gift"
 msgstr "هدية"
