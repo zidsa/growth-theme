@@ -1156,7 +1156,7 @@ msgid "1 product"
 msgstr "1 منتج"
 
 msgid "No products found in this brand"
-msgstr "لا توجد منتجات في هذا الماركات"
+msgstr "لا توجد منتجات في هذه الماركة"
 
 msgid "%(count)s products"
 msgstr "%(count)s منتج"
