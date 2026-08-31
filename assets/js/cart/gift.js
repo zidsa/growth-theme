@@ -83,7 +83,7 @@ export function deleteGiftCard() {
 export function updateGiftCardDisplay(giftData) {
   if (!giftData) return;
 
-  refreshCartPage();
+  refreshCartPage()
 
   // Show gift card display in products list
   const giftCardDisplays = document.querySelectorAll("[data-gift-card-display]");
@@ -156,6 +156,7 @@ export function updateGiftCardDisplay(giftData) {
  */
 export function setupGiftEventListener() {
   window.addEventListener("vitrin:gift:submitted", (event) => {
+
     const giftData = event?.detail?.data?.gift_card_details;
     if (giftData) {
       updateGiftCardDisplay(giftData);
