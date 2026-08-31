@@ -41,7 +41,7 @@
               >
                 {% include 'vitrin:v2/cart/products_list.jinja' %}
 
-                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' and not cart.gift_card_details.card_product_id %}
+                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' and not cart.gift_card_details.card_product_id or  cart.gift_card_details.card_design%}
                   <div class="mt-4">{% include 'components/cart/gift-card-display.jinja' %}</div>
                 {% endif %}
               </div>
