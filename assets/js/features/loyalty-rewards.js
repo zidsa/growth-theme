@@ -236,39 +236,18 @@ function updateCustomerPointsDisplay() {
 // Global Functions
 // ─────────────────────────────────────────────────────────────
 
+// The loyalty rewards popup is now provided by the Vitrin SDK kit dialog
+// (window.loyalty_rewards_dialog). These globals delegate to it for backwards
+// compatibility with any code still calling the legacy popup API.
 window.popupLoyaltyReward = function () {
-  console.log("[Loyalty] popupLoyaltyReward called");
-
-  const popupInit = document.querySelector(".loyalty-rewards-popup-init");
-  const popup = document.querySelector(".loyalty-rewards-popup");
-
-  console.log("[Loyalty] popupInit:", popupInit);
-  console.log("[Loyalty] popup:", popup);
-
-  if (popupInit) {
-    console.log("[Loyalty] Moving popup to body");
-    document.body.appendChild(popupInit);
-    popupInit.classList.remove("loyalty-rewards-popup-init");
-    popupInit.classList.remove("loyalty-rewards-popup-hidden");
-    // Populate rewards after moving popup to body
-    populateRewardsPopup();
-  } else if (popup) {
-    const isHidden = popup.classList.contains("loyalty-rewards-popup-hidden");
-    console.log("[Loyalty] Popup isHidden:", isHidden);
-    popup.classList.toggle("loyalty-rewards-popup-hidden");
-    // Populate rewards when showing popup
-    if (isHidden) {
-      populateRewardsPopup();
-    }
-  } else {
-    console.log("[Loyalty] No popup found!");
+  if (window.loyalty_rewards_dialog) {
+    window.loyalty_rewards_dialog.open();
   }
 };
 
 window.closeLoyaltyRewardsWindow = function () {
-  const popup = document.querySelector(".loyalty-rewards-popup");
-  if (popup) {
-    popup.classList.add("loyalty-rewards-popup-hidden");
+  if (window.loyalty_rewards_dialog) {
+    window.loyalty_rewards_dialog.close();
   }
 };
 

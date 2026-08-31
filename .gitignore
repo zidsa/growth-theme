@@ -26,6 +26,8 @@ yarn-error.log*
 *.zip
 .vitrin/dist/
 assets/styles.css
+# extracted theme copies (would ship stale duplicates inside the build zip)
+/growth-theme-*/
 
 # build
 dist/
@@ -36,3 +38,8 @@ dist/
 *.pot
 
 /build
+
+# browser tests
+/test-results/
+/playwright-report/
+/blob-report/

@@ -3,8 +3,8 @@
         id="mobile-drawer-dialog"
         class="group contents">
   <button
-    command="show-modal"
-    commandfor="mobile-drawer"
+    type="button"
+    onclick="document.getElementById('mobile-drawer-dialog')?.show();"
     class="text-foreground relative h-10 w-10 p-2 group-data-[transition]:pointer-events-none focus:outline-none lg:hidden"
     aria-label="Toggle menu"
   >
