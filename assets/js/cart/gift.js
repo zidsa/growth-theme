@@ -4,6 +4,8 @@
  * Handles gift card operations: open dialog, edit, delete, and display updates.
  */
 
+import { refreshCartPage } from "./refresh";
+
 /**
  * Handle login action for unauthenticated users
  * Uses the global handleLoginAction if available, otherwise opens auth dialog
@@ -53,7 +55,6 @@ export function editGiftCard() {
  * Delete gift card from cart
  */
 export function deleteGiftCard() {
-  const btn = document.querySelector("[data-gift-delete-btn]");
   const icon = document.querySelector("[data-gift-delete-icon]");
   const spinner = document.querySelector("[data-gift-delete-spinner]");
 
@@ -64,21 +65,8 @@ export function deleteGiftCard() {
   window.zid.cart
     .removeGiftCard({ showErrorNotification: true })
     .then(() => {
-      // Hide gift card display in products list
-      const giftCardDisplays = document.querySelectorAll("[data-gift-card-display]");
-      giftCardDisplays.forEach((el) => {
-        el.classList.add("hidden");
-      });
-
-      // Toggle Add/Edit details links on gift button
-      const addLink = document.querySelector("[data-gift-add-link]");
-      const editLink = document.querySelector("[data-gift-edit-link]");
-      if (addLink) addLink.classList.remove("hidden");
-      if (editLink) editLink.classList.add("hidden");
-
-      // Reset loading state
-      if (icon) icon.classList.remove("hidden");
-      if (spinner) spinner.classList.add("hidden");
+      // Reload so cart reflects the removed gift product
+      window.location.reload();
     })
     .catch((err) => {
       console.error("Failed to remove gift card:", err);
@@ -94,6 +82,8 @@ export function deleteGiftCard() {
  */
 export function updateGiftCardDisplay(giftData) {
   if (!giftData) return;
+
+  refreshCartPage()
 
   // Show gift card display in products list
   const giftCardDisplays = document.querySelectorAll("[data-gift-card-display]");
@@ -166,6 +156,7 @@ export function updateGiftCardDisplay(giftData) {
  */
 export function setupGiftEventListener() {
   window.addEventListener("vitrin:gift:submitted", (event) => {
+
     const giftData = event?.detail?.data?.gift_card_details;
     if (giftData) {
       updateGiftCardDisplay(giftData);
