@@ -90,7 +90,7 @@
                               {# Link to parent category #}
                               <a
                                 href="{{ submenu.url | localized_url if submenu.resource_type != 'url' else submenu.url }}"
-                                class="text-muted text-sm block px-6 py-3"
+                                class="text-foreground text-sm block px-6 py-3"
                               >
                                 {{ _("All") }} {{ submenu.label }}
                               </a>
@@ -98,7 +98,7 @@
                               {% for subsubmenu in submenu.items %}
                                 <a
                                   href="{{ subsubmenu.url | localized_url if subsubmenu.resource_type != 'url' else subsubmenu.url }}"
-                                  class="text-muted text-sm block px-6 py-3"
+                                  class="text-foreground text-sm block px-6 py-3"
                                 >
                                   {{ subsubmenu.label }}
                                 </a>
