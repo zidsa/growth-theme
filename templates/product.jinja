@@ -300,7 +300,7 @@
                   {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
                 </button>
                 <span id="product-view-add-to-cart"></span>
-                {% if not safeget(store, 'settings.general.availability.closed_now') and not product.preorder_campaign and product.selected_product.in_stock %}
+                {% if not safeget(store, 'settings.general.availability.closed_now') and store.settings.checkout.show_checkout_as_popup and not product.preorder_campaign and product.selected_product.in_stock %}
                   <button
                           type="button"
                           data-buy-now-form="product-form"
