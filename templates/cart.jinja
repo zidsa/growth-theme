@@ -79,6 +79,7 @@
                 <div class="flex flex-col gap-4 pt-4">
                   {% include 'components/cart/order-summary.jinja' %}
                   {% include 'components/cart/checkout-buttons.jinja' %}
+                  {% include 'vitrin:shared/bank_discounts.jinja' %}
                   <div data-payment-widgets>{% include 'vitrin:cart/payment_widgets.jinja' %}</div>
                   {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
                 </div>
