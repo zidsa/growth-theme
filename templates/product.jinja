@@ -71,6 +71,7 @@
             class="space-y-4"
           >
             <div class="space-y-1">
+              {% include 'components/brands/product-brand.jinja' %}
               <h1 class="text-foreground text-lg md:text-xl font-semibold">{{ product.name }}</h1>
               {% if store.settings.products.reviews_enabled %}
                 {% if product.rating %}
