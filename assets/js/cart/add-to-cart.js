@@ -13,10 +13,18 @@
 
 import { showSpinner, hideSpinner } from "../utils/loading.js";
 import { dispatch } from "../utils/events.js";
+import { requestRequiredCustomerLocation } from "../utils/customer-location.js";
 import { refreshBadge } from "./badge.js";
 
 // Track initialized buttons
 const initialized = new WeakSet();
+const CUSTOMER_LOCATION_REQUIRED_ERROR_CODE = "CUSTOMER_LOCATION_SELECTION_REQUIRED";
+
+function logUnexpectedCartError(message, error) {
+  if (error?.code !== CUSTOMER_LOCATION_REQUIRED_ERROR_CODE) {
+    console.error(message, error);
+  }
+}
 
 /**
  * Wait for Zid SDK to be available
@@ -46,7 +54,7 @@ async function addToCart(btn) {
     refreshBadge();
     showQuantityInput(productId, 1);
   } catch (err) {
-    console.error("[Cart] Add to cart failed:", err);
+    logUnexpectedCartError("[Cart] Add to cart failed:", err);
   } finally {
     hideSpinner(btn);
   }
@@ -83,7 +91,7 @@ async function addToCartFromForm(btn) {
       btn.disabled = false;
     }, 1500);
   } catch (err) {
-    console.error("[Cart] Add to cart failed:", err);
+    logUnexpectedCartError("[Cart] Add to cart failed:", err);
     btn.innerHTML = originalContent;
     btn.disabled = false;
   }
@@ -110,10 +118,10 @@ window.buyNowFromForm = async (btn) => {
     // buyNow handles redirect
     hideSpinner(btn);
   } catch (err) {
-    console.error("[Cart] Buy now failed:", err);
+    logUnexpectedCartError("[Cart] Buy now failed:", err);
     hideSpinner(btn);
   }
-}
+};
 
 /**
  * Add variant to cart (product page variant list)
@@ -141,7 +149,7 @@ async function addVariantToCart(btn) {
       btn.disabled = false;
     }, 1500);
   } catch (err) {
-    console.error("[Cart] Add variant to cart failed:", err);
+    logUnexpectedCartError("[Cart] Add variant to cart failed:", err);
     btn.innerHTML = originalContent;
     btn.disabled = false;
   }
@@ -151,6 +159,8 @@ async function addVariantToCart(btn) {
  * Open quick view modal for products with options
  */
 function openQuickView(btn) {
+  if (requestRequiredCustomerLocation()) return;
+
   const card = btn.closest("[data-product-card]");
   const link = card?.querySelector("a[href]");
   const productUrl = link?.getAttribute("href");

@@ -54,6 +54,15 @@
         data-bundle-offer-product-id="{{ product.id }}"
       ></span>
     </div>
+    {% if product.shipping_badges %}
+      <div class="absolute bottom-4 flex flex-col gap-2 ltr:left-4 rtl:right-4">
+        {% for badge in product.shipping_badges %}
+          {% with badge=badge, variant='card' %}
+            {% include 'components/products/shipping-badge.jinja' %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    {% endif %}
     {% with product_id=product.id, class='absolute bottom-4 ltr:right-4 rtl:left-4' %}
       {% include 'components/products/wishlist-button.jinja' %}
     {% endwith %}

@@ -6,6 +6,8 @@
     class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent"
     data-error-message="{{ _('Failed to load product. Please try again.') }}"
     data-go-to-product="{{ _('Go to product page') }}"
+    data-location-selection-enabled="{{ 'true' if safeget(store, 'settings.zones.selection_enabled', false) else 'false' }}"
+    data-location-selection-mode="{{ safeget(store, 'settings.zones.selection_mode', '') }}"
   >
     <el-dialog-backdrop
       class="fixed inset-0 bg-black/10 backdrop-blur-sm transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
