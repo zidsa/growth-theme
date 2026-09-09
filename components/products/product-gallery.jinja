@@ -47,7 +47,7 @@
           {% for item in gallery_media %}
             {% set img_src = item.image.large if item.image else item %}
 
-            <div class="product-gallery__slide relative min-w-0 flex-[0_0_calc(100%-8px)]">
+            <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
               {# Image (thumbnail for videos) #}
               <img
                 src="{{ image_url(img_src, w=750, q=90, f='auto') }}"
@@ -60,7 +60,7 @@
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
                 alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index) }}"
-                class="{{ 'cursor-zoom-in' if not is_video else '' }} aspect-[3/4] w-full rounded object-cover"
+                class="{{ 'cursor-zoom-in' if not is_video else '' }} h-[500px] w-full md:h-[650px] rounded object-contain"
                 {% if not is_video %}data-lightbox-trigger="{{ loop.index0 }}"{% endif %}
                 {% if loop.index > 1 %}loading="lazy"{% endif %}
               />
@@ -125,7 +125,7 @@
             <img
               src="{{ image_url(('images/placeholder.png' | asset_url), w=750, q=85, f='auto') }}"
               alt="{{ product.name }}"
-              class="aspect-[3/4] w-full rounded object-cover"
+              class="h-[500px] w-full md:h-[650px] rounded object-contain"
             />
           </div>
         {% endif %}
