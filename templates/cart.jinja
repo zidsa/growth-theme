@@ -41,7 +41,7 @@
               >
                 {% include 'vitrin:v2/cart/products_list.jinja' %}
 
-                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' %}
+                {% if store.settings.checkout.gift_order_settings.is_gift_order_enabled == '1' and not cart.gift_card_details.card_product_id and not cart.gift_card_details.card_design %}
                   <div class="mt-4">{% include 'components/cart/gift-card-display.jinja' %}</div>
                 {% endif %}
               </div>
@@ -79,6 +79,7 @@
                 <div class="flex flex-col gap-4 pt-4">
                   {% include 'components/cart/order-summary.jinja' %}
                   {% include 'components/cart/checkout-buttons.jinja' %}
+                  {% include 'vitrin:shared/bank_discounts.jinja' %}
                   <div data-payment-widgets>{% include 'vitrin:cart/payment_widgets.jinja' %}</div>
                   {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
                 </div>

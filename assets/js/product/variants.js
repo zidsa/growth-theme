@@ -228,11 +228,11 @@ export function updateProductImages(selectedProduct) {
         console.log("isVideo", isVideo);
         if (isVideo) {
           return `
-          <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
+          <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
             <img
               src="${imgSrc}"
               alt="${selectedProduct.name || ""} - Image ${index + 1}"
-              class="aspect-[3/4] w-full rounded object-cover"
+              class="h-[500px] w-full md:h-[650px] rounded object-contain"
               ${index > 0 ? 'loading="lazy"' : ""}
             />
             <button
@@ -266,11 +266,11 @@ export function updateProductImages(selectedProduct) {
         }
 
         return `
-        <div class="product-gallery__slide relative min-w-0 flex-[0_0_75%] md:flex-[0_0_calc(100%-8px)]">
+        <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
           <img
             src="${imgSrc}"
             alt="${selectedProduct.name || ""} - Image ${index + 1}"
-            class="aspect-[3/4] w-full cursor-zoom-in rounded object-cover"
+            class="h-[500px] w-full md:h-[650px] cursor-zoom-in rounded object-contain"
             data-lightbox-trigger="${index}"
             ${index > 0 ? 'loading="lazy"' : ""}
           />
@@ -353,6 +353,34 @@ export function updateProductImages(selectedProduct) {
 window.updateProductImages = updateProductImages;
 
 // ─────────────────────────────────────────────────────────────
+// Selected Option Labels
+// ─────────────────────────────────────────────────────────────
+
+export function updateSelectedOptionLabels() {
+  document.querySelectorAll(".product-options__group").forEach((group) => {
+    const label = group.querySelector(".product-options__label");
+    if (!label) return;
+
+    const activeOption = group.querySelector(".product-options__item.active[value]");
+    const selectedValue = activeOption?.getAttribute("value");
+    let selectedValueElement = label.querySelector("[data-selected-option-value]");
+
+    if (!selectedValue) {
+      selectedValueElement?.remove();
+      return;
+    }
+
+    if (!selectedValueElement) {
+      selectedValueElement = document.createElement("span");
+      selectedValueElement.setAttribute("data-selected-option-value", "");
+      label.append(selectedValueElement);
+    }
+
+    selectedValueElement.textContent = `: ${selectedValue}`;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
 // Main Callback (Called by platform's product.js)
 // ─────────────────────────────────────────────────────────────
 
@@ -361,6 +389,8 @@ window.updateProductImages = updateProductImages;
  * @param {Object} selectedProduct - The selected variant data from API
  */
 window.productOptionsChanged = function (selectedProduct) {
+  updateSelectedOptionLabels();
+
   var hasPreorder = document.querySelector("[data-has-preorder]")?.getAttribute("data-has-preorder") === "true";;
   var canPreorder = document.querySelector("[data-can-preorder]")?.getAttribute("data-can-preorder") === "true";
   var stockBehavior = document.querySelector("[data-stock-behavior]")?.getAttribute("data-stock-behavior") || '';
@@ -407,6 +437,8 @@ function initProductObjSync() {
 
 export function init() {
   initProductObjSync();
+  updateSelectedOptionLabels();
+  window.addEventListener("content:loaded", updateSelectedOptionLabels);
 }
 
 if (document.readyState === "loading") {

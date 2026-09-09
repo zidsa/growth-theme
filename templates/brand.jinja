@@ -1,0 +1,163 @@
+{% extends "layout.jinja" %}
+
+{% block title %}{{ store.name }} – {{ brand.name }}{% endblock %}
+
+{% block content %}
+
+  {# Breadcrumb Section #}
+  <section class="px-4 py-6 md:px-16">
+    <div class="theme-container">
+      {# Build breadcrumb items based on category hierarchy #}
+      {% set breadcrumb_items = [{'href': url_for('home'), 'label': _("Home")}, {'href': url_for('list_brands'), 'label': _("Brands")}] %}
+      {% set breadcrumb_items = breadcrumb_items + [{'label': brand.name}] %}
+
+      {% with items=breadcrumb_items %}
+        {% include 'components/ui/breadcrumb.jinja' %}
+      {% endwith %}
+    </div>
+  </section>
+
+  {# Products Section #}
+  <section class="px-4 pb-16 md:px-16">
+    <div class="theme-container">
+      <div
+        id="products-content"
+        class="flex flex-col gap-6 transition-opacity duration-200"
+      >
+        <h2 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight">
+          {{  brand.name | trim  | upper }}
+          {% if products.count %}
+            <span class="text-muted">
+              ({%- if products.count == 1 %}{{ _("1 product") }}{% else %}{{ _("%(count)s products") % {'count': products.count} }}{% endif -%})
+            </span>
+          {% endif %}
+        </h2>
+
+        {# Products Header with Filters #}
+        {% if products and products.results %}
+          {% include 'components/products/products-header.jinja' %}
+        {% endif %}
+
+        {# Products Grid #}
+        {% if products and products.results and products.results|length > 0 %}
+          <div
+            data-grid-root="true"
+            data-grid="four"
+            class="group/grid grid gap-x-4 gap-y-10"
+          >
+            {% for product in products.results %}
+              {% include 'components/products/product-card.jinja' %}
+            {% endfor %}
+          </div>
+
+          {# Pagination #}
+          {% set totalPages = ((products.count / (session.query_params.get('page_size') or 24)|int) | round(0, 'ceil')) | int %}
+          {% set currentPage = products.page %}
+          {% include 'components/products/pagination.jinja' %}
+        {% else %}
+          <div class="bg-secondary flex flex-col items-center justify-center rounded-lg py-16">
+            <p class="text-muted text-sm">{{ _("No products found in this brand") }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {# Quick View Modal #}
+  {% include 'components/products/quick-view-modal.jinja' %}
+
+  <script>
+    (function () {
+      // Track grid mode separately for desktop and mobile
+      let desktopGridMode = "four";
+      let mobileGridMode = "one";
+
+      function isMobile() {
+        return window.matchMedia("(max-width: 767px)").matches;
+      }
+
+      function getCurrentMode() {
+        return isMobile() ? mobileGridMode : desktopGridMode;
+      }
+
+      function initGridControls() {
+        const gridRoot = document.querySelector("[data-grid-root]");
+
+        if (!gridRoot) return;
+
+        // Apply current mode to grid root
+        gridRoot.setAttribute("data-grid", getCurrentMode());
+
+        // Update button checked states
+        const allButtons = document.querySelectorAll("[data-grid-btn]");
+        allButtons.forEach((btn) => {
+          const mode = btn.dataset.gridBtn;
+          const isDesktopBtn = mode === "four";
+          const isMobileBtn = mode === "one";
+          const isListBtn = mode === "list";
+
+          let shouldCheck = false;
+          if (isDesktopBtn) {
+            shouldCheck = mode === desktopGridMode;
+          } else if (isMobileBtn) {
+            shouldCheck = mobileGridMode === "one";
+          } else if (isListBtn) {
+            // List button appears on both - check based on current context
+            shouldCheck = (isMobile() && mobileGridMode === "list") || (!isMobile() && desktopGridMode === "list");
+          }
+
+          btn.checked = shouldCheck;
+        });
+      }
+
+      function setGrid(mode) {
+        const gridRoot = document.querySelector("[data-grid-root]");
+
+        // Update the appropriate mode based on button type
+        if (mode === "one") {
+          mobileGridMode = mode;
+        } else if (mode === "four") {
+          desktopGridMode = mode;
+        } else if (mode === "list") {
+          // List mode updates based on current viewport
+          if (isMobile()) {
+            mobileGridMode = mode;
+          } else {
+            desktopGridMode = mode;
+          }
+        }
+
+        if (gridRoot) {
+          gridRoot.setAttribute("data-grid", mode);
+        }
+
+        // Update all button states
+        initGridControls();
+      }
+
+      // Event delegation for grid buttons (works after AJAX swap)
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-grid-btn]");
+        if (btn) {
+          setGrid(btn.dataset.gridBtn);
+        }
+      });
+
+      // Handle viewport changes
+      const mediaQuery = window.matchMedia("(max-width: 767px)");
+      mediaQuery.addEventListener("change", () => {
+        const gridRoot = document.querySelector("[data-grid-root]");
+        if (gridRoot) {
+          gridRoot.setAttribute("data-grid", getCurrentMode());
+        }
+        initGridControls();
+      });
+
+      // Re-initialize after AJAX swap
+      window.addEventListener("products-updated", initGridControls);
+
+      // Initial setup
+      initGridControls();
+    })();
+  </script>
+{% endblock %}

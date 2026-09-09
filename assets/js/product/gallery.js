@@ -5,7 +5,6 @@
  * - Embla carousel for main gallery and thumbnails
  * - Video playback support (YouTube, etc.)
  * - Thumbnail sync
- * - Progress bar
  */
 
 import { createCarousel, syncCarousels } from "../lib/carousel.js";
@@ -178,10 +177,7 @@ export function initProductGallery(galleryId) {
   // Get all navigation elements
   const prevBtn = document.querySelector(`.product-gallery__prev[data-gallery-id="${galleryId}"]`);
   const nextBtn = document.querySelector(`.product-gallery__next[data-gallery-id="${galleryId}"]`);
-  const prevBtnMobile = document.querySelector(`.product-gallery__prev-mobile[data-gallery-id="${galleryId}"]`);
-  const nextBtnMobile = document.querySelector(`.product-gallery__next-mobile[data-gallery-id="${galleryId}"]`);
   const thumbButtons = document.querySelectorAll(`.product-gallery-thumbs__slide[data-gallery-id="${galleryId}"]`);
-  const progressBar = document.querySelector(`.product-gallery__progress-bar[data-gallery-id="${galleryId}"]`);
 
   // Navigation click handlers
   const prevClick = () => mainCarousel.scrollPrev();
@@ -189,8 +185,6 @@ export function initProductGallery(galleryId) {
 
   if (prevBtn) prevBtn.addEventListener("click", prevClick);
   if (nextBtn) nextBtn.addEventListener("click", nextClick);
-  if (prevBtnMobile) prevBtnMobile.addEventListener("click", prevClick);
-  if (nextBtnMobile) nextBtnMobile.addEventListener("click", nextClick);
 
   // Thumbnail click handlers
   const thumbClickHandlers = [];
@@ -200,21 +194,13 @@ export function initProductGallery(galleryId) {
     btn.addEventListener("click", handler);
   });
 
-  // Update progress bar
+  // Update navigation button states
   const updateProgress = () => {
-    if (progressBar) {
-      const progress = Math.max(0, Math.min(1, mainCarousel.embla.scrollProgress()));
-      progressBar.style.width = `${progress * 100}%`;
-    }
-
-    // Update button states
     const canPrev = mainCarousel.embla.canScrollPrev();
     const canNext = mainCarousel.embla.canScrollNext();
 
     if (prevBtn) prevBtn.disabled = !canPrev;
     if (nextBtn) nextBtn.disabled = !canNext;
-    if (prevBtnMobile) prevBtnMobile.disabled = !canPrev;
-    if (nextBtnMobile) nextBtnMobile.disabled = !canNext;
   };
 
   // Update active thumbnail
@@ -255,7 +241,7 @@ export function initProductGallery(galleryId) {
     mainCarousel,
     thumbsCarousel,
     handlers: { prevClick, nextClick, thumbClickHandlers },
-    elements: { prevBtn, nextBtn, prevBtnMobile, nextBtnMobile, thumbButtons }
+    elements: { prevBtn, nextBtn, thumbButtons }
   });
 
   return { mainCarousel, thumbsCarousel };
@@ -273,8 +259,6 @@ export function destroyProductGallery(galleryId) {
   // Remove event listeners
   if (elements.prevBtn) elements.prevBtn.removeEventListener("click", handlers.prevClick);
   if (elements.nextBtn) elements.nextBtn.removeEventListener("click", handlers.nextClick);
-  if (elements.prevBtnMobile) elements.prevBtnMobile.removeEventListener("click", handlers.prevClick);
-  if (elements.nextBtnMobile) elements.nextBtnMobile.removeEventListener("click", handlers.nextClick);
 
   elements.thumbButtons.forEach((btn, index) => {
     btn.removeEventListener("click", handlers.thumbClickHandlers[index]);

@@ -1,0 +1,28 @@
+{#
+  Product Brand
+
+  Brand logo (or name when no logo) shown above the product title on the
+  product page, linking to the brand page. Renders nothing when the product
+  has no brand.
+
+  Variables:
+  - product: object (required) - Product with optional brand (name, slug, logo)
+#}
+{% if product.brand %}
+  <a
+    href="/brands/{{ product.brand.slug }}"
+    class="inline-flex items-center gap-2"
+    aria-label="{{ product.brand.name }}"
+  >
+    {% if product.brand.logo %}
+      <img
+        src="{{ image_url(product.brand.logo, w=240, q=80, f='auto') }}"
+        alt="{{ product.brand.name }}"
+        class="h-12 w-auto object-contain"
+        onerror="this.style.display='none'"
+      />
+    {% else %}
+      <span class="text-muted-foreground text-sm underline">{{ product.brand.name }}</span>
+    {% endif %}
+  </a>
+{% endif %}

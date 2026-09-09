@@ -1,0 +1,42 @@
+{#
+  Category Card Component
+
+  Displays a category with image and name below.
+  Used in the categories grid on the categories listing page.
+
+  Variables:
+  - brand: object (required) - Category object with id, slug, name, image, image_full_size
+  - index: number (optional) - Card index for lazy loading
+#}
+{% set card_index = index | default(0) %}
+
+<a
+  href="/brands/{{ brand.slug }}"
+  class="group flex flex-col gap-4"
+>
+  {# Category Image Container #}
+  <div class="bg-secondary relative aspect-square w-full overflow-hidden rounded">
+    {% if brand.logo %}
+      <img src="{{ image_url(brand.logo, w=320, q=80, f='auto') }}"
+        alt="{{ brand.name }}"
+        class="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+        {% if card_index > 3 %}loading="lazy"{% endif %}
+        onerror="this.style.display='none'"
+      />
+    {% endif %}
+    <div class="pointer-events-none absolute inset-0 bg-white/10"></div>
+  </div>
+
+  {# Category Name - Always below #}
+  <h3 class="text-foreground text-lg md:text-xl font-semibold tracking-tight text-center">{{ brand.name }}
+    {% if brand.products_count %}
+    <span class="text-muted">({{ brand.products_count }})</span>
+    {% endif %}
+  </h3>
+
+  {% if brand.description %}
+    <p class="text-foreground text-sm line-clamp-2">
+      {{ brand.description | striptags | truncate(160) }}
+    </p>
+  {% endif %}
+</a>
