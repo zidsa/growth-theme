@@ -228,11 +228,11 @@ export function updateProductImages(selectedProduct) {
         console.log("isVideo", isVideo);
         if (isVideo) {
           return `
-          <div class="product-gallery__slide relative min-w-0 flex-[0_0_calc(100%-8px)]">
+          <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
             <img
               src="${imgSrc}"
               alt="${selectedProduct.name || ""} - Image ${index + 1}"
-              class="aspect-[3/4] w-full rounded object-cover"
+              class="h-[500px] w-full md:h-[650px] rounded object-contain"
               ${index > 0 ? 'loading="lazy"' : ""}
             />
             <button
@@ -266,11 +266,11 @@ export function updateProductImages(selectedProduct) {
         }
 
         return `
-        <div class="product-gallery__slide relative min-w-0 flex-[0_0_calc(100%-8px)]">
+        <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
           <img
             src="${imgSrc}"
             alt="${selectedProduct.name || ""} - Image ${index + 1}"
-            class="aspect-[3/4] w-full cursor-zoom-in rounded object-cover"
+            class="h-[500px] w-full md:h-[650px] cursor-zoom-in rounded object-contain"
             data-lightbox-trigger="${index}"
             ${index > 0 ? 'loading="lazy"' : ""}
           />
