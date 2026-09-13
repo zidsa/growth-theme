@@ -162,7 +162,8 @@
               {% set multiple_languages = store.languages | length > 1 %}
               {% set show_country = multiple_countries and not safeget(settings, "header_hide_country", false) %}
               {% set show_language = multiple_languages and not safeget(settings, "header_hide_language", false) %}
-              {% if show_country or show_language %}
+              {% set show_location = safeget(store, "settings.zones.selection_enabled", false) or safeget(store, "settings.products.filter_by_nearest_inventory", false) %}
+              {% if show_location or show_country or show_language %}
                 <button
                   type="button"
                   onclick="document.getElementById('mobile-drawer-dialog')?.hide(); zidOpenRegionSettingDialog();"
@@ -187,9 +188,13 @@
                     />
                   </svg>
                   <span class="nav-country-text">
-                    {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+                    {% if show_country %}
+                      {{ session.country.name }}{% if show_language %}|{% endif %}
+                    {% elif show_location %}
+                      {{ _("Select your location") }}{% if show_language %}|{% endif %}
+                    {% endif %}
                   </span>
-                 
+
                   {% if show_language %}{{ session.lang | upper }}{% endif %}
                 </button>
               {% endif %}

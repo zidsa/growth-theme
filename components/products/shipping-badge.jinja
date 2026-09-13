@@ -1,0 +1,83 @@
+{#
+  Shipping Badge Component
+
+  Parameters:
+  - badge (required): A backend-provided shipping badge
+  - variant (optional): "card" or "details"
+#}
+
+{% set variant = variant | default('card') %}
+{% set badge_text = badge.text %}
+{% set badge_description = badge.description or '' %}
+
+{% if badge_text %}
+  {% if badge.badge_type == 'pickup' %}
+    {% set card_classes = 'border-[#DDC9FF] bg-[#F5F0FF] text-[#7A4BC1]' %}
+    {% set callout_classes = 'border-[#DDC9FF] bg-[#FAF7FF]' %}
+    {% set icon_classes = 'text-[#7A4BC1]' %}
+  {% else %}
+    {% set card_classes = 'border-[#FFD6C2] bg-[#FFF4ED] text-[#F26322]' %}
+    {% set callout_classes = 'border-[#FFD6C2] bg-[#FFF8F4]' %}
+    {% set icon_classes = 'text-[#F26322]' %}
+  {% endif %}
+
+  {% if variant == 'details' %}
+    <div class="{{ callout_classes }} flex items-start gap-3 rounded border p-4">
+      <span class="{{ icon_classes }} mt-0.5 shrink-0">
+        {% if badge.badge_type == 'pickup' %}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 9l2-5h14l2 5" />
+            <path d="M5 13v7h14v-7" />
+            <path d="M9 20v-6h6v6" />
+            <path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" />
+          </svg>
+        {% else %}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M10 17h4V5H2v12h3" />
+            <path d="M14 9h4l4 4v4h-3" />
+            <circle
+              cx="7.5"
+              cy="17.5"
+              r="2.5"
+            />
+            <circle
+              cx="16.5"
+              cy="17.5"
+              r="2.5"
+            />
+          </svg>
+        {% endif %}
+      </span>
+      <div class="min-w-0">
+        <p class="text-foreground text-sm font-semibold">{{ badge_text }}</p>
+        {% if badge_description %}
+          <p class="text-muted-foreground text-sm">{{ badge_description }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <span class="{{ card_classes }} badge border whitespace-nowrap"> {{ badge_text }} </span>
+  {% endif %}
+{% endif %}

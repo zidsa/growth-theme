@@ -257,6 +257,15 @@
               {% include 'vitrin:products/bundle-products.jinja' %}
             {% endif %}
 
+            {% if product.shipping_badges %}
+              <div class="flex flex-col gap-2">
+                {% for badge in product.shipping_badges %}
+                  {% with badge=badge, variant='details' %}
+                    {% include 'components/products/shipping-badge.jinja' %}
+                  {% endwith %}
+                {% endfor %}
+              </div>
+            {% endif %}
 
             {# Action Buttons #}
             <div
