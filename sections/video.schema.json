@@ -47,6 +47,15 @@
         "en": "Autoplay"
       },
       "default": false
+    },
+    {
+      "id": "controls",
+      "type": "checkbox",
+      "label": {
+        "ar": "عرض ازرار التحكم",
+        "en": "Controls"
+      },
+      "default": false
     }
   ]
 }

@@ -3,8 +3,12 @@
 {% set multiple_languages = store.languages | length > 1 %}
 {% set show_country = multiple_countries and not safeget(settings, "header_hide_country", false) %}
 {% set show_language = multiple_languages and not safeget(settings, "header_hide_language", false) %}
+{% set modern_location_enabled = safeget(store, "settings.zones.selection_enabled", false) %}
+{% set legacy_location_enabled = safeget(store, "settings.products.filter_by_nearest_inventory", false) %}
+{% set show_location = modern_location_enabled or legacy_location_enabled %}
+{% set show_coordinate_location = (modern_location_enabled and safeget(store, "settings.zones.precision", "city") == "coordinates") or (not modern_location_enabled and legacy_location_enabled) %}
 
-{% if show_country or show_language %}
+{% if show_location or show_country or show_language %}
   <li class="hidden lg:block">
     <button
       type="button"
@@ -28,7 +32,11 @@
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </svg>
       <span class="nav-country-text">
-        {% if show_country %}{{ session.country.name }}{% if show_language %}|{% endif %}{% endif %}
+        {% if show_country %}
+          {{ session.country.name }}{% if show_language %}|{% endif %}
+        {% elif show_location %}
+          {{ _("Select your location") }}{% if show_language %}|{% endif %}
+        {% endif %}
       </span>
 
       {% if show_language %}{{ session.lang | upper }}{% endif %}
@@ -37,7 +45,7 @@
 {% endif %}
 
 <script>
-{% if store.settings.products.filter_by_nearest_inventory %}
+{% if show_coordinate_location %}
   document.addEventListener('DOMContentLoaded', function() {
     const storedData = localStorage.getItem('zid_kit_select_branch');
     if (!storedData) return;
@@ -45,6 +53,7 @@
     const lang = '{{ session.lang }}';
     const data = JSON.parse(storedData);
     const branchData = data.branchData;
+    if (!branchData) return;
     const buttons = document.querySelectorAll('.nav-country-text');
     
     if (!buttons) return;

@@ -11,9 +11,9 @@
         style="max-height: 80vh; object-fit: contain"
         loop
         playsinline
-        muted
         {% if settings.poster_image %}poster="{{ image_url(settings.poster_image, w=1280, q=70, f='auto') }}"{% endif %}
-        {% if settings.autoplay %} autoplay {% endif %}
+        {% if settings.controls | default(false) %} controls {% endif %}
+        {% if settings.autoplay %} autoplay muted {% endif %}
         {% if is_lazy %} preload="none"{% else %} preload="metadata" {% endif %}
       >
         <source

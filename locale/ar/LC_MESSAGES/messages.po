@@ -105,6 +105,9 @@ msgstr "التوصيل إلى:"
 msgid "Pickup from:"
 msgstr "الاستلام من:"
 
+msgid "Select your location"
+msgstr "حدد موقعك"
+
 msgid "Country"
 msgstr "الدولة"
 

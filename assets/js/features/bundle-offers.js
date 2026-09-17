@@ -70,7 +70,7 @@ const BundleOffersLoader = {
 
     elements.forEach((el) => {
       if (bundleOffer && bundleOffer.name) {
-        el.className = "badge badge-outlined text-destructive border-destructive";
+        el.className = "badge badge-dark";
         el.appendChild(this.createTagIcon());
 
         const text = document.createTextNode(bundleOffer.name);
