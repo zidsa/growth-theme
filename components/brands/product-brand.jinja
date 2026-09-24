@@ -12,17 +12,17 @@
   <a
     href="/brands/{{ product.brand.slug }}"
     class="inline-flex items-center gap-2"
-    aria-label="{{ product.brand.name }}"
+    aria-label="{{ product.brand.display_name or product.brand.name }}"
   >
     {% if product.brand.logo %}
       <img
         src="{{ image_url(product.brand.logo, w=240, q=80, f='auto') }}"
-        alt="{{ product.brand.name }}"
+        alt="{{ product.brand.display_name or product.brand.name }}"
         class="h-12 w-auto object-contain"
         onerror="this.style.display='none'"
       />
     {% else %}
-      <span class="text-muted-foreground text-sm underline">{{ product.brand.name }}</span>
+      <span class="text-muted-foreground text-sm underline">{{ product.brand.display_name or product.brand.name }}</span>
     {% endif %}
   </a>
 {% endif %}
