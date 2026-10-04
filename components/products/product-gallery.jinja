@@ -177,11 +177,18 @@
     {% endif %}
 
     {# Badges Overlay #}
-    {% if badges %}
-      <div class="absolute start-4 top-4 flex flex-col gap-2">
-        {% for badge in badges %}
+    {% if badges or show_bundle_badge %}
+      <div class="absolute start-4 top-4 z-10 flex flex-col items-start gap-2">
+        {% for badge in badges or [] %}
           <span class="bg-background text-sm w-fit rounded px-2 [font-variant:all-small-caps]"> {{ badge }} </span>
         {% endfor %}
+        {% if show_bundle_badge %}
+          {# Bundle offer badge - loaded via client-side JS #}
+          <span
+            class="bundle-offer-badge hidden"
+            data-bundle-offer-product-id="{{ product.id }}"
+          ></span>
+        {% endif %}
       </div>
     {% endif %}
   </div>

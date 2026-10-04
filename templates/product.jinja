@@ -58,7 +58,7 @@
       >
         {# Left Column: Product Gallery #}
         <div class="product-gallery-column">
-          {% with product=product,gallery_id="product-gallery" %}
+          {% with product=product,gallery_id="product-gallery",show_bundle_badge=true %}
             {% include 'components/products/product-gallery.jinja' %}
           {% endwith %}
         </div>
