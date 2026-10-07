@@ -165,6 +165,11 @@
     @apply border-border text-foreground border bg-transparent;
   }
 
+  /* Dark */
+  .badge-dark {
+    @apply bg-black text-white;
+  }
+
   /* ========== FORM COMPONENTS ========== */
   /* ---------- Form Label ---------- */
   .form-label {
