@@ -31,8 +31,9 @@ export function initLoyaltyProgram(config) {
   const cfg = state.config;
   if (!cfg) return;
 
-  // Calculate points for this purchase
-  calculateLoyaltyPoints(cfg.cartTotalValue);
+  const earnCard = document.querySelector("[data-loyalty-earn-card]");
+  const cartTotal = earnCard?.dataset.cartTotal !== undefined ? Number(earnCard.dataset.cartTotal) : cfg.cartTotalValue;
+  calculateLoyaltyPoints(cartTotal);
 
   // Authenticated branch — fetch customer points and redemption methods
   if (state.customerLoaded || (window.customerAuthState && window.customerAuthState.isAuthenticated)) {
