@@ -140,6 +140,14 @@ export async function refreshCartPage() {
     updatePaymentWidgets();
     updateLoyaltyDisplay();
 
+    // Platform kits (wallet cashback, progressive discount, bundle progress) keep their own cart
+    // copy and only refetch on this event; the SDK fires it for item changes, not for loyalty or coupons
+    if (window.zid?.cart?.refetchCartAPI) {
+      window.zid.cart.refetchCartAPI();
+    } else {
+      window.dispatchEvent(new CustomEvent("vitrin:cart:refetch"));
+    }
+
     // Dispatch event for other components
     window.dispatchEvent(new CustomEvent("cart-updated"));
   } catch (error) {
