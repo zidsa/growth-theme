@@ -9,6 +9,7 @@
     <div
       class="border-foreground flex items-center gap-2 rounded border p-4"
       data-loyalty-earn-card
+      data-cart-total="{{ cart.total_value | default(0) }}"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
