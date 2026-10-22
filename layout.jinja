@@ -117,8 +117,8 @@
         remaining: "{{ _('Remaining %s only') }}",
         sold: "{{ _('Sold more than %s times') }}"
       };
-      window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_enabled else 'false' }};
-      window.storeLowStockThreshold = {{ store.settings.products.low_stock_threshold | default(5) }};
+      window.storeLowStockEnabled = {{ 'true' if store.settings.products.low_stock_label_enabled else 'false' }};
+      window.storeLowStockThreshold = {{ store.settings.products.low_stock_quantity_threshold | default(10) }};
 
       // Notify Me translations (used by notify-me.js for stock alerts)
       window.notifyMeTranslations = {

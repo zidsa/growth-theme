@@ -106,7 +106,7 @@ export function updateProductInfo(selectedProduct) {
   // Update Low Stock Badge
   const lowStockBadge = document.querySelector("[data-low-stock-badge]");
   if (lowStockBadge) {
-    const threshold = window.storeLowStockThreshold || 5;
+    const threshold = window.storeLowStockThreshold || 10;
     if (window.storeLowStockEnabled && !selectedProduct.is_infinite && selectedProduct.quantity < threshold) {
       const template = window.productTranslations?.remaining || "Remaining %s only";
       lowStockBadge.querySelector("[data-low-stock-text]")?.textContent ||
