@@ -19,7 +19,7 @@
   {# Header: Name + Rating + Date #}
   <div class="flex flex-col gap-1">
     <div class="flex items-start justify-between gap-4">
-      <p class="text-foreground text-sm font-semibold">{{ review.customer.name or _("Anonymous") }}</p>
+      <p class="text-foreground text-sm font-semibold">{{ (review.customer.name or _("Anonymous"))|e }}</p>
       <span
         class="text-muted text-sm shrink-0 whitespace-nowrap"
         data-time-ago-date="{{ review.created_at }}"
