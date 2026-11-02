@@ -185,11 +185,19 @@ function autoFillCustomerData(customer) {
   }
 }
 
+// variants.js only updates the first #product-id on the page, so remember each section's pick here.
+const selectedVariantBySection = new WeakMap();
+
 function handleVariantChange(event) {
   const selectedProduct = event.detail?.selectedProduct;
   if (selectedProduct && productIdInput) {
     productIdInput.value = selectedProduct.id;
   }
+  // Quick view content is emptied on close, so a section inside it means the quick view is active.
+  const section =
+    document.querySelector("#quick-view-content #product-main-section") ||
+    document.getElementById("product-main-section");
+  if (selectedProduct && section) selectedVariantBySection.set(section, selectedProduct.id);
 }
 
 function openNotifyMeDialog(productId) {
@@ -209,7 +217,19 @@ function openNotifyMeDialog(productId) {
   }
 }
 
+// The page has one global dialog; point it at the product of the section the button sits in
+// (quick view or page; the sticky bar falls back to the page's section).
+function seedProductIdFromSection(button) {
+  const section = button.closest("#product-main-section") || document.getElementById("product-main-section");
+  const productId = selectedVariantBySection.get(section) ?? section?.querySelector("#product-id")?.value;
+  const input = document.querySelector("[data-notify-product-id]");
+  if (productId && input) input.value = productId;
+}
+
 function handleNotifyMeTriggerClick(event) {
+  const commandButton = event.target.closest('[command="show-modal"][commandfor="notify-me-dialog"]');
+  if (commandButton) seedProductIdFromSection(commandButton);
+
   const trigger = event.target.closest("[data-notify-me-trigger]");
   if (trigger) {
     event.preventDefault();
