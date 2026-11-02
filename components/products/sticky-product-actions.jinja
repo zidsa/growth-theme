@@ -138,36 +138,38 @@
         </button>
       </div>
 
-      {# Out of Stock State #}
-      <div
-        class="flex items-center gap-2 {{ "hidden" if can_buy }}"
-        data-sticky-cta-out-of-stock
-      >
-        {# Notify Me Button #}
-        <button
-          type="button"
-          class="btn btn-filled btn-lg shrink-0"
-          command="show-modal"
-          commandfor="notify-me-dialog"
+      {# Out of Stock State: options and custom fields can re-check stock on the client #}
+      {% if not can_buy or product.has_options or product.has_fields %}
+        <div
+          class="flex items-center gap-2 {{ "hidden" if can_buy }}"
+          data-sticky-cta-out-of-stock
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="hidden sm:block"
+          {# Notify Me Button #}
+          <button
+            type="button"
+            class="btn btn-filled btn-lg shrink-0"
+            command="show-modal"
+            commandfor="notify-me-dialog"
           >
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-          </svg>
-          <span>{{ _("Notify me when available") }}</span>
-        </button>
-      </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="hidden sm:block"
+            >
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+            </svg>
+            <span>{{ _("Notify me when available") }}</span>
+          </button>
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>
