@@ -43,3 +43,6 @@ dist/
 /test-results/
 /playwright-report/
 /blob-report/
+
+# python test caches
+__pycache__/

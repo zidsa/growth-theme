@@ -30,7 +30,7 @@
         width="828"
         height="{{ settings.min_height_mobile | default(700) }}"
         class="h-full w-full object-cover"
-        style="object-position: {{ settings.background_position | default('center') }}"
+        style="object-position: {{ settings.background_position | default('center') }}; object-fit: {{ settings.background_image_object_fit | default('cover') }}"
         {% if is_lazy %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
       />
     </picture>

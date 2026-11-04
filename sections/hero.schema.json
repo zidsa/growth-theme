@@ -97,6 +97,22 @@
       "default": "center"
     },
     {
+      "id": "background_image_object_fit",
+      "type": "select",
+      "default": "cover",
+      "label": {
+        "ar": "طريقة عرض الصورة",
+        "en": "Image object fit"
+      },
+      "options": [
+        { "label": { "ar": "ملء", "en": "Fill" }, "value": "fill" },
+        { "label": { "ar": "احتواء", "en": "Contain" }, "value": "contain" },
+        { "label": { "ar": "تغطية", "en": "Cover" }, "value": "cover" },
+        { "label": { "ar": "بدون", "en": "None" }, "value": "none" },
+        { "label": { "ar": "تصغير", "en": "Scale Down" }, "value": "scale-down" }
+      ]
+    },
+    {
       "id": "overlay_opacity",
       "type": "range",
       "label": {

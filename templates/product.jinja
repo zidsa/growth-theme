@@ -328,51 +328,53 @@
                 {% endwith %}
               </div>
 
-              {# Out of Stock State #}
-              <div
-                class="flex flex-col gap-3 {{ "hidden" if can_buy }}"
-                data-out-of-stock
-              >
-                {# Disabled Add to Cart Button #}
-                <button
-                  type="button"
-                  disabled
-                  class="btn btn-lg bg-secondary text-muted-foreground w-full cursor-not-allowed border border-transparent"
+              {# Out of Stock State: options and custom fields can re-check stock on the client #}
+              {% if not can_buy or product.has_options or product.has_fields %}
+                <div
+                  class="flex flex-col gap-3 {{ "hidden" if can_buy }}"
+                  data-out-of-stock
                 >
-                  {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
-                </button>
-
-                {# Notify Me & Wishlist Buttons #}
-                <div class="flex items-center gap-2">
+                  {# Disabled Add to Cart Button #}
                   <button
                     type="button"
-                    class="btn btn-filled btn-lg flex-1"
-                    data-notify-me-btn
-                    command="show-modal"
-                    commandfor="notify-me-dialog"
+                    disabled
+                    class="btn btn-lg bg-secondary text-muted-foreground w-full cursor-not-allowed border border-transparent"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-                    </svg>
-                    {{ _("Notify me when available") }}
+                    {% if product.preorder_campaign %}{{ _("Preorder now") }}{% else %} {{ _("Add to cart") }} {% endif %}
                   </button>
-                  {# Wishlist Button #}
-                  {% with product_id=product.id, class="btn-lg border-input border" %}
-                    {% include 'components/products/wishlist-button.jinja' %}
-                  {% endwith %}
+
+                  {# Notify Me & Wishlist Buttons #}
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-filled btn-lg flex-1"
+                      data-notify-me-btn
+                      command="show-modal"
+                      commandfor="notify-me-dialog"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                      </svg>
+                      {{ _("Notify me when available") }}
+                    </button>
+                    {# Wishlist Button #}
+                    {% with product_id=product.id, class="btn-lg border-input border" %}
+                      {% include 'components/products/wishlist-button.jinja' %}
+                    {% endwith %}
+                  </div>
                 </div>
-              </div>
+              {% endif %}
             </div>
 
             {% include 'vitrin:checkout/checkout_dialog.jinja' %}
@@ -475,11 +477,6 @@
             </div>
           </form>
         </div>
-
-        {# Notify Me Dialog - inside product-main-section for quick view support #}
-        {% with product=product %}
-          {% include 'components/products/notify-me-dialog.jinja' %}
-        {% endwith %}
       </div>
       <div
         id="additional-info"
