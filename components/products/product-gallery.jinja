@@ -23,7 +23,7 @@
         >
           <img
             src="{{ image_url(full_src, w=1600, q=85, f='auto') }}"
-            alt="{{ product.name }} - {{ _('Image') }} {{ loop.index }}"
+            alt="{{ (item.alt_text or (product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index)) | e }}"
             data-lightbox-item
             data-lightbox-src="{{ image_url(full_src, w=1600, q=90, f='auto') }}"
             data-lightbox-width="1600"
@@ -59,7 +59,7 @@
                   {{ image_url(img_src, w=1200, q=90, f='auto') }} 1200w
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
-                alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index) }}"
+                alt="{{ (item.alt_text or (product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index)) | e }}"
                 class="{{ 'cursor-zoom-in' if not is_video else '' }} h-[500px] w-full md:h-[650px] rounded object-contain"
                 {% if not is_video %}data-lightbox-trigger="{{ loop.index0 }}"{% endif %}
                 {% if loop.index > 1 %}loading="lazy"{% endif %}

@@ -11,6 +11,8 @@
  * - window.productOptionsChanged - Called by platform after variant API
  */
 
+import { escapeAttr } from "../utils/escape.js";
+
 const GALLERY_ID = "product-gallery";
 
 // ─────────────────────────────────────────────────────────────
@@ -193,6 +195,10 @@ function updateQuantitySelector(selectedProduct) {
 // Gallery Updates
 // ─────────────────────────────────────────────────────────────
 
+function imageAlt(item, productName, index) {
+  return escapeAttr(item.alt_text || `${productName || ""} - Image ${index + 1}`);
+}
+
 /**
  * Update product gallery when variant changes
  * Rebuilds DOM and re-initializes EmblaCarousel
@@ -231,7 +237,7 @@ export function updateProductImages(selectedProduct) {
           <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
             <img
               src="${imgSrc}"
-              alt="${selectedProduct.name || ""} - Image ${index + 1}"
+              alt="${imageAlt(item, selectedProduct.name, index)}"
               class="h-[500px] w-full md:h-[650px] rounded object-contain"
               ${index > 0 ? 'loading="lazy"' : ""}
             />
@@ -269,7 +275,7 @@ export function updateProductImages(selectedProduct) {
         <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
           <img
             src="${imgSrc}"
-            alt="${selectedProduct.name || ""} - Image ${index + 1}"
+            alt="${imageAlt(item, selectedProduct.name, index)}"
             class="h-[500px] w-full md:h-[650px] cursor-zoom-in rounded object-contain"
             data-lightbox-trigger="${index}"
             ${index > 0 ? 'loading="lazy"' : ""}
@@ -292,7 +298,7 @@ export function updateProductImages(selectedProduct) {
           >
             <img
               src="${item.image?.thumbnail || item.image?.medium || ""}"
-              alt="${selectedProduct.name || ""} - Image ${index + 1}"
+              alt="${imageAlt(item, selectedProduct.name, index)}"
             />
           </a>
         `
