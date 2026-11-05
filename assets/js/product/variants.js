@@ -35,10 +35,6 @@ function hide(selector) {
   }
 }
 
-function imageAlt(item, productName, index) {
-  return escapeAttr(item.alt_text || `${productName || ""} - Image ${index + 1}`);
-}
-
 // ─────────────────────────────────────────────────────────────
 // Price Updates
 // ─────────────────────────────────────────────────────────────
@@ -198,6 +194,10 @@ function updateQuantitySelector(selectedProduct) {
 // ─────────────────────────────────────────────────────────────
 // Gallery Updates
 // ─────────────────────────────────────────────────────────────
+
+function imageAlt(item, productName, index) {
+  return escapeAttr(item.alt_text || `${productName || ""} - Image ${index + 1}`);
+}
 
 /**
  * Update product gallery when variant changes
