@@ -34,9 +34,12 @@
 <div class="space-y-3">
   {# Main Gallery #}
   <div class="relative">
+    {# data-image-cdn: the platform's default image service, taken from image_url() itself #}
+    {# so assets/js/utils/image-url.js never hardcodes a CDN host #}
     <div
       class="product-gallery overflow-hidden rounded"
       data-gallery-id="{{ gallery_id }}"
+      data-image-cdn="{{ image_url('_', w=1) | trim | replace('w=1/_', '') }}"
     >
       <div class="product-gallery__container flex gap-2">
         {% if gallery_media and gallery_media|length > 0 %}

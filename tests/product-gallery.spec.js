@@ -57,7 +57,7 @@ function serverGallery(items) {
 
   return `
     <div id="product-gallery-lightbox" class="hidden">${lightbox}</div>
-    <div class="product-gallery" data-gallery-id="product-gallery">
+    <div class="product-gallery" data-gallery-id="product-gallery" data-image-cdn="${cdn}">
       <div class="product-gallery__container flex">${slides}</div>
     </div>
     <div class="product-gallery-thumbs" data-gallery-id="product-gallery">
@@ -83,10 +83,12 @@ async function loadTheme(page) {
   await page.addInitScript(() => {
     window.zid = { cart: { get: async () => ({ products: [] }) } };
   });
-  await page.route("https://media.zid.store/**", (route) => {
-    imageRequests.push(route.request().url());
-    route.fulfill({ status: 204 });
-  });
+  for (const host of ["https://media.zid.store/**", "https://img.zid.store/**"]) {
+    await page.route(host, (route) => {
+      imageRequests.push(route.request().url());
+      route.fulfill({ status: 204 });
+    });
+  }
   await page.route(`${storeOrigin}/**`, (route) => route.fulfill({ contentType: "text/html", body: productPage }));
   await page.goto(`${storeOrigin}${productPath}`);
   await page.addScriptTag({ path: themeBundlePath });
@@ -167,4 +169,34 @@ test("sticky bar keeps the resized thumbnail instead of loading the raw platform
   );
   await page.waitForLoadState("networkidle");
   expect(imageRequests.filter((url) => url.includes("width=370"))).toEqual([]);
+});
+
+test("sources already on another image service keep that service, like image_url()", async ({ page }) => {
+  await loadTheme(page);
+  const imgService = "https://img.zid.store/img/";
+  const item = {
+    id: "m5",
+    image: {
+      thumbnail: `${imgService}fit=scale-down,width=370/https://media.zid.store/store/thumb-5.webp`,
+      large: `${imgService}w=1000/https://media.zid.store/store/large-5.webp`,
+      full_size: "https://media.zid.store/store/full-5.webp"
+    },
+    alt_text: "Custom alt 5"
+  };
+
+  await page.evaluate((m) => window.productOptionsChanged({ id: "v5", in_stock: true, media: m }), [item, media(6)]);
+
+  await expect(page.locator(".product-gallery__container img").first()).toHaveAttribute(
+    "src",
+    `${imgService}w=750,q=90,f=auto/https://media.zid.store/store/large-5.webp`
+  );
+  await expect(page.locator(".product-gallery-thumbs__container img").first()).toHaveAttribute(
+    "src",
+    `${imgService}w=256,q=85,f=auto/https://media.zid.store/store/thumb-5.webp`
+  );
+  // Plain sources fall back to the default service rendered by the server
+  await expect(page.locator("#product-gallery-lightbox a").first()).toHaveAttribute(
+    "href",
+    `${cdn}w=1600,q=90,f=auto/https://media.zid.store/store/full-5.webp`
+  );
 });
