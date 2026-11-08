@@ -5,6 +5,8 @@
  * Supports keyboard navigation, touch gestures, pinch-zoom.
  */
 
+import { escapeAttr } from "../utils/escape.js";
+
 // ─────────────────────────────────────────────────────────────
 // State
 // ─────────────────────────────────────────────────────────────
@@ -92,7 +94,7 @@ async function initLightbox() {
           .map((item, i) => {
             return `
               <button class="pswp-custom-thumb${i === 0 ? " pswp-custom-thumb--active" : ""}" data-index="${i}" type="button">
-                <img src="${item.thumbSrc}" alt="${item.alt}" />
+                <img src="${item.thumbSrc}" alt="${escapeAttr(item.alt)}" />
               </button>
             `;
           })
