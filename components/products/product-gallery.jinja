@@ -24,7 +24,7 @@
           data-pswp-width="1600"
           data-pswp-height="2133"
           data-thumb-src="{{ image_url(lb_thumb_src, w=160, q=85, f='auto') }}"
-          data-alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) }}"
+          data-alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) | e }}"
         ></a>
       {% endif %}
     {% endfor %}
@@ -34,12 +34,9 @@
 <div class="space-y-3">
   {# Main Gallery #}
   <div class="relative">
-    {# data-image-cdn: the platform's default image service, taken from image_url() itself #}
-    {# so assets/js/utils/image-url.js never hardcodes a CDN host #}
     <div
       class="product-gallery overflow-hidden rounded"
       data-gallery-id="{{ gallery_id }}"
-      data-image-cdn="{{ image_url('_', w=1) | trim | replace('w=1/_', '') }}"
     >
       <div class="product-gallery__container flex gap-2">
         {% if gallery_media and gallery_media|length > 0 %}
@@ -53,7 +50,7 @@
               {# Image (thumbnail for videos) #}
               {# data-media-src lets variants.js skip rebuilding when the media did not change #}
               <img
-                data-media-src="{{ img_src }}"
+                data-media-src="{{ img_src | e }}"
                 width="1000"
                 height="1000"
                 src="{{ image_url(img_src, w=750, q=90, f='auto') }}"
@@ -65,7 +62,7 @@
                   {{ image_url(img_src, w=1200, q=90, f='auto') }} 1200w
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
-                alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) }}"
+                alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) | e }}"
                 class="{{ 'cursor-zoom-in' if not is_video else '' }} h-[500px] w-full md:h-[650px] rounded object-contain"
                 {% if not is_video %} data-lightbox-trigger="{{ lb.index }}"{% endif %}
                 {% if loop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %}

@@ -11,7 +11,7 @@
  * - window.productOptionsChanged - Called by platform after variant API
  */
 
-import { escapeAttr, imageUrl } from "../utils/image-url.js";
+import { escapeAttr } from "../utils/escape.js";
 
 const GALLERY_ID = "product-gallery";
 
@@ -195,10 +195,6 @@ function updateQuantitySelector(selectedProduct) {
 // Gallery Updates
 // ─────────────────────────────────────────────────────────────
 
-// Same responsive widths/quality as components/products/product-gallery.jinja
-const MAIN_IMAGE_WIDTHS = [400, 640, 750, 960, 1200];
-const MAIN_IMAGE_SIZES = "(max-width: 640px) 100vw, 50vw";
-
 function mainImageSrc(item) {
   return item.image?.large || item.image?.full_size || "";
 }
@@ -222,16 +218,13 @@ function galleryShowsMedia(galleryContainer, media) {
 
 function mainImageMarkup(item, index, alt, isVideo, lightboxIndex) {
   const src = mainImageSrc(item);
-  const srcset = MAIN_IMAGE_WIDTHS.map((w) => `${imageUrl(src, { w, q: 90, f: "auto" })} ${w}w`).join(", ");
 
   return `
     <img
       data-media-src="${escapeAttr(src)}"
       width="1000"
       height="1000"
-      src="${escapeAttr(imageUrl(src, { w: 750, q: 90, f: "auto" }))}"
-      srcset="${escapeAttr(srcset)}"
-      sizes="${MAIN_IMAGE_SIZES}"
+      src="${escapeAttr(src)}"
       alt="${escapeAttr(alt)}"
       class="${isVideo ? "" : "cursor-zoom-in"} h-[500px] w-full md:h-[650px] rounded object-contain"
       ${isVideo ? "" : `data-lightbox-trigger="${lightboxIndex}"`}
@@ -259,8 +252,6 @@ export function updateProductImages(selectedProduct) {
 
   if (!galleryContainer || media.length === 0) return;
 
-  // Same media already rendered (e.g. initial call with the server-rendered variant):
-  // keep the existing responsive images and the currently selected slide.
   if (galleryShowsMedia(galleryContainer, media)) return;
 
   // Destroy existing carousel instance
@@ -320,8 +311,6 @@ export function updateProductImages(selectedProduct) {
     })
     .join("");
 
-  // Rebuild hidden lightbox data for PhotoSwipe (images only, no videos).
-  // Data attributes only (no <img>) so zoom images load only when the lightbox opens.
   if (lightboxGallery) {
     lightboxGallery.innerHTML = media
       .map((item, index) => ({ item, index }))
@@ -329,10 +318,10 @@ export function updateProductImages(selectedProduct) {
       .map(
         ({ item, index }) => `
         <a
-          href="${escapeAttr(imageUrl(item.image?.full_size || item.image?.large || "", { w: 1600, q: 90, f: "auto" }))}"
+          href="${escapeAttr(item.image?.full_size || item.image?.large || "")}"
           data-pswp-width="1600"
           data-pswp-height="2133"
-          data-thumb-src="${escapeAttr(imageUrl(item.image?.thumbnail || item.image?.medium || "", { w: 160, q: 85, f: "auto" }))}"
+          data-thumb-src="${escapeAttr(item.image?.thumbnail || item.image?.medium || "")}"
           data-alt="${escapeAttr(mediaAlt(item, productName, index))}"
         ></a>
       `
@@ -340,13 +329,12 @@ export function updateProductImages(selectedProduct) {
       .join("");
   }
 
-  // Build thumbnails (if more than 1 image, with video indicator)
   if (thumbsContainer) {
     if (media.length > 1) {
       thumbsContainer.innerHTML = media
         .map((item, index) => {
           const isVideo = item.provider && item.link;
-          const thumbSrc = imageUrl(item.image?.thumbnail || item.image?.medium || "", { w: 256, q: 85, f: "auto" });
+          const thumbSrc = item.image?.thumbnail || item.image?.medium || "";
 
           return `
           <button

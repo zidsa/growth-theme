@@ -7,8 +7,6 @@
  * Quantity handling is delegated to qty-input.js
  */
 
-import { imageUrl } from "../utils/image-url.js";
-
 // ─────────────────────────────────────────────────────────────
 // State
 // ─────────────────────────────────────────────────────────────
@@ -145,10 +143,11 @@ function handleVariantChange(event) {
 
   if (stickyImageEl && selectedProduct.media?.[0]?.image) {
     const img = selectedProduct.media[0].image;
-    // Same size/quality as sticky-product-actions.jinja so the browser reuses the
-    // server-rendered image instead of downloading the raw 370px thumbnail.
-    const src = imageUrl(img.thumbnail || img.medium, { w: 128, q: 85, f: "auto" });
-    if (src && stickyImageEl.getAttribute("src") !== src) stickyImageEl.src = src;
+    const src = img.thumbnail || img.medium;
+    if (src && stickyImageEl.dataset.mediaSrc !== src) {
+      stickyImageEl.src = src;
+      stickyImageEl.dataset.mediaSrc = src;
+    }
   }
 
   // Update max quantity via qty-input.js

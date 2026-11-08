@@ -5,7 +5,7 @@
  * Supports keyboard navigation, touch gestures, pinch-zoom.
  */
 
-import { escapeAttr } from "../utils/image-url.js";
+import { escapeAttr } from "../utils/escape.js";
 
 // ─────────────────────────────────────────────────────────────
 // State
@@ -23,7 +23,6 @@ function collectImageData() {
   if (!gallery) return [];
 
   const links = gallery.querySelectorAll("a");
-  // Links carry data only (no <img>), so nothing is downloaded until the lightbox opens.
   return Array.from(links).map((link) => ({
     src: link.href,
     width: parseInt(link.dataset.pswpWidth) || 1600,

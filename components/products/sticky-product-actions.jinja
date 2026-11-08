@@ -11,8 +11,9 @@
         {% if product.images and product.images|length > 0 %}
           {% set img_src = product.images[0].image.thumbnail if product.images[0].image else product.images[0] %}
           <img
+            data-media-src="{{ img_src | e }}"
             src="{{ image_url(img_src, w=128, q=85, f='auto') }}"
-            alt="{{ product.name }}"
+            alt="{{ product.name | e }}"
             class="size-full object-cover"
             data-sticky-cta-image
           />
