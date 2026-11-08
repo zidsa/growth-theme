@@ -11,6 +11,8 @@
  * - window.productOptionsChanged - Called by platform after variant API
  */
 
+import { escapeAttr, imageUrl } from "../utils/image-url.js";
+
 const GALLERY_ID = "product-gallery";
 
 // ─────────────────────────────────────────────────────────────
@@ -193,6 +195,51 @@ function updateQuantitySelector(selectedProduct) {
 // Gallery Updates
 // ─────────────────────────────────────────────────────────────
 
+// Same responsive widths/quality as components/products/product-gallery.jinja
+const MAIN_IMAGE_WIDTHS = [400, 640, 750, 960, 1200];
+const MAIN_IMAGE_SIZES = "(max-width: 640px) 100vw, 50vw";
+
+function mainImageSrc(item) {
+  return item.image?.large || item.image?.full_size || "";
+}
+
+function mediaAlt(item, productName, index) {
+  return item.alt_text || `${productName || ""} - Image ${index + 1}`;
+}
+
+/**
+ * True when the gallery already shows exactly this media list (same order).
+ * The platform calls productOptionsChanged on load with the server-rendered
+ * variant, so rebuilding here would only re-download the same images.
+ */
+function galleryShowsMedia(galleryContainer, media) {
+  const current = Array.from(galleryContainer.querySelectorAll("img[data-media-src]")).map(
+    (img) => img.dataset.mediaSrc
+  );
+  const next = media.map(mainImageSrc);
+  return current.length === next.length && current.every((src, i) => src === next[i]);
+}
+
+function mainImageMarkup(item, index, alt, isVideo, lightboxIndex) {
+  const src = mainImageSrc(item);
+  const srcset = MAIN_IMAGE_WIDTHS.map((w) => `${imageUrl(src, { w, q: 90, f: "auto" })} ${w}w`).join(", ");
+
+  return `
+    <img
+      data-media-src="${escapeAttr(src)}"
+      width="1000"
+      height="1000"
+      src="${escapeAttr(imageUrl(src, { w: 750, q: 90, f: "auto" }))}"
+      srcset="${escapeAttr(srcset)}"
+      sizes="${MAIN_IMAGE_SIZES}"
+      alt="${escapeAttr(alt)}"
+      class="${isVideo ? "" : "cursor-zoom-in"} h-[500px] w-full md:h-[650px] rounded object-contain"
+      ${isVideo ? "" : `data-lightbox-trigger="${lightboxIndex}"`}
+      ${index > 0 ? 'loading="lazy"' : ""}
+    />
+  `;
+}
+
 /**
  * Update product gallery when variant changes
  * Rebuilds DOM and re-initializes EmblaCarousel
@@ -210,143 +257,137 @@ export function updateProductImages(selectedProduct) {
   const thumbsWrapper = document.querySelector(`.product-gallery-thumbs[data-gallery-id="${GALLERY_ID}"]`);
   const lightboxGallery = document.getElementById("product-gallery-lightbox");
 
-  if (!galleryContainer) return;
+  if (!galleryContainer || media.length === 0) return;
+
+  // Same media already rendered (e.g. initial call with the server-rendered variant):
+  // keep the existing responsive images and the currently selected slide.
+  if (galleryShowsMedia(galleryContainer, media)) return;
 
   // Destroy existing carousel instance
   if (typeof window.destroyProductGallery === "function") {
     window.destroyProductGallery(GALLERY_ID);
   }
 
-  if (media.length > 0) {
-    // Build main gallery slides (with video support)
-    galleryContainer.innerHTML = media
-      .map((item, index) => {
-        const isVideo = item.provider && item.link;
-        const imgSrc = item.image?.large || item.image?.full_size || "";
+  const productName = selectedProduct.name || "";
+  let lightboxIndex = 0;
 
-        console.log("item", item);
-        console.log("isVideo", isVideo);
-        if (isVideo) {
-          return `
-          <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
-            <img
-              src="${imgSrc}"
-              alt="${selectedProduct.name || ""} - Image ${index + 1}"
-              class="h-[500px] w-full md:h-[650px] rounded object-contain"
-              ${index > 0 ? 'loading="lazy"' : ""}
-            />
-            <button
-              type="button"
-              class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/20 transition-colors hover:bg-black/30"
-              data-video-play
-              data-video-src="${item.link}"
-              aria-label="Play video"
-            >
-              <span class="bg-background/90 flex size-16 items-center justify-center rounded-full shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-foreground size-8 rtl:rotate-180">
-                  <path d="M8 5.14v14l11-7-11-7z" />
-                </svg>
-              </span>
-            </button>
-            <div class="absolute inset-0 hidden rounded bg-black" data-video-container>
-              <button
-                type="button"
-                class="bg-background/80 text-foreground absolute end-2 top-2 z-10 flex size-8 items-center justify-center rounded-full"
-                data-video-close
-                aria-label="Close video"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5">
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
-              <iframe class="size-full rounded" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-          </div>
-        `;
-        }
+  // Build main gallery slides (with video support)
+  galleryContainer.innerHTML = media
+    .map((item, index) => {
+      const isVideo = Boolean(item.provider && item.link);
+      const alt = mediaAlt(item, productName, index);
+      const img = mainImageMarkup(item, index, alt, isVideo, isVideo ? null : lightboxIndex++);
 
+      if (isVideo) {
         return `
         <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
-          <img
-            src="${imgSrc}"
-            alt="${selectedProduct.name || ""} - Image ${index + 1}"
-            class="h-[500px] w-full md:h-[650px] cursor-zoom-in rounded object-contain"
-            data-lightbox-trigger="${index}"
-            ${index > 0 ? 'loading="lazy"' : ""}
-          />
+          ${img}
+          <button
+            type="button"
+            class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/20 transition-colors hover:bg-black/30"
+            data-video-play
+            data-video-src="${escapeAttr(item.link)}"
+            aria-label="Play video"
+          >
+            <span class="bg-background/90 flex size-16 items-center justify-center rounded-full shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-foreground size-8 rtl:rotate-180">
+                <path d="M8 5.14v14l11-7-11-7z" />
+              </svg>
+            </span>
+          </button>
+          <div class="absolute inset-0 hidden rounded bg-black" data-video-container>
+            <button
+              type="button"
+              class="bg-background/80 text-foreground absolute end-2 top-2 z-10 flex size-8 items-center justify-center rounded-full"
+              data-video-close
+              aria-label="Close video"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <iframe class="size-full rounded" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
         </div>
       `;
-      })
-      .join("");
+      }
 
-    // Build hidden lightbox gallery for PhotoSwipe (images only, no videos)
-    if (lightboxGallery) {
-      lightboxGallery.innerHTML = media
-        .filter((item) => !(item.provider && item.link)) // Exclude videos
-        .map(
-          (item, index) => `
-          <a
-            href="${item.image?.full_size || item.image?.medium || ""}"
-            data-pswp-width="1600"
-            data-pswp-height="2133"
+      return `
+      <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
+        ${img}
+      </div>
+    `;
+    })
+    .join("");
+
+  // Rebuild hidden lightbox data for PhotoSwipe (images only, no videos).
+  // Data attributes only (no <img>) so zoom images load only when the lightbox opens.
+  if (lightboxGallery) {
+    lightboxGallery.innerHTML = media
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => !(item.provider && item.link))
+      .map(
+        ({ item, index }) => `
+        <a
+          href="${escapeAttr(imageUrl(item.image?.full_size || item.image?.large || "", { w: 1600, q: 90, f: "auto" }))}"
+          data-pswp-width="1600"
+          data-pswp-height="2133"
+          data-thumb-src="${escapeAttr(imageUrl(item.image?.thumbnail || item.image?.medium || "", { w: 160, q: 85, f: "auto" }))}"
+          data-alt="${escapeAttr(mediaAlt(item, productName, index))}"
+        ></a>
+      `
+      )
+      .join("");
+  }
+
+  // Build thumbnails (if more than 1 image, with video indicator)
+  if (thumbsContainer) {
+    if (media.length > 1) {
+      thumbsContainer.innerHTML = media
+        .map((item, index) => {
+          const isVideo = item.provider && item.link;
+          const thumbSrc = imageUrl(item.image?.thumbnail || item.image?.medium || "", { w: 256, q: 85, f: "auto" });
+
+          return `
+          <button
+            class="product-gallery-thumbs__slide hover:border-primary relative min-w-0 flex-[0_0_calc(25%-8px)] overflow-hidden rounded border-1 border-transparent transition-colors"
+            data-gallery-id="${GALLERY_ID}"
+            type="button"
           >
             <img
-              src="${item.image?.thumbnail || item.image?.medium || ""}"
-              alt="${selectedProduct.name || ""} - Image ${index + 1}"
+              src="${escapeAttr(thumbSrc)}"
+              width="256"
+              height="256"
+              alt="Thumbnail ${index + 1}"
+              class="aspect-square w-full object-cover"
+              loading="lazy"
             />
-          </a>
-        `
-        )
+            ${
+              isVideo
+                ? `<span class="bg-background/80 absolute inset-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-foreground size-6 rtl:rotate-180">
+                  <path d="M8 5.14v14l11-7-11-7z" />
+                </svg>
+              </span>`
+                : ""
+            }
+          </button>
+        `;
+        })
         .join("");
+
+      if (thumbsWrapper) thumbsWrapper.classList.remove("hidden");
+    } else {
+      if (thumbsWrapper) thumbsWrapper.classList.add("hidden");
     }
-
-    // Build thumbnails (if more than 1 image, with video indicator)
-    if (thumbsContainer) {
-      if (media.length > 1) {
-        thumbsContainer.innerHTML = media
-          .map((item, index) => {
-            const isVideo = item.provider && item.link;
-            const thumbSrc = item.image?.thumbnail || item.image?.medium || "";
-
-            return `
-            <button
-              class="product-gallery-thumbs__slide hover:border-primary relative min-w-0 flex-[0_0_calc(25%-8px)] overflow-hidden rounded border-1 border-transparent transition-colors"
-              data-gallery-id="${GALLERY_ID}"
-              type="button"
-            >
-              <img
-                src="${thumbSrc}"
-                alt="Thumbnail ${index + 1}"
-                class="aspect-square w-full object-cover"
-                loading="lazy"
-              />
-              ${
-                isVideo
-                  ? `<span class="bg-background/80 absolute inset-0 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-foreground size-6 rtl:rotate-180">
-                    <path d="M8 5.14v14l11-7-11-7z" />
-                  </svg>
-                </span>`
-                  : ""
-              }
-            </button>
-          `;
-          })
-          .join("");
-
-        if (thumbsWrapper) thumbsWrapper.classList.remove("hidden");
-      } else {
-        if (thumbsWrapper) thumbsWrapper.classList.add("hidden");
-      }
-    }
-
-    // Re-initialize carousel after DOM update
-    requestAnimationFrame(() => {
-      if (typeof window.initProductGallery === "function") {
-        window.initProductGallery(GALLERY_ID);
-      }
-    });
   }
+
+  // Re-initialize carousel after DOM update
+  requestAnimationFrame(() => {
+    if (typeof window.initProductGallery === "function") {
+      window.initProductGallery(GALLERY_ID);
+    }
+  });
 }
 
 // Expose for external use

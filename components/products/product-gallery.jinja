@@ -6,7 +6,9 @@
 {% set gallery_media = product.selected_product.media if product.selected_product and product.selected_product.media and product.selected_product.media|length > 0 else product.images %}
 {% set has_multiple_items = gallery_media and gallery_media|length > 1 %}
 
-{# Hidden lightbox gallery for PhotoSwipe (images only, not videos) #}
+{# Hidden lightbox data for PhotoSwipe (images only, not videos). #}
+{# No <img> tags here on purpose: browsers download images inside display:none #}
+{# containers, which competed with the LCP image. Zoom images load only when opened. #}
 <div
   id="product-gallery-lightbox"
   class="hidden"
@@ -16,20 +18,14 @@
       {# Only include images in lightbox, not videos #}
       {% if not (item.provider and item.link) %}
         {% set full_src = item.image.full_size if item.image else item %}
+        {% set lb_thumb_src = item.image.thumbnail if item.image else item %}
         <a
           href="{{ image_url(full_src, w=1600, q=90, f='auto') }}"
           data-pswp-width="1600"
           data-pswp-height="2133"
-        >
-          <img
-            src="{{ image_url(full_src, w=1600, q=85, f='auto') }}"
-            alt="{{ product.name }} - {{ _('Image') }} {{ loop.index }}"
-            data-lightbox-item
-            data-lightbox-src="{{ image_url(full_src, w=1600, q=90, f='auto') }}"
-            data-lightbox-width="1600"
-            data-lightbox-height="2133"
-          />
-        </a>
+          data-thumb-src="{{ image_url(lb_thumb_src, w=160, q=85, f='auto') }}"
+          data-alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) }}"
+        ></a>
       {% endif %}
     {% endfor %}
   {% endif %}
@@ -44,12 +40,19 @@
     >
       <div class="product-gallery__container flex gap-2">
         {% if gallery_media and gallery_media|length > 0 %}
+          {# Lightbox index counts images only (videos are excluded from the lightbox) #}
+          {% set lb = namespace(index=0) %}
           {% for item in gallery_media %}
             {% set img_src = item.image.large if item.image else item %}
+            {% set is_video = item.provider and item.link %}
 
             <div class="product-gallery__slide relative min-w-0 flex-[0_0_100%]">
               {# Image (thumbnail for videos) #}
+              {# data-media-src lets variants.js skip rebuilding when the media did not change #}
               <img
+                data-media-src="{{ img_src }}"
+                width="1000"
+                height="1000"
                 src="{{ image_url(img_src, w=750, q=90, f='auto') }}"
                 srcset="
                   {{ image_url(img_src, w=400, q=90, f='auto') }}  400w,
@@ -59,11 +62,12 @@
                   {{ image_url(img_src, w=1200, q=90, f='auto') }} 1200w
                 "
                 sizes="(max-width: 640px) 100vw, 50vw"
-                alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index) }}"
+                alt="{{ item.alt_text|default(product.name ~ ' - ' ~ _('Image') ~ ' ' ~ loop.index, true) }}"
                 class="{{ 'cursor-zoom-in' if not is_video else '' }} h-[500px] w-full md:h-[650px] rounded object-contain"
-                {% if not is_video %}data-lightbox-trigger="{{ loop.index0 }}"{% endif %}
-                {% if loop.index > 1 %}loading="lazy"{% endif %}
+                {% if not is_video %} data-lightbox-trigger="{{ lb.index }}"{% endif %}
+                {% if loop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %}
               />
+              {% if not is_video %}{% set lb.index = lb.index + 1 %}{% endif %}
 
               {% if is_video %}
                 {# Video play button overlay #}
@@ -209,7 +213,9 @@
             type="button"
           >
             <img
-              src="{{ image_url(thumb_src, f='auto') }}"
+              src="{{ image_url(thumb_src, w=256, q=85, f='auto') }}"
+              width="256"
+              height="256"
               alt="{{ _('Thumbnail') }} {{ loop.index }}"
               class="aspect-square w-full object-cover"
               loading="lazy"
