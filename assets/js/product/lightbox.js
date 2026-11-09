@@ -5,6 +5,8 @@
  * Supports keyboard navigation, touch gestures, pinch-zoom.
  */
 
+import { escapeAttr } from "../utils/escape.js";
+
 // ─────────────────────────────────────────────────────────────
 // State
 // ─────────────────────────────────────────────────────────────
@@ -21,16 +23,13 @@ function collectImageData() {
   if (!gallery) return [];
 
   const links = gallery.querySelectorAll("a");
-  return Array.from(links).map((link) => {
-    const img = link.querySelector("img");
-    return {
-      src: link.href,
-      width: parseInt(link.dataset.pswpWidth) || 1600,
-      height: parseInt(link.dataset.pswpHeight) || 2133,
-      thumbSrc: img ? img.src : link.href,
-      alt: img ? img.alt : ""
-    };
-  });
+  return Array.from(links).map((link) => ({
+    src: link.href,
+    width: parseInt(link.dataset.pswpWidth) || 1600,
+    height: parseInt(link.dataset.pswpHeight) || 2133,
+    thumbSrc: link.dataset.thumbSrc || link.href,
+    alt: link.dataset.alt || ""
+  }));
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -92,7 +91,7 @@ async function initLightbox() {
           .map((item, i) => {
             return `
               <button class="pswp-custom-thumb${i === 0 ? " pswp-custom-thumb--active" : ""}" data-index="${i}" type="button">
-                <img src="${item.thumbSrc}" alt="${item.alt}" />
+                <img src="${escapeAttr(item.thumbSrc)}" alt="${escapeAttr(item.alt)}" loading="lazy" />
               </button>
             `;
           })

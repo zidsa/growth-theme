@@ -143,7 +143,11 @@ function handleVariantChange(event) {
 
   if (stickyImageEl && selectedProduct.media?.[0]?.image) {
     const img = selectedProduct.media[0].image;
-    if (img.thumbnail || img.medium) stickyImageEl.src = img.thumbnail || img.medium;
+    const src = img.thumbnail || img.medium;
+    if (src && stickyImageEl.dataset.mediaSrc !== src) {
+      stickyImageEl.src = src;
+      stickyImageEl.dataset.mediaSrc = src;
+    }
   }
 
   // Update max quantity via qty-input.js
