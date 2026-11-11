@@ -1,0 +1,11 @@
+--- a/sections/countdown.jinja
++++ b/sections/countdown.jinja
+@@ -108,7 +108,7 @@
+         const now = new Date().getTime();
+         const distance = endDate - now;
+ 
+-        if (distance < 0) {
++        if (distance < -5000) {
+           if (interval) clearInterval(interval);
+           section.style.display = "none";
+           return;

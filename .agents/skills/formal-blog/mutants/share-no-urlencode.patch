@@ -1,0 +1,11 @@
+--- a/components/blogs/blog-share.jinja
++++ b/components/blogs/blog-share.jinja
+@@ -21,7 +21,7 @@
+   </a>
+   {# Twitter/X #}
+   <a
+-    href="https://twitter.com/intent/tweet?text={{ share_title | urlencode }}&amp;url={{ share_url }}"
++    href="https://twitter.com/intent/tweet?text={{ share_title }}&amp;url={{ share_url }}"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="text-foreground flex"

@@ -1,0 +1,11 @@
+--- a/assets/js/shipping-payment.js
++++ b/assets/js/shipping-payment.js
+@@ -78,7 +78,7 @@
+       const filtered = citiesList.filter((city) => {
+         const cityName = city.name || city.city_name || "";
+         return (
+-          cityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
++          cityName.includes(searchTerm) ||
+           country.toLowerCase().includes(searchTerm.toLowerCase())
+         );
+       });
