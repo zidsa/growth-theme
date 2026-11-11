@@ -1,0 +1,11 @@
+--- a/assets/js/time-ago.js	2026-11-11 04:41:04
++++ b/assets/js/time-ago.js	2026-11-11 15:46:53
+@@ -51,7 +51,7 @@
+     ];
+ 
+     for (const interval of intervals) {
+-      const count = Math.floor(diffInSeconds / interval.seconds);
++      const count = Math.round(diffInSeconds / interval.seconds);
+       if (count >= 1) {
+         const label = count === 1 ? interval.label : interval.labelPlural;
+         return labels.ago.replace("%s", count + " " + label);

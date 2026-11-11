@@ -1,0 +1,11 @@
+--- a/templates/blogs.jinja
++++ b/templates/blogs.jinja
+@@ -30,7 +30,7 @@
+ 
+ {# Pagination #}
+ {% set page_size = posts.page_size | default(12) if posts is defined else 12 %}
+-{% set totalPages = ((posts.count / page_size) | round(0, 'ceil')) | int if posts is defined and posts.count else 1 %}
++{% set totalPages = ((posts.count / page_size) | round(0, 'floor')) | int if posts is defined and posts.count else 1 %}
+ {% set currentPage = posts.page | default(1) if posts is defined else 1 %}
+ 
+ {% block title %}{{ store.name }} – {{ _('Blog') }}{% endblock %}

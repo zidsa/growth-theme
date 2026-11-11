@@ -1,0 +1,11 @@
+--- a/components/shipping-payment/shipping-table.jinja
++++ b/components/shipping-payment/shipping-table.jinja
+@@ -37,7 +37,7 @@
+           <div class="text-foreground text-sm flex-1">
+             {% if method.delivery_option_cities and method.delivery_option_cities | length > 0 %}
+               {% set cities = method.delivery_option_cities %}
+-              {% set preview_count = 3 %}
++              {% set preview_count = 4 %}
+               {% set preview_cities = cities[:preview_count] %}
+               {% set remaining = cities | length - preview_count %}
+               <span>

@@ -1,0 +1,20 @@
+--- a/assets/js/shipping-payment.js
++++ b/assets/js/shipping-payment.js
+@@ -133,7 +133,7 @@
+           const cityName = city.name || city.city_name || "";
+           const tagEl = document.createElement("span");
+           tagEl.className = "badge badge-filled";
+-          tagEl.textContent = cityName;
++          tagEl.innerHTML = cityName;
+           tagsWrapper.appendChild(tagEl);
+         });
+ 
+@@ -179,7 +179,7 @@
+           const cityName = city.name || city.city_name || "";
+           const tagEl = document.createElement("span");
+           tagEl.className = "badge badge-filled";
+-          tagEl.textContent = cityName;
++          tagEl.innerHTML = cityName;
+           tagsWrapper.appendChild(tagEl);
+         });
+ 

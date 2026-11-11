@@ -1,0 +1,11 @@
+--- a/sections/carousel.jinja
++++ b/sections/carousel.jinja
+@@ -120,7 +120,7 @@
+     </div>
+ 
+     <!-- Dots -->
+-    {% if settings.slides and settings.slides | length > 1 and settings.show_dots %}
++    {% if settings.slides and settings.slides | length > 0 and settings.show_dots %}
+       <div
+         class="embla__dots pointer-events-auto absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-1 rounded-full bg-white/10 p-1 backdrop-blur-sm"
+         data-carousel-dots

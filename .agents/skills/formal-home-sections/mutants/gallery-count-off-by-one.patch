@@ -1,0 +1,11 @@
+--- a/sections/gallery.jinja
++++ b/sections/gallery.jinja
+@@ -9,7 +9,7 @@
+       <h2 class="text-foreground text-xl md:text-2xl font-semibold tracking-tight mb-6">{{ settings.title }}</h2>
+     {% endif %}
+     {% if settings.gallery %}
+-      {% set item_count = settings.gallery | length %}
++      {% set item_count = settings.gallery | length + 1 %}
+       <div
+         class="grid grid-cols-2 gap-4 md:grid-cols-4 [&_.media-wrap]:aspect-[4/3] [&[data-items-count='1']]:grid-cols-1 [&[data-items-count='1']]:md:grid-cols-2 [&[data-items-count='2']]:grid-cols-1 [&[data-items-count='2']]:md:grid-cols-2 [&[data-items-count='3']]:auto-rows-[153px] [&[data-items-count='3']]:grid-cols-2 [&[data-items-count='3']]:md:auto-rows-[314px] [&[data-items-count='3']_.media-wrap]:aspect-auto [&[data-items-count='3']_.media-wrap]:h-full [&[data-items-count='3']_.media-wrap]:w-full [&[data-items-count='3']>*:first-child]:col-span-2 [&[data-items-count='3']>*:first-child]:row-span-2 [&[data-items-count='4']]:grid-cols-1 [&[data-items-count='4']]:md:grid-cols-2 [&[data-items-count='5']]:auto-rows-[153px] [&[data-items-count='5']]:grid-cols-2 [&[data-items-count='5']]:md:auto-rows-[314px] [&[data-items-count='5']]:md:grid-cols-4 [&[data-items-count='5']_.media-wrap]:aspect-auto [&[data-items-count='5']_.media-wrap]:h-full [&[data-items-count='5']_.media-wrap]:w-full [&[data-items-count='5']>*:first-child]:col-span-2 [&[data-items-count='5']>*:first-child]:row-span-2"
+         data-items-count="{{ item_count }}"

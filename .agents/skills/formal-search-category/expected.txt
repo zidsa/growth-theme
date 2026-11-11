@@ -1,0 +1,15 @@
+# property id        recorded outcome at sync-commit
+# FAIL means the current theme breaks the promise (a finding, listed in SKILL.md).
+cards-own-record                     PASS
+cards-escape                         FAIL
+hero-h1-image                        PASS
+carousel-scope                       PASS
+listing-grid                         PASS
+filter-recovery                      FAIL
+search-escape                        FAIL
+price-slider-order                   FAIL
+filter-form-url                      FAIL
+filter-url-roundtrip                 PASS
+filter-remove-semantics              PASS
+filter-request-order                 FAIL
+filter-request-order-model-sanity    PASS

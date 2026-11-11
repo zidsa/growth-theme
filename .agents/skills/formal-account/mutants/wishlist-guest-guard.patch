@@ -1,0 +1,14 @@
+--- a/assets/js/features/wishlist.js
++++ b/assets/js/features/wishlist.js
+@@ -82,11 +82,6 @@
+     const productId = button.dataset.productId;
+     if (!productId) return;
+ 
+-    if (!this.isLoggedIn) {
+-      this.redirectToLogin();
+-      return;
+-    }
+-
+     if (this.wishlistProductIds.has(productId)) {
+       this.removeFromWishlist(productId);
+     } else {

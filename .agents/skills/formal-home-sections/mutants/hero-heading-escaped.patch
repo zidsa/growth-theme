@@ -1,0 +1,11 @@
+--- a/sections/hero.jinja
++++ b/sections/hero.jinja
+@@ -48,7 +48,7 @@
+         {% endif %}
+         {% if settings.heading and settings.heading | trim %}
+           {% if settings.is_primary_hero %}
+-            <h1 class="text-foreground text-2xl md:text-3xl font-semibold tracking-tight">{{ settings.heading }}</h1>
++            <h1 class="text-foreground text-2xl md:text-3xl font-semibold tracking-tight">{{ settings.heading | e }}</h1>
+           {% else %}
+             <h2 class="text-foreground text-2xl md:text-3xl font-semibold tracking-tight">{{ settings.heading }}</h2>
+           {% endif %}

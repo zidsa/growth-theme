@@ -1,0 +1,11 @@
+--- a/assets/js/cart/refresh.js
++++ b/assets/js/cart/refresh.js
+@@ -76,7 +76,7 @@
+  * Fetches current page and swaps content sections
+  */
+ export async function refreshCartPage() {
+-  if (isRefreshing) return;
++  // if (isRefreshing) return;
+   isRefreshing = true;
+ 
+   try {

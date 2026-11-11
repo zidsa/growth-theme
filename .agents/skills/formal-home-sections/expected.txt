@@ -1,0 +1,10 @@
+P1-escaping finding 265
+P2-countdown-literal finding 4
+P3a-hero-flags holds
+P3b-carousel-flags holds
+P3c-gallery-count holds
+P3d-element-iff-data holds
+P4-no-empty-href finding 2
+P5-single-h1 finding 2
+P6-countdown-never-negative holds
+P7-countdown-expired-at-load finding 4

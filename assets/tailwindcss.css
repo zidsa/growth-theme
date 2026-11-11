@@ -1,4 +1,12 @@
 @import "tailwindcss";
+/* Agent skill folders are not theme sources: keep their markup out of styles.css. */
+@source not "../.agents";
+@source not "../.claude";
+@source not "../.codex";
+@source not "../.cursor";
+@source not "../.hermes";
+@source not "../AGENTS.md";
+@source not "../CLAUDE.md";
 @import "photoswipe/dist/photoswipe.css";
 @import "nouislider/dist/nouislider.css";
 @import "./css/components.css";

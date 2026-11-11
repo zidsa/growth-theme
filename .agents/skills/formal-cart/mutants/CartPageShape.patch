@@ -1,0 +1,11 @@
+--- a/templates/cart.jinja
++++ b/templates/cart.jinja
+@@ -113,7 +113,7 @@
+         setTimeout(registerHandler, 10);
+       }
+     })();
+-      CartPage.init({
++      CartPage.setup({
+         cart: {{ cart | tojson }},
+         loyaltyEnabled: {{ (store.settings.checkout.is_loyalty_enabled | default(false)) | tojson }},
+         cartTotalValue: {{ cart.total_value | default(0) }},
