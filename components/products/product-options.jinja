@@ -1,5 +1,6 @@
+{# dropdown_threshold: options with more than 6 text choices render as a dropdown #}
 {% if options %}
-  {% with options=options, product=product, style=style|default('dropdown') %}
+  {% with options=options, product=product, style=style|default('dropdown'), dropdown_threshold=6 %}
     {% include 'vitrin:v2/products/options/variant_options.jinja' %}
   {% endwith %}
 {% endif %}
