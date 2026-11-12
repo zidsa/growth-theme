@@ -14,14 +14,14 @@
         <img
           width="106"
           height="44"
-          src="{{ image_url(settings.logo_logo_desktop | default(settings.logo_logo_mobile) | default(store.logo), w=212, q=90, f='auto') }}"
+          src="{{ image_url(settings.logo_logo_desktop or settings.logo_logo_mobile or store.logo, w=212, q=90, f='auto') }}"
           class="hidden md:block"
           alt="{{ store.name }}"
         />
         <img
           width="106"
           height="44"
-          src="{{ image_url(settings.logo_logo_mobile | default(settings.logo_logo_desktop) | default(store.logo), w=212, q=90, f='auto') }}"
+          src="{{ image_url(settings.logo_logo_mobile or settings.logo_logo_desktop or store.logo, w=212, q=90, f='auto') }}"
           class="block md:hidden"
           alt="{{ store.name }}"
         />
