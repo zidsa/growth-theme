@@ -53,6 +53,13 @@
                     <img
                       {% if categoryItem.category.image %}
                         src="{{ image_url(categoryItem.category.image_full_size, w=768, q=90, f='auto') }}"
+                        srcset="
+                          {{ image_url(categoryItem.category.image_full_size, w=320, q=90, f='auto') }} 320w,
+                          {{ image_url(categoryItem.category.image_full_size, w=480, q=90, f='auto') }} 480w,
+                          {{ image_url(categoryItem.category.image_full_size, w=640, q=90, f='auto') }} 640w,
+                          {{ image_url(categoryItem.category.image_full_size, w=768, q=90, f='auto') }} 768w
+                        "
+                        sizes="(min-width: 1024px) 364px, 304px"
                       {% else %}
                         src="{{ image_url(('images/product-img.svg' | asset_url), w=235, q=90, f='auto') }}"
                       {% endif %}
