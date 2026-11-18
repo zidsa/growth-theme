@@ -13,7 +13,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="${ROOT:-$(cd "$HERE/../../.." && pwd)}"
 export ROOT
-SYNC=2b1c67df1fb4f69637887f375d22099b90dafeb5
+SYNC=858437f
 
 # Files this check describes; drift is reported for them (git diff --stat <sync-commit>).
 COVERED=(
@@ -46,6 +46,7 @@ loyalty-button ok cases=3
 main-init ok cases=6
 main-nav ok violations=0
 metafields finding violations=1
+notify-snippet ok templates=5
 mobile-drawer ok violations=0
 pagination ok violations=0
 phone-input ok violations=0

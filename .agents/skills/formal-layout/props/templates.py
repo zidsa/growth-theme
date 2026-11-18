@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from html.parser import HTMLParser
 from pathlib import Path
 
 from jinja2 import ChainableUndefined, ChoiceLoader, DictLoader, FileSystemLoader, nodes, select_autoescape
@@ -203,6 +204,70 @@ def render(template, **ctx):
 
 def count(html, needle):
     return html.count(needle)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# P2 notify-snippet: the hidden notify-me dialog must not be snippetable.
+#
+# The dialog is server-rendered on every page with the whole phone country list, so a
+# page without the guard let Google show "+966 Saudi Arabia ... Syria +963" as the
+# store's search snippet (INQUIRY-837). Google honours data-nosnippet on div, span and
+# section only, so both the attribute and the wrapper element are the property.
+# ─────────────────────────────────────────────────────────────────────────────
+NOSNIPPET_TAGS = {"div", "span", "section"}
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+DIALOG_TEMPLATE = "components/products/notify-me-dialog.jinja"
+
+
+class SnippetableText(HTMLParser):
+    """Text and attribute values Google may put in a snippet, skipping data-nosnippet subtrees."""
+
+    def __init__(self):
+        super().__init__()
+        self.stack = []
+        self.collected = []
+
+    def hidden(self):
+        return any(self.stack)
+
+    def handle_starttag(self, tag, attrs):
+        names = dict(attrs)
+        if not self.hidden():
+            self.collected.extend(value for value in names.values() if value)
+        if tag in VOID_TAGS:
+            return
+        self.stack.append(self.hidden() or ("data-nosnippet" in names and tag in NOSNIPPET_TAGS))
+
+    def handle_endtag(self, tag):
+        if tag not in VOID_TAGS and self.stack:
+            self.stack.pop()
+
+    def handle_data(self, data):
+        if not self.hidden():
+            self.collected.append(data)
+
+
+def snippetable_text(html_text):
+    parser = SnippetableText()
+    parser.feed(html_text)
+    return " ".join(parser.collected)
+
+
+def prop_notify_snippet():
+    problems = []
+    templates = ("home", "product_details", "cart_page", "list_products", "page_details")
+    for template in templates:
+        ctx = base_ctx()
+        ctx["session"]["template"] = template
+        html = render("layout.jinja", **ctx)
+        if DIALOG_TEMPLATE not in html and "notify-me-dialog" not in html:
+            problems.append(f"{template}: the notify-me dialog is not rendered, so the guard is untested")
+            continue
+        text = snippetable_text(html)
+        for marker in ("Syria", "+963"):
+            if marker in text:
+                problems.append(f"{template}: {marker!r} is snippetable; wrap the dialog in div/span/section data-nosnippet")
+    report("notify-snippet", not problems, f"templates={len(templates)}", "\n".join(problems[:6]))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -740,6 +805,7 @@ def prop_footer():
 def main():
     prop_settings_keys()
     prop_layout_gates()
+    prop_notify_snippet()
     prop_footer()
     prop_404()
     prop_rating_stars()
