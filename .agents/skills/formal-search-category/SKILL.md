@@ -1,7 +1,7 @@
 ---
 name: formal-search-category
 description: Formal properties for growth-theme's search/category group - card links, attribute escaping, listing counts, filter URL building, price-slider bounds and filter request ordering. Use when changing templates/products|category|brand|brands|categories, components/categories, components/brands or js/features/{search,price-slider,product-filter}.
-sync-commit: 2b1c67df1fb4f69637887f375d22099b90dafeb5
+sync-commit: 50981522eae2a45a11425998d72bdbad92c28697
 ---
 
 # formal-search-category
