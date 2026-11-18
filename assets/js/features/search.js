@@ -143,11 +143,6 @@ class SearchManager {
       badges.push(lang === "ar" ? "نفذت الكمية" : "OUT OF STOCK");
     }
 
-    if (product.keywords?.length > 0 && badges.length < 2) {
-      const remaining = 2 - badges.length;
-      badges.push(...product.keywords.slice(0, remaining).map((k) => k.toUpperCase()));
-    }
-
     return badges.slice(0, 2);
   }
 
