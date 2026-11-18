@@ -75,6 +75,7 @@ parser.
 | `loyalty-button` | `assets/js/layout-loyalty.js` | Exactly one floating button, on the side the direction says, opening the SDK dialog once per click, and nothing when the label is not defined | Two buttons overlap the cart CTA, or the rewards button opens nothing | Chrome, the real classic script + a synthetic `load` |
 | `layout-gates` | `layout.jinja` | One `<main>`, one header, one footer, `data-template`, `dir`/`lang`, one theme bundle, loyalty block iff its template/loyalty gate, announcement bar iff its display/page gate | A duplicated theme bundle doubles every listener; a loyalty button on the cart page overlays checkout | Plain Jinja2 render (24 shell combos + 12 announcement combos) |
 | `settings-keys` | `layout.jinja`, `header.jinja`, `footer.jinja`, `components/**` vs `*.schema.json` | A template never reads a `settings.*` key its schemas do not declare, and the group's schemas declare no key nothing reads | A typo silently disables a merchant toggle; a dead toggle makes a merchant believe it works | Jinja AST over the group templates + the whole repo |
+| `notify-snippet` | `layout.jinja` + `components/products/notify-me-dialog.jinja` | The hidden notify-me dialog's country list and dial codes are not snippetable: no text or attribute value inside it survives outside a `div`/`span`/`section` `data-nosnippet` subtree | Google shows `+966 Saudi Arabia … Syria +963` as the store's search snippet on every page (INQUIRY-837) | Plain Jinja2 render of `layout.jinja` in 5 templates, parsed with `html.parser` while skipping `data-nosnippet` subtrees |
 | `footer` | `footer.jinja` | One list per visible link group, every link kept with its href, labels escaped, richtext `about_us` passed through | A footer link disappears or a merchant-supplied label injects markup | Plain Jinja2 render |
 | `404-countdown` | `templates/404_not_found.jinja` (inline script) | The rendered countdown ticks 3, 2, 1, 0, redirects home exactly once, never goes negative, and clears its interval | A 404 that never leaves, redirects instantly, or counts into negatives | Render + execute the real inline script against fake timers (`props/run_script.mjs`) |
 | `rating-stars` | `components/rating-stars.jinja` | Always exactly five stars, filled = half-up of the rating, nothing when `rating` is `none` | A 4.9-rated product showing three stars loses the sale | Plain Jinja2 render (16 ratings incl. halves and garbage) |
@@ -181,5 +182,5 @@ parser.
 - `props/browser.py` — Chrome properties (`escape-attr`, `loading`, `carousel-bounds`, `main-init`,
   `loyalty-button`); serves the real modules by request interception, no server or build step.
 - `props/run_script.mjs` — executes the rendered 404 script against fake timers.
-- `mutants/*.patch` — the three breaks used to prove the check can fail (see
+- `mutants/*.patch` — the four breaks used to prove the check can fail (see
   `<proof>/formal-layout/break*.txt`).

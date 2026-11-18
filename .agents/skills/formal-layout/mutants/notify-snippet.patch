@@ -1,0 +1,13 @@
+diff --git a/layout.jinja b/layout.jinja
+index 85f7fe2..184f11d 100644
+--- a/layout.jinja
++++ b/layout.jinja
+@@ -95,7 +95,7 @@
+     {% include 'footer.jinja' %}
+     {% include "vitrin:shared/region_settings_dialog.jinja" %}
+     {# Global Notify Me Dialog - for product cards on any page #}
+-    <div data-nosnippet>{% include 'components/products/notify-me-dialog.jinja' %}</div>
++    {% include 'components/products/notify-me-dialog.jinja' %}
+     {# Global Quick View Modal - for product cards on any page #}
+     {% include 'components/products/quick-view-modal.jinja' %}
+     <script>

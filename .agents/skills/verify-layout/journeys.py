@@ -345,6 +345,13 @@ def phone(page, base, out, checks):
     checks["dialog_open"] = page.evaluate(
         "(() => { const d = document.getElementById('notify-me-dialog'); return d ? d.open : null; })()"
     )
+    # INQUIRY-837: Google honours data-nosnippet on div/span/section only, so the dialog
+    # that server-renders the whole country list has to sit inside one.
+    checks["snippet_wrapped"] = page.evaluate(
+        "(() => { const d = document.getElementById('notify-me-dialog');"
+        " const w = d && d.closest('[data-nosnippet]');"
+        " return w ? w.tagName.toLowerCase() : null; })()"
+    )
     checks["all_countries"] = page.get_attribute("[data-phone-input]", "data-all-countries")
     checks["options"] = page.locator("[data-phone-input] [data-phone-country-list] [data-dial-code]").count()
     checks["expected_options"] = _countries_in_source() if checks["all_countries"] == "true" else 18
@@ -388,6 +395,7 @@ def phone(page, base, out, checks):
         and checks["initial_hidden"] == "+966"
         and checks["saudi_option"] >= 1
         and checks["egypt_option"] >= 1
+        and checks["snippet_wrapped"] in ("div", "span", "section")
         and checks["popover_open"] is True
         and 1 <= checks["filtered_options"] < checks["options"]
         and checks["filtered_first"] == "+20"
