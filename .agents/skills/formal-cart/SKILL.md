@@ -1,7 +1,7 @@
 ---
 name: formal-cart
 description: Verify the growth-theme cart group — totals, coupon, gifting, loyalty, badge, quantity, refresh — against stated promises, with property checks on the real .jinja and .js files and a TLA+ model of the refresh race. Use when a change touches the cart page or its JS, or before believing a cart fix.
-sync-commit: 2b1c67df1fb4f69637887f375d22099b90dafeb5
+sync-commit: 88304b34f7cce264edb118ed9e665ef2b6d8b7c6
 ---
 
 # formal-cart
