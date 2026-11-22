@@ -1,7 +1,7 @@
 ---
 name: formal-cart
 description: Verify the growth-theme cart group — totals, coupon, gifting, loyalty, badge, quantity, refresh — against stated promises, with property checks on the real .jinja and .js files and a TLA+ model of the refresh race. Use when a change touches the cart page or its JS, or before believing a cart fix.
-sync-commit: 2b1c67df1fb4f69637887f375d22099b90dafeb5
+sync-commit: 88304b34f7cce264edb118ed9e665ef2b6d8b7c6
 ---
 
 # formal-cart
@@ -16,8 +16,8 @@ bash .agents/skills/formal-cart/check.sh                 # this checkout
 ROOT=/path/to/checkout bash .agents/skills/formal-cart/check.sh
 ```
 
-Exit 0 means every property still has the outcome recorded below — including the seven
-recorded as **violations** (five distinct defects), which are open, not passes. Exit 1 with a `CHANGED`
+Exit 0 means every property still has the outcome recorded below — including the six
+recorded as **violations** (four distinct defects), which are open, not passes. Exit 1 with a `CHANGED`
 line means an outcome moved: a finding was fixed, or a new break appeared. Exit 2 means
 the harness or the model no longer describes the code — read the code, do not guess.
 
@@ -98,7 +98,7 @@ JavaScript properties:
   is left alone when the cart read fails. Harm: the header count contradicts the cart.
 - **BadgeOnRefresh** (N, `refresh.js:refreshCartPage`, `controller.js:cartProductsHtmlChanged`)
   — Promise: after the theme re-renders the cart, the header badge equals the new
-  `products_count`. Harm: the header says 2 items while the cart holds 1. **FINDING 1.**
+  `products_count`. Harm: the header says 2 items while the cart holds 1. **holds.**
 - **ControllerInitOnce** (N, `cart/controller.js`) — Promise: a second `CartPage.init`
   adds no second submit delegation. Harm: one coupon submit applies the code twice.
   **holds.**
@@ -143,7 +143,7 @@ JavaScript properties:
 | RedemptionRecovers | N | `assets/js/cart/loyalty.js:applyLoyaltyRedemption`, `removeLoyaltyRedemption` | holds |
 | GiftDeleteRecovers | N | `assets/js/cart/gift.js:deleteGiftCard` | holds |
 | BadgeConsistency | N | `assets/js/cart/badge.js:refreshBadge` | holds |
-| BadgeOnRefresh | N | `assets/js/cart/refresh.js:refreshCartPage`; `assets/js/cart/controller.js:cartProductsHtmlChanged` | **violation** |
+| BadgeOnRefresh | N | `assets/js/cart/refresh.js:refreshCartPage`; `assets/js/cart/controller.js:cartProductsHtmlChanged` | holds |
 | ControllerInitOnce | N | `assets/js/cart/controller.js:init`, `setupEventDelegation` | holds |
 | AddToCartBindsOnce | N | `assets/js/cart/add-to-cart.js:initButtons`, `addToCart` | holds |
 | GiftPopupTimer | N | `assets/js/features/gifting.js:showGiftPopup`, `init` | holds |
@@ -157,12 +157,7 @@ included even though it never runs on the cart page (`layout.jinja` excludes
 
 ## Findings, in code terms
 
-1. **The header badge goes stale** (`refreshCartPage`, `cartProductsHtmlChanged`). Both
-   call `window.cartManager.refreshBadge()` if a platform global exists — it does not on
-   this storefront — so the badge keeps its server-rendered number. Counterexample:
-   two lines, remove one, the products list and totals re-render, the badge still says
-   `2` while `/api/v1/cart` says `products_count: 1`. `refreshBadge` is imported and
-   called from `add-to-cart.js`, so the capability exists in the theme.
+1. Fixed: both re-render paths now call the imported `refreshBadge` (REQUEST-221).
 2. **A refresh that arrives during a refresh is dropped** (`if (isRefreshing) return;`).
    The event is forgotten instead of owed, and the in-flight response carries the cart as
    of its request, so the swap can write an older cart and nothing else fires. TLC

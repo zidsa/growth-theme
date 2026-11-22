@@ -29,6 +29,7 @@ import { updateCartTotals, updateFreeShippingProgress } from "./totals.js";
 import { setupQuantityInputHandlers, updateQuantity } from "./quantity.js";
 import { refreshCartPage, setCartLoadingState, setupZidCartEventListeners } from "./refresh.js";
 import { handleLoginAction } from "../features/layout.js";
+import { refreshBadge } from "./badge.js";
 
 // ===== State =====
 const state = {
@@ -291,9 +292,7 @@ function cartProductsHtmlChanged(html, cart) {
   updateFreeShippingProgress(cart, config);
 
   // Update cart badge
-  if (window.cartManager) {
-    window.cartManager.refreshBadge();
-  }
+  refreshBadge(cart);
 }
 
 // ===== Public API =====
