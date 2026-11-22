@@ -8,6 +8,7 @@
 import { updatePaymentWidgets, updateLoyaltyDisplay } from "./totals.js";
 import { setupCouponInput } from "./coupon.js";
 import { initAuthVisibility } from "../features/layout.js";
+import { refreshBadge } from "./badge.js";
 
 // Module state
 let isRefreshing = false;
@@ -132,9 +133,7 @@ export async function refreshCartPage() {
     setupCouponInput();
 
     // Update cart badge in header
-    if (window.cartManager && window.cartManager.refreshBadge) {
-      window.cartManager.refreshBadge();
-    }
+    refreshBadge();
 
     // Update payment widgets (Tamara, Tabby) and loyalty calculations
     updatePaymentWidgets();

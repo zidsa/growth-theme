@@ -72,24 +72,20 @@ verification transcripts attached to the PR that last changed this skill.
 | `cart-page` | opens `/cart` with one line in the cart | line renders with its `[data-qty-input]`; `[data-cart-totals]` has one direct child per `totals[]` entry and the `total` row is last and the only bold one; every total's amount appears (numbers, not `value_string`: vitrin swaps the currency word for an inline riyal SVG); no double sign; `[data-checkout-buttons] a[href="/checkout"]`; `dist/cart-controller.js` loaded from the asset server and `window.CartPage.init` is a function | **passes** |
 | `cart-empty` | opens `/cart` with nothing in it | `.cart-empty` visible, no `[data-cart-totals]`, no `[data-coupon-section]`, no checkout button, header badge hidden, controller still loads | **passes** |
 | `cart-quantity` | clicks `+`, then `−`, then the row trash on the cart page | each click sends exactly one `PATCH`/`DELETE` to `/api/v1/cart/items/<cart line id>`, the DOM reaches the API quantity after the swap, and removing the last line lands on the empty state | **passes** |
-| `cart-badge` | removes one of two lines, stays on the page | DOM holds one line, `/api/v1/cart` `products_count` is 1, header `[data-cart-badge]` reads 1 | **fails — badge stays 2** (finding 1) |
+| `cart-badge` | removes one of two lines, stays on the page | DOM holds one line, `/api/v1/cart` `products_count` is 1, header `[data-cart-badge]` reads 1 | **passes** |
 | `cart-coupon` | types a code, clears it, retypes and submits an invalid code | submit disabled on empty input; exactly one `POST /api/v1/cart/coupons` per click *after `CartPage.init` is called a second time*; a rejected code re-enables the button, hides the spinner, refocuses the input, no navigation | **passes** |
 | `cart-loyalty-guest` | opens `/cart` as a guest | `[data-loyalty-section]` + earn card render, login link carries `redirect_to=/cart`, redemption section stays hidden for a guest | **passes** |
 | `cart-gift-guest` | clicks "Make it a gift" as a guest | `[data-gift-order-section]` renders and the click opens a dialog without leaving `/cart` | **passes** |
 | `cart-gift-popup` | adds a product from the PDP | `[data-gift-cart-popup]` becomes visible after the add and hides again ~4 s later | **passes** |
 | `cart-refresh-race` | changes the cart after the response body is composed but before it is swapped in | once the swap lands the page must reach `/api/v1/cart` within 1 s (`stale_window.ms`); a `zidcart:updated` sent during a refresh may not be dropped | **fails — `stale_window` timed out at 12 s, qty 1 against API 3** (finding 2) |
 
-Two journeys replay open defects. They are listed in `KNOWN` at the bottom of
+One journey replays an open defect. It is listed in `KNOWN` at the bottom of
 `journeys.py`: `drive.py` exits 0 for a journey listed in its skill's `KNOWN` table only while it fails exactly the recorded `failed_checks` (prints `FINDING`); any other failure, a crash, or the bug no longer reproducing exits 1 with `CHANGED`. When a fix lands, drop the entry from `KNOWN` and the
 Findings section; do not edit the journey to pass.
 
 ## Findings these journeys replay
 
-1. **Header badge goes stale** (`js/cart/badge.js`, `js/cart/refresh.js`). After a
-   cart change the theme re-renders the sections but never re-runs `refreshBadge`:
-   it calls `window.cartManager.refreshBadge()` if the platform defines it, and on
-   this storefront `window.cartManager` is `undefined`. `cart-badge` removes one of
-   two lines and the header still reads 2 while the cart holds 1.
+1. Fixed: the cart re-render now calls the imported `refreshBadge` (REQUEST-221).
 2. **A refresh requested during a refresh is dropped** (`js/cart/refresh.js`). The
    `isRefreshing` guard returns early instead of remembering that another refresh is
    needed, so a cart change that lands while the (4–6 s) AJAX swap is in flight is
@@ -97,7 +93,7 @@ Findings section; do not edit the journey to pass.
    request-time body, changes the cart, and shows the DOM stuck at the old quantity
    until a further event arrives.
 
-`formal-cart` carries the same two as `RefreshConverges` / `BadgeOnRefresh` plus three
+`formal-cart` carries the same race as `RefreshConverges` plus three
 the browser cannot show here: the free-shipping bar width (`ProgressWidth`), cart-string
 escaping (`TotalsTextEscaping` / `CartTextEscaping`) and the quantity field drifting from
 its reported value (`QuantityMirrorsDisplay`).

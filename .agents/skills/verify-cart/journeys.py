@@ -285,11 +285,7 @@ def cart_quantity(page, base, out, checks):
 
 
 def cart_badge(page, base, out, checks):
-    """Header badge after removing one of two lines.
-
-    Expected to FAIL today: js/cart/refresh.js only refreshes the badge through
-    `window.cartManager.refreshBadge`, which this storefront does not define.
-    """
+    """Header badge after removing one of two lines."""
     try:
         _clear(page, base)
         products = _simple_products(page, base, 2)
@@ -626,7 +622,6 @@ JOURNEYS = {
 
 # Recorded product bugs (drive.py exits 0 with FINDING while exactly these checks fail).
 KNOWN = {
-    "cart-badge": ({"badge_matches_api"}, "the header badge keeps the old count after a cart line is removed"),
     "cart-refresh-race": (
         {"dom_qty_converges", "converges_within_1s"},
         "js/cart/refresh.js drops a zidcart:updated that lands while a refresh is in flight; the page keeps the stale quantity",

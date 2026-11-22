@@ -42,7 +42,7 @@ export const EXPECTED = {
   RedemptionRecovers: "holds",
   GiftDeleteRecovers: "holds",
   BadgeConsistency: "holds",
-  BadgeOnRefresh: "violation", // finding: badge only refreshes through window.cartManager
+  BadgeOnRefresh: "holds",
   AddToCartBindsOnce: "holds",
   ControllerInitOnce: "holds",
   GiftPopupTimer: "holds",
@@ -58,8 +58,6 @@ const FINDINGS = {
     "products_subtotal_percentage_from_min is written into the bar width unclamped (202% on store 1's cart).",
   QuantityMirrorsDisplay:
     "qty-input.js leaves the typed text and the delete/minus buttons out of step with the value it reports.",
-  BadgeOnRefresh:
-    "after a cart re-render the header badge keeps its old count: refresh.js/controller.js only call window.cartManager.",
 };
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -824,15 +822,20 @@ function refreshDom({ badgeText = "2" } = {}) {
     ".theme-container": new El("div"),
     "[data-cart-badge]": badge,
   };
-  installDom({ query: (s) => map[s] ?? null });
+  installDom({ query: (s) => map[s] ?? null, queryAll: (s) => (s === "[data-cart-badge]" ? [badge] : []) });
   return { badge, map };
+}
+
+async function installRealBadge() {
+  window.__refreshBadge = (await importPlain("assets/js/cart/badge.js", { root: ROOT })).refreshBadge;
+  window.zid = { cart: { get: () => Promise.resolve({ products_count: 1 }) } };
 }
 
 async function badgeOnRefresh() {
   const r = new Recorder();
 
-  // refreshCartPage: the fetched page's badge says 1, the live page still says 2.
   refreshDom({ badgeText: "2" });
+  await installRealBadge();
   const fetched = shadowDocument({
     ".cart-with-products": new El("div"),
     "[data-cart-products-list]": new El("div", { innerHTML: "<div>x</div>" }),
@@ -856,20 +859,23 @@ async function badgeOnRefresh() {
       "const updateLoyaltyDisplay = () => {};",
       "const setupCouponInput = () => {};",
       "const initAuthVisibility = () => {};",
+      "const refreshBadge = (...a) => window.__refreshBadge(...a);",
     ].join("\n"),
     expose: ["refreshCartPage"],
   });
   await refresh.refreshCartPage();
+  await settle();
   const badge = document.querySelector("[data-cart-badge]");
   r.eq("refreshCartPage leaves the badge at the fetched count", badge.textContent, "1");
 
-  // cartProductsHtmlChanged: same gap on the platform-callback path.
   const dom = refreshDom({ badgeText: "2" });
+  await installRealBadge();
   const controller = await loadController();
   controller.cartProductsHtmlChanged("<div>line</div>", {
     products_count: 1,
     totals: [{ code: "total", title: "Total", value_string: "10.00 SAR" }],
   });
+  await settle();
   r.eq("cartProductsHtmlChanged leaves the badge at products_count", dom.badge.textContent, "1");
 
   return { name: "BadgeOnRefresh", holds: r.failures.length === 0, detail: r.failures.slice(0, 3) };
@@ -900,6 +906,7 @@ const CONTROLLER_STUB = [
   "const setCartLoadingState = rec('setCartLoadingState');",
   "const setupZidCartEventListeners = rec('setupZidCartEventListeners');",
   "const handleLoginAction = rec('handleLoginAction');",
+  "const refreshBadge = (...a) => window.__refreshBadge?.(...a);",
 ].join("\n");
 
 async function loadController() {
