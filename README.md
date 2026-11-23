@@ -597,9 +597,10 @@ Shows a sticky add-to-cart bar at the bottom when the main add-to-cart button sc
 
 The product page share links and the copy link button share the variant the shopper selected:
 - The platform writes the selected variant to the address as `?pid=<variant id>`
-- On click, the link is built from the product URL in `data-product-share` plus that `pid`
-- Other query parameters of the address (campaign and click ids) are never shared
-- A quick view of another product keeps that product's plain link: `pid` is added only when the link is the page's own product
+- When a share link is pressed or clicked, it is built from the product URL in `data-product-share` plus that `pid`
+- Only a `pid` shaped like a variant id is shared; other query parameters of the address (campaign and click ids) never are
+- `pid` is added only when the address is the link's own product page, with or without a language prefix, so a quick view of another product keeps that product's plain link
+- Without the bundle, the links keep their server-rendered URL and the copy button copies the product URL
 
 ### Product Filters (`product-filter.js`)
 
@@ -699,6 +700,7 @@ These are exposed for platform integration and must be maintained:
 | `window.CartPage` | `cart/controller.js` | Cart page controller (`init`) |
 | `window.cartManager` | `cart/add-to-cart.js` | Cart manager (`refreshBadge`) |
 | `window.handleLoginAction` | `features/layout.js` | Login trigger with optional redirect |
+| `window.productShareUrl` | `product/share.js` | Product link with the selected variant, used by the copy link button |
 | `window.initQtyInputs` | `features/qty-input.js` | Re-init quantity inputs (used by cart refresh) |
 | `window.initPriceSliders` | `features/price-slider.js` | Re-init price sliders |
 | `window.updateQtyMax` | `features/qty-input.js` | Update max quantity for an input |

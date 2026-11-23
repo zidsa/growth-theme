@@ -1,19 +1,30 @@
+const VARIANT_ID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const serverHrefs = new WeakMap();
+
+function decodedPath(href) {
+  return decodeURIComponent(new URL(href, window.location.href).pathname).replace(/\/+$/, "");
+}
+
 function productShareUrl(productUrl) {
   const variantId = new URLSearchParams(window.location.search).get("pid");
-  const url = new URL(productUrl, window.location.href);
-  if (!variantId || url.pathname !== window.location.pathname) return productUrl;
+  const isPageProduct = decodedPath(window.location.href).endsWith(decodedPath(productUrl));
+  if (!VARIANT_ID_PATTERN.test(variantId) || !isPageProduct) return productUrl;
 
+  const url = new URL(productUrl, window.location.href);
   url.searchParams.set("pid", variantId);
   return url.href;
 }
 
-document.addEventListener("click", (event) => {
+function updateShareLink(event) {
   const link = event.target.closest("[data-product-share] a");
   if (!link) return;
 
   const productUrl = link.closest("[data-product-share]").dataset.productShare;
-  if (!link.dataset.shareHref) link.dataset.shareHref = link.getAttribute("href");
-  link.href = link.dataset.shareHref.replace(productUrl, encodeURIComponent(productShareUrl(productUrl)));
-});
+  if (!serverHrefs.has(link)) serverHrefs.set(link, link.getAttribute("href"));
+  link.href = serverHrefs.get(link).replace(productUrl, encodeURIComponent(productShareUrl(productUrl)));
+}
+
+document.addEventListener("pointerdown", updateShareLink);
+document.addEventListener("click", updateShareLink);
 
 window.productShareUrl = productShareUrl;
