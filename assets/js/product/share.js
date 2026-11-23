@@ -7,8 +7,8 @@ function decodedPath(href) {
 
 function productShareUrl(productUrl) {
   const variantId = new URLSearchParams(window.location.search).get("pid");
-  const isPageProduct = decodedPath(window.location.href).endsWith(decodedPath(productUrl));
-  if (!VARIANT_ID_PATTERN.test(variantId) || !isPageProduct) return productUrl;
+  if (!VARIANT_ID_PATTERN.test(variantId)) return productUrl;
+  if (!decodedPath(window.location.href).endsWith(decodedPath(productUrl))) return productUrl;
 
   const url = new URL(productUrl, window.location.href);
   url.searchParams.set("pid", variantId);
