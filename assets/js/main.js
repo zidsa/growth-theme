@@ -18,6 +18,7 @@ import "./product/variants.js";
 import "./product/quick-view.js";
 import "./product/lightbox.js";
 import "./product/sticky-bar.js";
+import "./product/share.js";
 
 // Feature modules (self-initializing)
 import "./features/layout.js";

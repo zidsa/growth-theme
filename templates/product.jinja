@@ -390,7 +390,10 @@
             {# Social Share Links #}
             <div class="border-border-light flex items-center gap-4 border-t pt-4">
               <span class="text-sm text-muted">{{ _("Share product") }}:</span>
-              <div class="flex items-center gap-3">
+              <div
+                class="flex items-center gap-3"
+                data-product-share="{{ product.html_url }}"
+              >
                 {# WhatsApp #}
                 <a
                   href="https://api.whatsapp.com/send?text={{ _('Check Out this Product') }}: {{ product.name }} {{ product.html_url }}"
@@ -456,7 +459,7 @@
                   type="button"
                   class="text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="{{ _('Copy link') }}"
-                  onclick='navigator.clipboard.writeText(&apos;{{ product.html_url }}&apos;); this.innerHTML = &apos;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>&apos;; setTimeout(() => this.innerHTML = &apos;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>&apos;, 2000);'
+                  onclick='navigator.clipboard.writeText(productShareUrl(&apos;{{ product.html_url }}&apos;)); this.innerHTML = &apos;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>&apos;; setTimeout(() => this.innerHTML = &apos;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>&apos;, 2000);'
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

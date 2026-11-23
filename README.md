@@ -350,6 +350,7 @@ assets/js/
 │   ├── gallery.js             # Product image carousel (Embla)
 │   ├── lightbox.js            # Full-screen image viewer (PhotoSwipe)
 │   ├── quick-view.js          # Quick view modal with LRU cache
+│   ├── share.js               # Share buttons carry the selected variant
 │   └── sticky-bar.js          # Sticky add-to-cart bar on scroll
 │
 ├── features/                  # Self-initializing feature modules
@@ -591,6 +592,14 @@ PhotoSwipe integration for full-screen image viewing:
 Shows a sticky add-to-cart bar at the bottom when the main add-to-cart button scrolls out of view:
 - Uses IntersectionObserver to detect when the add-to-cart section leaves the viewport
 - Shows/hides the sticky bar with a slide-up animation
+
+### Share Buttons (`share.js`)
+
+The product page share links and the copy link button share the variant the shopper selected:
+- The platform writes the selected variant to the address as `?pid=<variant id>`
+- On click, the link is built from the product URL in `data-product-share` plus that `pid`
+- Other query parameters of the address (campaign and click ids) are never shared
+- A quick view of another product keeps that product's plain link: `pid` is added only when the link is the page's own product
 
 ### Product Filters (`product-filter.js`)
 
