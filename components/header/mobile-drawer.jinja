@@ -149,13 +149,12 @@
                 >
                   {{ _("Account") }}
                 </a>
-                <button
-                  type="button"
-                  onclick="zid.customer.logout()"
+                <a
+                  href="/auth/logout"
                   class="text-foreground text-sm min-h-px w-full min-w-px px-6 py-3 text-start"
                 >
                   {{ _("Log out") }}
-                </button>
+                </a>
               </div>
               {# Mobile Region Selector - Opens Vitrin's shared region dialog #}
               {% set multiple_countries = store.countries | length > 1 %}
