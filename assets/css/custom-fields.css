@@ -6,7 +6,8 @@
   gap: 0.5rem;
 }
 
-.custom-field__label {
+.custom-field__label,
+[data-custom-choice-control] .custom-field__label {
   display: flex;
   align-items: center;
   gap: 0.25rem;
