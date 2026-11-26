@@ -57,5 +57,8 @@
       },
       "default": false
     }
-  ]
+  ],
+  "meta": {
+    "type": "video"
+  }
 }

@@ -32,5 +32,8 @@
       "unit": "px",
       "default": 280
     }
-  ]
+  ],
+  "meta": {
+    "type": "logo-social"
+  }
 }

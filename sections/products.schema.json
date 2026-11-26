@@ -71,5 +71,8 @@
       },
       "default": true
     }
-  ]
+  ],
+  "meta": {
+    "type": "products"
+  }
 }

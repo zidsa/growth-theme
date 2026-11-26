@@ -196,5 +196,8 @@
       "unit": "px",
       "default": 700
     }
-  ]
+  ],
+  "meta": {
+    "type": "hero"
+  }
 }
