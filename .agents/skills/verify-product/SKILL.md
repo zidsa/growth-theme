@@ -27,6 +27,7 @@ and browser JS against the store's own API — not a mock.
 | `assets/js/product/variants.js` | Option picks → price/SKU/media/stock/quantity, gallery rebuild |
 | `assets/js/product/sticky-bar.js` | Show/hide against the buy box, sticky add-to-cart state machine |
 | `assets/js/product/quick-view.js` | Prefetch, LRU cache, modal render, productObj save/restore |
+| `assets/js/product/share.js` | Share links and copy link carry the selected variant (`pid`) |
 | `assets/js/features/notify-me.js` | Stock-alert dialog: product seeding per section, phone validation, submit |
 | `assets/js/features/bundle-offers.js` | Bundle badge fetch and fill on cards |
 | `assets/js/question-form.js` | Ask-a-question validation and submit |
@@ -93,6 +94,7 @@ Every module of the group, and how it is proven here.
 | `assets/js/product/variants.js` | `product-variants` | verified |
 | `assets/js/product/sticky-bar.js` | `product-sticky-bar` | verified |
 | `assets/js/product/quick-view.js` | `product-quick-view` | verified |
+| `assets/js/product/share.js` | `tests/product-share.spec.js` (no journey) | verified at unit level |
 | `assets/js/features/notify-me.js` | `product-notify-me` | verified |
 | `assets/js/features/bundle-offers.js` | `product-bundle-offers` | verified |
 | `assets/js/question-form.js` | `product-questions` (module loads, bound, no submission escapes) | verified-partial: native validation wins the click; see above |
@@ -101,7 +103,7 @@ Every module of the group, and how it is proven here.
 The repo's own specs back the same surfaces at unit level and are worth running
 too: `tests/product-gallery.spec.js` (alt text and escaping of gallery data),
 `tests/product-options.spec.js`, `tests/notify-me.spec.js` (dialog target per
-section), `tests/repro/test_inquiry_728_oos_markup.py` and
+section), `tests/product-share.spec.js` (share links and the selected variant), `tests/repro/test_inquiry_728_oos_markup.py` and
 `tests/repro/test_inquiry_748_gallery_alt.py`.
 
 ## Recorded run

@@ -350,6 +350,7 @@ assets/js/
 │   ├── gallery.js             # Product image carousel (Embla)
 │   ├── lightbox.js            # Full-screen image viewer (PhotoSwipe)
 │   ├── quick-view.js          # Quick view modal with LRU cache
+│   ├── share.js               # Share buttons carry the selected variant
 │   └── sticky-bar.js          # Sticky add-to-cart bar on scroll
 │
 ├── features/                  # Self-initializing feature modules
@@ -592,6 +593,15 @@ Shows a sticky add-to-cart bar at the bottom when the main add-to-cart button sc
 - Uses IntersectionObserver to detect when the add-to-cart section leaves the viewport
 - Shows/hides the sticky bar with a slide-up animation
 
+### Share Buttons (`share.js`)
+
+The product page share links and the copy link button share the variant the shopper selected:
+- The platform writes the selected variant to the address as `?pid=<variant id>`
+- When a share link is pressed or clicked, it is built from the product URL in `data-product-share` plus that `pid`
+- Only a `pid` shaped like a variant id is shared; other query parameters of the address (campaign and click ids) never are
+- `pid` is added only when the address is the link's own product page, with or without a language prefix, so a quick view of another product keeps that product's plain link
+- Without the bundle, the links keep their server-rendered URL and the copy button copies the product URL
+
 ### Product Filters (`product-filter.js`)
 
 AJAX-based filtering on the products listing page:
@@ -690,6 +700,7 @@ These are exposed for platform integration and must be maintained:
 | `window.CartPage` | `cart/controller.js` | Cart page controller (`init`) |
 | `window.cartManager` | `cart/add-to-cart.js` | Cart manager (`refreshBadge`) |
 | `window.handleLoginAction` | `features/layout.js` | Login trigger with optional redirect |
+| `window.productShareUrl` | `product/share.js` | Product link with the selected variant, used by the copy link button |
 | `window.initQtyInputs` | `features/qty-input.js` | Re-init quantity inputs (used by cart refresh) |
 | `window.initPriceSliders` | `features/price-slider.js` | Re-init price sliders |
 | `window.updateQtyMax` | `features/qty-input.js` | Update max quantity for an input |
