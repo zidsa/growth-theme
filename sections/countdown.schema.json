@@ -101,5 +101,8 @@
       "unit": "%",
       "default": 5
     }
-  ]
+  ],
+  "meta": {
+    "type": "countdown"
+  }
 }

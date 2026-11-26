@@ -71,5 +71,8 @@
         "en": "Upload image 1500 × 500 pixels"
       }
     }
-  ]
+  ],
+  "meta": {
+    "type": "call-to-action"
+  }
 }
