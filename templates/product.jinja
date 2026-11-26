@@ -129,7 +129,7 @@
               </span>
 
               {# Remaining Stock Badge #}
-              {% if store.settings.products.low_stock_label_enabled %}
+              {% if store.settings.products.low_stock_label_enabled and product.product_class != 'dynamic_bundle' %}
                 {% set selected_product = selected_product if selected_product is defined else product.selected_product %}
                 {% set show_low_stock = not selected_product.is_infinite
                   and selected_product.quantity < store.settings.products.low_stock_quantity_threshold %}
