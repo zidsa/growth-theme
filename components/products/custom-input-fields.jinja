@@ -1,5 +1,5 @@
 {% if product.custom_input_fields %}
-  {% with product=product %}
+  {% with product=product, enable_custom_choice_kits=true %}
     {% include 'vitrin:v2/products/fields/custom_input_fields.jinja' %}
   {% endwith %}
 {% endif %}
